@@ -1,0 +1,28 @@
+{
+  "name": "posts",
+  "version": "1.0.0",
+  "description": "Post website",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \" npm run client\" \"npm run server\" "
+  },
+  "author": "RP",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.0.0",
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.9.9",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.12"
+  }
+}
