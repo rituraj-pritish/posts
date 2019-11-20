@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  postIds: [
+    {
+      postId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'posts'
+      }
+    }
+  ],
   dateCreated: {
     type: Date,
     required: true,
