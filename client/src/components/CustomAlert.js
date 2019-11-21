@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
-import { Snackbar, SnackbarContent, IconButton } from '@material-ui/core';
+import {
+  Snackbar,
+  SnackbarContent,
+  IconButton,
+  Slide
+} from '@material-ui/core';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
@@ -8,6 +13,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
 import { amber, green } from '@material-ui/core/colors';
+
+import { connect } from 'react-redux';
+import { removeAlert } from '../actions/alerts';
 
 const variantIcon = {
   success: CheckCircleIcon,
@@ -71,13 +79,18 @@ function MySnackbarContentWrapper(props) {
   );
 }
 
-const CustomAlert = ({ message, variant }) => {
+const CustomAlert = ({ message, variant,removeAlert }) => {
   const [open, setOpen] = useState(true);
+
+  useState(() => {
+    setOpen(true)
+  },[open, setOpen])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') return;
 
     setOpen(false);
+    removeAlert()
   };
 
   return (
@@ -91,10 +104,17 @@ const CustomAlert = ({ message, variant }) => {
         autoHideDuration={3000}
         onClose={handleClose}
       >
-        <MySnackbarContentWrapper variant={variant} message={message} onClose={handleClose} />
+        <MySnackbarContentWrapper
+          variant={variant}
+          message={message}
+          onClose={handleClose}
+        />
       </Snackbar>
     </div>
   );
 };
 
-export default CustomAlert;
+export default connect(
+  null,
+  { removeAlert }
+)(CustomAlert);

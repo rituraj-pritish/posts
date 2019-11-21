@@ -80,19 +80,26 @@ module.exports = {
   },
 
   Mutation: {
-    addUser: async (parent, { name, email, password }) => {
+    addUser: async (parent, { firstName, lastName, email, password }) => {
       const existingUser = await User.findOne({ email });
 
       if (existingUser) {
         throw new Error('User already exists');
       }
 
+      const emailExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if (!emailExpression.test(String(email).toLowerCase())) {
+        throw new Error('Please provide valid email address');
+      }
+
       const hashedPassword = await utils.hashPassword(password);
 
       const user = new User({
+        firstName,
+        lastName,
         email,
-        password: hashedPassword,
-        name
+        password: hashedPassword
       });
 
       await user.save();
@@ -156,7 +163,7 @@ module.exports = {
         like => like.userId.toString() === userId
       );
       const idx = comment.likes.indexOf(alreadyLiked);
-      
+
       if (!alreadyLiked) {
         throw new Error('Comment not yet liked');
       }

@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Redirect, Link } from 'react-router-dom';
+import { Mutation } from 'react-apollo';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -13,18 +17,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-function Copyright() {
-  return (
-    <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
-      <Link color='inherit' href='https://material-ui.com/'>
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { authError, authSuccess } from '../actions/auth';
+import { setAlert } from '../actions/alerts';
+import { loginQuery } from '../graphql/queries';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -51,7 +46,54 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignIn() {
+const SignIn = ({
+  alert,
+  auth: { user },
+  setAlert,
+  authError,
+  authSuccess
+}) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { email, password } = formData;
+  const [login, { loading, error, data }] = useLazyQuery(loginQuery);
+
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    if (error) {
+      setAlert(error.graphQLErrors[0].message, 'error');
+      authError();
+    }
+
+    if (data && data.login) {
+      setFormData({
+        email: '',
+        password: ''
+      });
+      authSuccess(data.login);
+      setAlert('Sign in successful', 'success');
+    }
+  }, [error, data]);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    if ((email === '', password === '')) {
+      setAlert('All fields are required', 'error');
+      return;
+    }
+
+    login({ variables: { email, password } });
+  };
+
+  console.log(data);
+
   const classes = useStyles();
 
   return (
@@ -64,7 +106,7 @@ export default function SignIn() {
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
             variant='outlined'
             margin='normal'
@@ -74,6 +116,8 @@ export default function SignIn() {
             label='Email Address'
             name='email'
             autoComplete='email'
+            value={email}
+            onChange={handleChange}
             autoFocus
           />
           <TextField
@@ -85,6 +129,8 @@ export default function SignIn() {
             label='Password'
             type='password'
             id='password'
+            value={password}
+            onChange={handleChange}
             autoComplete='current-password'
           />
           <FormControlLabel
@@ -100,23 +146,25 @@ export default function SignIn() {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href='#' variant='body2'>
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justify='flex-end'>
             <Grid item>
-              <Link href='signup' variant='body2'>
+              <Link to='/signup' variant='body2'>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
     </Container>
   );
-}
+};
+
+const mapStateToProps = state => ({
+  alert: state.alert,
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { setAlert, authSuccess, authError }
+)(SignIn);
