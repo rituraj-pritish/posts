@@ -27,7 +27,7 @@ const PostsList = () => {
   if (error) return <div>Oooops... Something went wrong. Please try again</div>;
 
   const render = data.getPosts.map(post => (
-    <Grid className={classes.gridItem}  wrap item md={4} sm={6} xs={10}>
+    <Grid className={classes.gridItem} item md={4} sm={6} xs={10}>
         <Paper>
           <PostItem {...post} key={post._id} />
         </Paper>

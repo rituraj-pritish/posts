@@ -67,9 +67,11 @@ const Comment = ({
   _id,
   content,
   likes,
+  userId,
   postId,
   date,
-  setAlert
+  setAlert,
+  auth
 }) => {
   const classes = useStyles();
   const [deleteComment] = useMutation(deleteCommentMutation);
@@ -115,6 +117,8 @@ const Comment = ({
     });
   };
 
+  console.log(userId);
+
   return (
     <Grid className={classes.root} container>
       <Grid item>
@@ -155,15 +159,20 @@ const Comment = ({
           />
         </div>
 
-        <IconButton onClick={handleDelete}>
+        { userId === auth.user._id ?
+          <IconButton onClick={handleDelete}>
           <DeleteRoundedIcon className={classes.delete} />
-        </IconButton>
+        </IconButton> : null }
       </div>
     </Grid>
   );
 };
 
+const mapStateToProps = (state) => ({
+  auth: state.auth  
+})
+
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert }
 )(Comment);

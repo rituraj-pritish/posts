@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Icon } from '@material-ui/core';
 
 import { logout } from '../actions/auth';
@@ -28,8 +28,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ auth: { loading, user, isAuth }, logout }) => {
+const Navbar = ({ auth: { loading, user, isAuth }, logout, history }) => {
   const classes = useStyles();
+
+  const handleLogout = () => {
+    logout();
+    history.push('/signin');
+  };
+  console.log(history);
 
   const authLinks = (
     <Fragment>
@@ -38,7 +44,7 @@ const Navbar = ({ auth: { loading, user, isAuth }, logout }) => {
           Dashboard
         </Link>
       </Button>
-      <IconButton color='inherit' onClick={logout}>
+      <IconButton color='inherit' onClick={handleLogout}>
         <Icon className='fa fa-sign-out-alt' />
       </IconButton>
     </Fragment>
@@ -85,7 +91,9 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
+const component = connect(
   mapStateToProps,
   { logout }
 )(Navbar);
+
+export default withRouter(component);

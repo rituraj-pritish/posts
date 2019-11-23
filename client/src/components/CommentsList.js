@@ -2,7 +2,7 @@ import React from 'react'
 
 import Comment from './Comment'
 
-const CommentsList = ({comments, postId}) => {
+const CommentsList = ({comments, postId,userId}) => {
   
   return (
     comments.map(comment => (

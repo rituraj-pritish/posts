@@ -54,6 +54,7 @@ export const getPostQuery = gql`
         _id
         content
         date
+        userId
         user {
           _id
           firstName
