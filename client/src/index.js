@@ -11,7 +11,16 @@ import App from './App';
 import reducers from './reducers';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql'
+  uri: 'http://localhost:5000/graphql',
+  request: operation => {
+    const token = window.localStorage.getItem('token')
+
+    operation.setContext({
+      headers: {
+        authorization: token ? token : ''
+      }
+    })
+  }
 });
 
 const middlewares = [reduxThunk];

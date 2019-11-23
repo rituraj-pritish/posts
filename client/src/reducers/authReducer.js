@@ -1,10 +1,9 @@
-import { AUTH_SUCCESS, AUTH_ERROR } from '../actions/types';
+import { AUTH_SUCCESS, AUTH_ERROR, SET_USER, LOGOUT } from '../actions/types';
 
 const initialState = {
   isAuth: false,
   loading: true,
-  user: null,
-  token: ''
+  user: null
 };
 
 export default (state = initialState, action) => {
@@ -15,16 +14,22 @@ export default (state = initialState, action) => {
         ...state,
         isAuth: true,
         loading: false,
-        user: payload.user,
-        token: payload.token
+        user: payload
       };
+    case SET_USER:
+      return {
+        ...state,
+        loading: false,
+        isAuth: true,
+        user: payload
+      };
+    case LOGOUT:
     case AUTH_ERROR:
       return {
         ...state,
         isAuth: false,
-        loading: true,
+        loading: false,
         user: null,
-        token: ''
       };
     default:
       return state;

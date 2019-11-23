@@ -44,11 +44,12 @@ const useStyles = makeStyles(theme => ({
 
 const SignUp = ({
   alert,
-  auth: { user, token },
+  auth: { user, isAuth },
   setAlert,
   authError,
   authSuccess
 }) => {
+  const classes = useStyles();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -59,7 +60,32 @@ const SignUp = ({
 
   const { firstName, lastName, email, password, confirmPassword } = formData;
 
+  //eslint-disable-next-line
   const [signup, { loading, error, data }] = useMutation(signupMutation);
+
+  useEffect(() => {
+    if (error) {
+      setAlert(error.graphQLErrors[0].message, 'error');
+      authError();
+    }
+
+    if (data && data.addUser) {
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      });
+      authSuccess(data.addUser);
+      setAlert('Sign up successful', 'success');
+    }
+    //eslint-disable-next-line
+  }, [error, data]);
+
+  if (isAuth) {
+    return <Redirect to='/dashboard' />;
+  }
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,30 +109,9 @@ const SignUp = ({
       setAlert('Passwords does not match', 'error');
       return;
     }
-    
+
     signup({ variables: { firstName, lastName, email, password } });
   };
-
-  useEffect(() => {
-    if (error) {
-      setAlert(error.graphQLErrors[0].message, 'error');
-      authError();
-    }
-
-    if (data && data.addUser) {
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
-      authSuccess(data.addUser);
-      setAlert('Sign up successful', 'success');
-    }
-  }, [error, data]);
-
-  const classes = useStyles();
 
   return (
     <Container component='main' maxWidth='xs'>

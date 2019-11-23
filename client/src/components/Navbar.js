@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,7 +8,9 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
-import {Icon} from '@material-ui/core'
+import { Icon } from '@material-ui/core';
+
+import { logout } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,19 +28,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = () => {
-  const isAuth = false;
+const Navbar = ({ auth: { loading, user, isAuth }, logout }) => {
   const classes = useStyles();
 
   const authLinks = (
     <Fragment>
       <Button>
-        <Link to='/' className={classes.link} color='inherit'>
+        <Link to='/dashboard' className={classes.link} color='inherit'>
           Dashboard
         </Link>
       </Button>
-      <IconButton color='inherit' >
-          <Icon className='fa fa-sign-out-alt'/>
+      <IconButton color='inherit' onClick={logout}>
+        <Icon className='fa fa-sign-out-alt' />
       </IconButton>
     </Fragment>
   );
@@ -79,4 +81,11 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Navbar);

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
-import { Mutation } from 'react-apollo';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -11,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,22 +46,20 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = ({
   alert,
-  auth: { user },
+  auth: { user, isAuth },
   setAlert,
   authError,
   authSuccess
 }) => {
+  const classes = useStyles();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
 
   const { email, password } = formData;
+  // eslint-disable-next-line
   const [login, { loading, error, data }] = useLazyQuery(loginQuery);
-
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
     if (error) {
@@ -79,7 +75,16 @@ const SignIn = ({
       authSuccess(data.login);
       setAlert('Sign in successful', 'success');
     }
+    // eslint-disable-next-line
   }, [error, data]);
+
+  if (isAuth) {
+    return <Redirect to='/dashboard' />;
+  }
+
+  const handleChange = e => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -91,10 +96,6 @@ const SignIn = ({
 
     login({ variables: { email, password } });
   };
-
-  console.log(data);
-
-  const classes = useStyles();
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -134,7 +135,7 @@ const SignIn = ({
             autoComplete='current-password'
           />
           <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
+            control={<Checkbox value={'remember'} color='primary' />}
             label='Remember me'
           />
           <Button
