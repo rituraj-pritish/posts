@@ -12,7 +12,7 @@ import {
   likeCommentMutation,
   unlikeCommentMutation
 } from '../graphql/mutations';
-import { getPostQuery } from '../graphql/queries';
+import { getCommentsOfPostQuery } from '../graphql/queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     whiteSpace: 'pre-line',
     width: '100%',
     overflowWrap: 'break-word',
-    margin: '12px 20px 0 54px'
+    margin: '5px 20px 0 70px'
   },
   avatar: {
     margin: '0 10px',
@@ -42,7 +42,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     width: '100%',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    minHeight: '48px'
   },
   thumbs: {
     width: '100px',
@@ -75,30 +76,15 @@ const Comment = ({
 }) => {
   const classes = useStyles();
   const [deleteComment] = useMutation(deleteCommentMutation);
-  const [likeComment, likeRes] = useMutation(likeCommentMutation);
-  const [unlikeComment, unlikeRes] = useMutation(unlikeCommentMutation, {
-    variables: { postId, commentId: _id },
-    refetchQueries: [
-      {
-        query: getPostQuery,
-        variables: { postId }
-      }
-    ]
-  });
-
-  useEffect(() => {
-    if (likeRes.error || unlikeRes.error) {
-      const err = likeRes.error || unlikeRes.error;
-      setAlert(err.graphQLErrors[0].message, 'warning');
-    }
-  }, [likeRes.error, unlikeRes.error, likeRes.loading, unlikeRes.loading]);
+  const [likeComment] = useMutation(likeCommentMutation);
+  const [unlikeComment] = useMutation(unlikeCommentMutation);
 
   const handleDelete = () => {
     deleteComment({
       variables: { postId, commentId: _id },
       refetchQueries: [
         {
-          query: getPostQuery,
+          query: getCommentsOfPostQuery,
           variables: { postId }
         }
       ]
@@ -106,39 +92,61 @@ const Comment = ({
   };
 
   const handleLike = () => {
+    const isLiked = likes.find(like => like.userId === auth.user._id);
+    if (isLiked) {
+      setAlert('Comment already liked', 'warning');
+      return;
+    }
     likeComment({
       variables: { postId, commentId: _id },
       refetchQueries: [
         {
-          query: getPostQuery,
+          query: getCommentsOfPostQuery,
           variables: { postId }
         }
       ]
     });
   };
 
-  console.log(userId);
+  const handleUnlike = () => {
+    const isLiked = likes.find(like => like.userId === auth.user._id);
+    if (!isLiked) {
+      setAlert('Comment not yet liked', 'warning');
+      return;
+    }
+    unlikeComment({
+      variables: { postId, commentId: _id },
+      refetchQueries: [
+        {
+          query: getCommentsOfPostQuery,
+          variables: { postId }
+        }
+      ]
+    });
+  };
 
   return (
     <Grid className={classes.root} container>
-      <Grid item>
-        <Avatar className={classes.avatar}>
-          {firstName[0].toUpperCase() + lastName[0].toUpperCase()}
-        </Avatar>
-      </Grid>
-      <Grid item>
-        <div className={classes.name}>
-          {firstName[0].toUpperCase() +
-            firstName.slice(1) +
-            ' ' +
-            lastName[0].toUpperCase() +
-            lastName.slice(1)}
-        </div>
-      </Grid>
-      <Grid item>
-        <Moment className={classes.commentDate} fromNow>
-          {date}
-        </Moment>
+      <Grid container alignItems='center'>
+        <Grid item>
+          <Avatar className={classes.avatar}>
+            {firstName[0].toUpperCase() + lastName[0].toUpperCase()}
+          </Avatar>
+        </Grid>
+        <Grid item>
+          <div className={classes.name}>
+            {firstName[0].toUpperCase() +
+              firstName.slice(1) +
+              ' ' +
+              lastName[0].toUpperCase() +
+              lastName.slice(1)}
+          </div>
+        </Grid>
+        <Grid item>
+          <Moment className={classes.commentDate} fromNow>
+            {date}
+          </Moment>
+        </Grid>
       </Grid>
 
       <div className={classes.comment}>{content}</div>
@@ -155,22 +163,23 @@ const Comment = ({
 
           <Icon
             className={`fas fa-thumbs-down ${classes.thumb} `}
-            onClick={unlikeComment}
+            onClick={handleUnlike}
           />
         </div>
 
-        { userId === auth.user._id ?
+        {userId === auth.user._id ? (
           <IconButton onClick={handleDelete}>
-          <DeleteRoundedIcon className={classes.delete} />
-        </IconButton> : null }
+            <DeleteRoundedIcon className={classes.delete} />
+          </IconButton>
+        ) : null}
       </div>
     </Grid>
   );
 };
 
-const mapStateToProps = (state) => ({
-  auth: state.auth  
-})
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
 export default connect(
   mapStateToProps,

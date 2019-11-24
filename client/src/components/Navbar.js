@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
+import { withApollo } from 'react-apollo';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
-import { Icon } from '@material-ui/core';
+import { Icon, Tooltip } from '@material-ui/core';
 
 import { logout } from '../actions/auth';
 
@@ -20,7 +21,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    textDecoration: 'none',
+    color: '#fff'
   },
   link: {
     color: '#fff',
@@ -28,14 +31,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navbar = ({ auth: { loading, user, isAuth }, logout, history }) => {
+const Navbar = ({
+  auth: { loading, user, isAuth },
+  logout,
+  history,
+  client
+}) => {
   const classes = useStyles();
 
   const handleLogout = () => {
     logout();
+    client.clearStore();
     history.push('/signin');
   };
-  console.log(history);
 
   const authLinks = (
     <Fragment>
@@ -44,9 +52,11 @@ const Navbar = ({ auth: { loading, user, isAuth }, logout, history }) => {
           Dashboard
         </Link>
       </Button>
-      <IconButton color='inherit' onClick={handleLogout}>
-        <Icon className='fa fa-sign-out-alt' />
-      </IconButton>
+      <Tooltip title='Logout'>
+        <IconButton color='inherit' onClick={handleLogout}>
+          <Icon className='fa fa-sign-out-alt' />
+        </IconButton>
+      </Tooltip>
     </Fragment>
   );
 
@@ -78,7 +88,9 @@ const Navbar = ({ auth: { loading, user, isAuth }, logout, history }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant='h6' className={classes.title}>
-            Posts
+            <Link className={classes.link} to='/'>
+              Posts
+            </Link>
           </Typography>
           {isAuth ? authLinks : noAuthLinks}
         </Toolbar>
@@ -96,4 +108,4 @@ const component = connect(
   { logout }
 )(Navbar);
 
-export default withRouter(component);
+export default withApollo(withRouter(component));

@@ -3,30 +3,36 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   CircularProgress,
   TextField,
-  Button,
-  Divider
+  IconButton,
+  Icon,
+  Divider,
+  Grid,
+  Container,
+  Badge
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 
-import {setAlert} from '../actions/alerts'
-import { getPostQuery } from '../graphql/queries';
-import { addCommentMutation } from '../graphql/mutations';
+import { setAlert } from '../actions/alerts';
+import { getPostQuery, getCommentsOfPostQuery } from '../graphql/queries';
+import { addClapMutation, removeClapMutation } from '../graphql/mutations';
 import CommentsList from './CommentsList';
 
 const useStyles = makeStyles(theme => ({
-  commentField: {
-    width: '80%',
-    display: 'inline-block'
+  root: {
+    padding: '30px'
   },
-  commentButton: {
-    position: 'absolute',
-    display: 'block',
-    right: 32
+  divider: {
+    height: '2px',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    margin: '10px 0'
   },
   lineBreaks: {
     whiteSpace: 'pre-line'
+  },
+  commentsList: {
+    marginTop: '20px'
   }
 }));
 
@@ -34,15 +40,11 @@ const Post = props => {
   const classes = useStyles();
   const postId = props.match.params.postId;
 
-  const [comment, setComment] = useState('');
+  const [addClap, addClapRes] = useMutation(addClapMutation);
+  const [removeClap, removeClapRes] = useMutation(removeClapMutation);
   const { loading, error, data } = useQuery(getPostQuery, {
     variables: { postId }
   });
-  const [addComment, addCommentRes] = useMutation(addCommentMutation);
-
-  useEffect(() => {
-    if (!addCommentRes.loading && !addCommentRes.error) setComment('');
-  }, [addCommentRes.loading, addCommentRes.error]);
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
@@ -55,48 +57,40 @@ const Post = props => {
     date,
     comments,
     likes,
-    thumbsUp
+    claps
   } = data.getPost;
 
   const {
     user: { _id: currentUserId }
   } = props.auth;
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    addComment({
-      variables: { content: comment, postId },
-      refetchQueries: [
-        {
-          query: getPostQuery,
-          variables: { postId }
-        }
-      ]
-    });
-  };
-
   return (
-    <div>
-      <Moment format='DD/MM/YYYY'>{date}</Moment>
-      <h3>{title}</h3>
+    <Container className={classes.root}>
+      <Grid container justify='space-between'>
+        <Grid item>
+          <Moment format='DD/MM/YYYY'>{date}</Moment>
+        </Grid>
+        <Grid item>edit and delete buttons</Grid>
+      </Grid>
+      <Grid container justify='center'>
+        <h2>{title}</h2>
+      </Grid>
       <div className={classes.lineBreaks}>{content}</div>
       Author -{' '}
       {user.firstName.toUpperCase() + ' ' + user.lastName.toUpperCase()}
-      thumbs ups : {thumbsUp.length}
+      claps : {claps.length}
       {currentUserId === userId ? 'delete' : null}
+      <Badge badgeContent={11} color='secondary' >
+        <IconButton disabled >
+          <Icon className='fas fa-sign-language' />
+        </IconButton>
+      </Badge>
       <br />
-      <Divider />
-      <div>{comments.length} Comments</div>
-      <TextField
-        fullWidth
-        multiline
-        value={comment}
-        onChange={e => setComment(e.target.value)}
-      />
-      <Button className={classes.commentButton} disabled={!comment} onClick={handleSubmit}>Comment</Button>
-      <CommentsList postId={postId} comments={comments} />
-    </div>
+      <Divider className={classes.divider} />
+      <div className={classes.commentsList}>
+        <CommentsList postId={postId} comments={comments} />
+      </div>
+    </Container>
   );
 };
 
@@ -104,4 +98,7 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, {setAlert})(Post);
+export default connect(
+  mapStateToProps,
+  { setAlert }
+)(Post);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import { TextField, TextareaAutosize, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
 import { addPostMutation } from '../graphql/mutations';
 import { getPostsQuery } from '../graphql/queries';
+import { setAlert } from '../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
   textArea: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreatePost = ({ history }) => {
+const CreatePost = ({ history,setAlert }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: ''
@@ -43,8 +44,8 @@ const CreatePost = ({ history }) => {
     e.preventDefault();
 
     if ((title === '', content === '')) {
-      // setAlert('All fields are required', 'error');
-      // return;
+      setAlert('All fields are required', 'error');
+      return;
     }
 
     addPost({
@@ -82,4 +83,7 @@ const CreatePost = ({ history }) => {
   );
 };
 
-export default withRouter(CreatePost);
+export default connect(
+  null,
+  { setAlert }
+)(CreatePost);

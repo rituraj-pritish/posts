@@ -1,4 +1,4 @@
-import {gql} from 'apollo-boost'
+import { gql } from 'apollo-boost';
 
 export const loginQuery = gql`
   query($email: String!, $password: String!) {
@@ -10,7 +10,7 @@ export const loginQuery = gql`
       token
     }
   }
-`
+`;
 
 export const getUserByTokenQuery = gql`
   query($token: String!) {
@@ -21,7 +21,31 @@ export const getUserByTokenQuery = gql`
       email
     }
   }
-`
+`;
+
+export const getUserQuery = gql`
+  query($userId: ID!) {
+    getUser(userId: $userId) {
+      _id
+      firstName
+      lastName
+      posts {
+        _id
+        title
+        content
+        date
+        views
+        claps {
+          userId
+        }
+        user {
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
 
 export const getPostsQuery = gql`
   {
@@ -30,13 +54,17 @@ export const getPostsQuery = gql`
       title
       content
       date
+      views
+      claps {
+        userId
+      }
       user {
         firstName
         lastName
       }
     }
   }
-`
+`;
 
 export const getPostQuery = gql`
   query($postId: ID!) {
@@ -46,7 +74,8 @@ export const getPostQuery = gql`
       title
       content
       date
-      user{
+      views
+      user {
         firstName
         lastName
       }
@@ -64,7 +93,28 @@ export const getPostQuery = gql`
           userId
         }
       }
-      thumbsUp
+      claps {
+        userId
+      }
     }
   }
-`
+`;
+
+export const getCommentsOfPostQuery = gql`
+  query($postId: ID!) {
+    getCommentsOfPost(postId: $postId) {
+      _id
+      content
+      date
+      userId
+      user {
+        _id
+        firstName
+        lastName
+      }
+      likes {
+        userId
+      }
+    }
+  }
+`;

@@ -1,8 +1,9 @@
 import React from 'react';
 import Moment from 'react-moment';
 import {Link} from 'react-router-dom'
+import { Collapse } from '@material-ui/core';
 
-const PostItem = ({_id, title, content, date, user }) => {
+const PostItem = ({_id, title, claps,date, user, views }) => {
   return (
     <div>
       <Link to={`/post/${_id}`} >
@@ -10,6 +11,7 @@ const PostItem = ({_id, title, content, date, user }) => {
       </Link>
       <br />
       {`-${user.firstName} ${user.lastName}`}
+      Views: {views} Claps: {claps.length}
     </div>
   );
 };

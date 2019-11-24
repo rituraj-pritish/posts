@@ -1,9 +1,7 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import { CircularProgress, Grid, Paper, CardContent } from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles';
 
-import { getPostsQuery } from '../graphql/queries';
 import PostItem from './PostItem';
 
 const useStyles = makeStyles(theme => ({
@@ -12,25 +10,18 @@ const useStyles = makeStyles(theme => ({
   },
   gridItem: {
     textAlign: 'center',
-    [theme.breakpoints.down('xs')]: {
-
-    }
+    [theme.breakpoints.down('xs')]: {}
   }
-}))
+}));
 
-const PostsList = () => {
-  const classes = useStyles()
-  const { loading, error, data } = useQuery(getPostsQuery);
+const PostsList = ({posts}) => {
+  const classes = useStyles();
 
-  if (loading) return <CircularProgress />;
-
-  if (error) return <div>Oooops... Something went wrong. Please try again</div>;
-
-  const render = data.getPosts.map(post => (
-    <Grid className={classes.gridItem} item md={4} sm={6} xs={10}>
-        <Paper>
-          <PostItem {...post} key={post._id} />
-        </Paper>
+  const render = posts.map(post => (
+    <Grid key={post._id} className={classes.gridItem} item md={4} sm={6} xs={10}>
+      <Paper>
+        <PostItem {...post} key={post._id} />
+      </Paper>
     </Grid>
   ));
 
