@@ -1,7 +1,5 @@
 import React from 'react';
-import Moment from 'react-moment';
 import {Link} from 'react-router-dom'
-import { Collapse } from '@material-ui/core';
 
 const PostItem = ({_id, title, claps,date, user, views }) => {
   return (

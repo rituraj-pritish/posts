@@ -118,3 +118,11 @@ export const getCommentsOfPostQuery = gql`
     }
   }
 `;
+
+export const getClapsOfPostQuery = gql`
+  query($postId: ID!) {
+    getClapsOfPost(postId: $postId) {
+      userId
+    }
+  }
+`;

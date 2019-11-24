@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, IconButton, Avatar, Icon } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';

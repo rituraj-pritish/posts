@@ -14,7 +14,8 @@ const useStyles = makeStyles(theme => ({
   commentButton: {
     position: 'absolute',
     display: 'block',
-    right: 75
+    right: 75,
+    backgroundColor: theme.palette.primary.light
   }
 }));
 
@@ -61,7 +62,6 @@ const CommentsList = ({ postId, userId }) => {
       <Grid container justify='flex-end'>
         <Button
           variant='contained'
-          color='primary'
           disabled={!comment}
           onClick={handleSubmit}
         >

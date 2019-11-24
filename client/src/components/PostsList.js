@@ -1,5 +1,5 @@
 import React from 'react';
-import { CircularProgress, Grid, Paper, CardContent } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PostItem from './PostItem';
@@ -14,11 +14,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const PostsList = ({posts}) => {
+const PostsList = ({ posts }) => {
   const classes = useStyles();
 
   const render = posts.map(post => (
-    <Grid key={post._id} className={classes.gridItem} item md={4} sm={6} xs={10}>
+    <Grid
+      key={post._id}
+      className={classes.gridItem}
+      item
+      md={4}
+      sm={6}
+      xs={10}
+    >
       <Paper>
         <PostItem {...post} key={post._id} />
       </Paper>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   CircularProgress,
-  TextField,
   IconButton,
   Icon,
   Divider,
@@ -15,7 +14,7 @@ import Moment from 'react-moment';
 import { connect } from 'react-redux';
 
 import { setAlert } from '../actions/alerts';
-import { getPostQuery, getCommentsOfPostQuery } from '../graphql/queries';
+import { getPostQuery, getClapsOfPostQuery } from '../graphql/queries';
 import { addClapMutation, removeClapMutation } from '../graphql/mutations';
 import CommentsList from './CommentsList';
 
@@ -40,11 +39,42 @@ const Post = props => {
   const classes = useStyles();
   const postId = props.match.params.postId;
 
-  const [addClap, addClapRes] = useMutation(addClapMutation);
-  const [removeClap, removeClapRes] = useMutation(removeClapMutation);
+  const [addClap, addClapRes] = useMutation(addClapMutation, {
+    variables: { postId },
+    refetchQueries: [
+      {
+        query: getClapsOfPostQuery,
+        variables: { postId }
+      }
+    ]
+  });
+  const [removeClap, removeClapRes] = useMutation(removeClapMutation, {
+    variables: { postId },
+    refetchQueries: [
+      {
+        query: getClapsOfPostQuery,
+        variables: { postId }
+      }
+    ]
+  });
+  const getClaps = useQuery(getClapsOfPostQuery, {
+    variables: { postId }
+  });
   const { loading, error, data } = useQuery(getPostQuery, {
     variables: { postId }
   });
+
+  const [clapsCount, setClapsCount] = useState(0);
+
+  useEffect(() => {
+    if (!loading && !error) {
+      setClapsCount(data.getPost.claps.length);
+    }
+
+    if(!getClaps.loading && !getClaps.error) {
+      setClapsCount(getClaps.data.getClapsOfPost.length)
+    }
+  }, [removeClapRes.loading, addClapRes.loading, loading, error,getClaps]);
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
@@ -56,13 +86,24 @@ const Post = props => {
     userId,
     date,
     comments,
-    likes,
     claps
   } = data.getPost;
 
   const {
     user: { _id: currentUserId }
   } = props.auth;
+
+  const isAlreadyClapped = getClaps.data.getClapsOfPost.find(
+    clap => clap.userId.toString() === currentUserId
+  );
+
+  const handleClapButton = () => {
+    if (isAlreadyClapped) {
+      removeClap();
+    } else {
+      addClap();
+    }
+  };
 
   return (
     <Container className={classes.root}>
@@ -80,8 +121,8 @@ const Post = props => {
       {user.firstName.toUpperCase() + ' ' + user.lastName.toUpperCase()}
       claps : {claps.length}
       {currentUserId === userId ? 'delete' : null}
-      <Badge badgeContent={11} color='secondary' >
-        <IconButton disabled >
+      <Badge badgeContent={clapsCount} color='secondary'>
+        <IconButton onClick={handleClapButton}>
           <Icon className='fas fa-sign-language' />
         </IconButton>
       </Badge>

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
 import { addPostMutation } from '../graphql/mutations';
-import { getPostsQuery } from '../graphql/queries';
+import { getPostsQuery, getUserQuery } from '../graphql/queries';
 import { setAlert } from '../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreatePost = ({ history,setAlert }) => {
+const CreatePost = ({ history, setAlert, auth }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: ''
@@ -50,7 +50,10 @@ const CreatePost = ({ history,setAlert }) => {
 
     addPost({
       variables: { title, content },
-      refetchQueries: [{ query: getPostsQuery }]
+      refetchQueries: [
+        { query: getPostsQuery },
+        { query: getUserQuery, variables: { userId: auth.user._id } }
+      ]
     });
   };
 
@@ -83,7 +86,11 @@ const CreatePost = ({ history,setAlert }) => {
   );
 };
 
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert }
 )(CreatePost);
