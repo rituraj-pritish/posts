@@ -9,13 +9,14 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
-import { Icon, Tooltip } from '@material-ui/core';
+import { Icon, Tooltip, Switch } from '@material-ui/core';
 
 import { logout } from '../actions/auth';
+import { changeTheme } from '../actions/theme';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -26,16 +27,18 @@ const useStyles = makeStyles(theme => ({
     color: '#fff'
   },
   link: {
-    color: '#fff',
-    textDecoration: 'none'
+    ...theme.link,
+    color: theme.palette.text.primary
   }
 }));
 
 const Navbar = ({
   auth: { loading, user, isAuth },
+  isLight,
   logout,
   history,
-  client
+  client,
+  changeTheme
 }) => {
   const classes = useStyles();
 
@@ -77,7 +80,7 @@ const Navbar = ({
 
   return (
     <div className={classes.root}>
-      <AppBar position='static'>
+      <AppBar position='static' >
         <Toolbar>
           <IconButton
             edge='start'
@@ -92,6 +95,7 @@ const Navbar = ({
               Posts
             </Link>
           </Typography>
+          <Switch checked={!isLight} onChange={() => changeTheme(isLight)} />
           {isAuth ? authLinks : noAuthLinks}
         </Toolbar>
       </AppBar>
@@ -100,12 +104,13 @@ const Navbar = ({
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  isLight: state.theme.isLight
 });
 
 const component = connect(
   mapStateToProps,
-  { logout }
+  { logout,changeTheme }
 )(Navbar);
 
 export default withApollo(withRouter(component));

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
   gridItem: {
     textAlign: 'center',
-    [theme.breakpoints.down('xs')]: {}
+    [theme.breakpoints.up('md')]: {}
   }
 }));
 
@@ -22,7 +22,7 @@ const PostsList = ({ posts }) => {
       key={post._id}
       className={classes.gridItem}
       item
-      md={4}
+      md={6}
       sm={6}
       xs={10}
     >

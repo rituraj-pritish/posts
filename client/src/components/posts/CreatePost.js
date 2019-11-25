@@ -4,17 +4,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
 
-import { addPostMutation } from '../graphql/mutations';
-import { getPostsQuery, getUserQuery } from '../graphql/queries';
-import { setAlert } from '../actions/alerts';
+import { addPostMutation } from '../../graphql/mutations';
+import { getPostsQuery, getUserQuery } from '../../graphql/queries';
+import { setAlert } from '../../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
   textArea: {
-    backgroundColor: '#eee',
+    backgroundColor: theme.palette.bg,
     width: '99%',
     height: '380px',
+    color: theme.palette.text.primary,
     '&:focus': {
-      outlineColor: '#3f51b5'
+      outlineColor: theme.palette.text.primary,
     }
   }
 }));
@@ -68,6 +69,7 @@ const CreatePost = ({ history, setAlert, auth }) => {
         name='title'
         value={title}
         onChange={handleChange}
+        color='secondary'
       />
 
       <TextareaAutosize

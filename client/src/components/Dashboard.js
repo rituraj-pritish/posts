@@ -3,12 +3,18 @@ import { connect } from 'react-redux';
 import { CircularProgress, Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import {makeStyles} from '@material-ui/core/styles'
 
 import { getUserQuery } from '../graphql/queries';
-import PostsList from './PostsList';
+import PostsList from './posts/PostsList';
 import Chart from './Chart';
 
+const useStyles = makeStyles(theme => ({
+  link: theme.link
+}))
+
 const Dashboard = ({ auth: { user } }) => {
+  const classes = useStyles()
   const { loading, error, data } = useQuery(getUserQuery, {
     variables: { userId: user._id }
   });
@@ -39,7 +45,7 @@ const Dashboard = ({ auth: { user } }) => {
       </Grid>
       filter by drop down
       <Button variant='contained'>
-        <Link to='/create-post'>New Post</Link>
+        <Link className={classes.link} to='/create-post'>New Post</Link>
       </Button>
       <br />
       visitor count graph

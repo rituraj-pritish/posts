@@ -16,5 +16,8 @@ module.exports = {
   },
   verifyPassword: async (password, hashPassword) => {
     return await bcrypt.compare(password,hashPassword)
+  },
+  getUser: async (req) => {
+
   }
 };

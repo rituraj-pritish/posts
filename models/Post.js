@@ -14,7 +14,7 @@ const postSchema = new mongoose.Schema({
     ref: 'users'
   },
   categories: [String],
-  thumbsUp: [
+  claps: [
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +22,10 @@ const postSchema = new mongoose.Schema({
       }
     }
   ],
+  views: {
+    type: Number,
+    default: 0
+  },
   comments: [
     {
       userId: {
@@ -30,8 +34,8 @@ const postSchema = new mongoose.Schema({
       },
       content: String,
       date: {
-        type: Date,
-        default: Date.now()
+        type: String,
+        default: new Date()
       },
       likes: [
         {
@@ -44,9 +48,9 @@ const postSchema = new mongoose.Schema({
     }
   ],
   date: {
-    type: Date,
+    type: String,
     required: true,
-    default: Date.now()
+    default: new Date()
   }
 });
 

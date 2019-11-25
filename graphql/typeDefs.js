@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server-express');
+const { DateTime } = require('graphql-iso-date');
 
 module.exports = gql`
   type User {
@@ -26,19 +27,20 @@ module.exports = gql`
     content: String!
     userId: ID!
     user: User!
+    views: Int!
     categories: [Category]
-    thumbsUp: [String] #userId
+    claps: [Clap] #userId
     comments: [Comment]
     date: String!
   }
 
   type Comment {
-    _id: ID!
-    content: String!
-    userId: ID!
-    user: User!
+    _id: ID
+    content: String
+    userId: ID
+    user: User
     likes: [Like]
-    date: String!
+    date: String
   }
 
   type Like {
@@ -47,24 +49,48 @@ module.exports = gql`
     user: User!
   }
 
+  type Clap {
+    _id: ID
+    userId: ID
+  }
+
   type Query {
     getUserByToken(token: String!): User
-    getUserById(userId: ID!): User
+    getUser(userId: ID!): User
     login(email: String!, password: String!): User
     getPosts: [Post]
     getPost(postId: ID!): Post
-    getComments(commentId: ID!): [Comment]
+    getPostsByUserId: [Post]
+    getCommentsOfPost(postId: ID!): [Comment]
+    getClapsOfPost(postId: ID!): [Clap]
   }
 
   type Mutation {
-    addUser(firstName: String!, lastName: String!, email: String!, password: String!): User
+    addUser(
+      firstName: String!
+      lastName: String!
+      email: String!
+      password: String!
+    ): User
 
-    addPost(title: String!, content: String!, userId: ID!): Post
+    addPost(title: String!, content: String!): Post
 
-    addComment(content: ID!, userId: ID!, postId: ID!): Comment
+    updatePost(title: String!, content: String!, postId: ID!): Post
 
-    likeComment(postId: ID!, userId: ID!, commentId: ID!): Comment
+    deletePost(postId: ID!): Boolean
 
-    unlikeComment(postId: ID!, userId: ID!, commentId: ID!): Comment
+    addComment(content: String!, postId: ID!): Comment
+
+    updateComment(content: String!, postId: ID!, commentId: ID!): Comment
+
+    deleteComment(postId: ID!, commentId: ID!): Boolean
+
+    likeComment(postId: ID!, commentId: ID!): Boolean
+
+    unlikeComment(postId: ID!, commentId: ID!): Boolean
+
+    addClap(postId: ID!): Boolean
+
+    removeClap(postId: ID!): Boolean
   }
 `;

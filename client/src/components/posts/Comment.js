@@ -6,13 +6,13 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import { useMutation } from '@apollo/react-hooks';
 import Moment from 'react-moment';
 
-import { setAlert } from '../actions/alerts';
+import { setAlert } from '../../actions/alerts';
 import {
   deleteCommentMutation,
   likeCommentMutation,
   unlikeCommentMutation
-} from '../graphql/mutations';
-import { getCommentsOfPostQuery } from '../graphql/queries';
+} from '../../graphql/mutations';
+import { getCommentsOfPostQuery } from '../../graphql/queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -167,7 +167,7 @@ const Comment = ({
           />
         </div>
 
-        {userId === auth.user._id ? (
+        {auth.isAuth && (userId === auth.user._id) ? (
           <IconButton onClick={handleDelete}>
             <DeleteRoundedIcon className={classes.delete} />
           </IconButton>

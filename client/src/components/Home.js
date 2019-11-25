@@ -4,7 +4,7 @@ import { CircularProgress, Select, MenuItem, InputLabel } from '@material-ui/cor
 import { connect } from 'react-redux';
 
 import { getPostsQuery } from '../graphql/queries';
-import PostsList from './PostsList';
+import PostsList from './posts/PostsList';
 
 const Home = ({ auth }) => {
   let [sortCategory, setSortCategory] = useState('date')

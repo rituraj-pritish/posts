@@ -22,7 +22,7 @@ module.exports = {
       return { token, ...user._doc, password: null };
     },
 
-    getUserById: async (parent, { userId }) => {
+    getUser: async (parent, { userId }) => {
       const user = await User.findById(userId).select('-password');
 
       if (!user) {
@@ -50,22 +50,36 @@ module.exports = {
       return user;
     },
 
-    getPosts: async () => await Post.find({}),
-
-    getPost: async (parent, { postId }) => {
-      return await Post.findById(postId);
+    getPosts: async () => {
+      return await Post.find({});
     },
 
-    getComments: async (parent, { commentId }) => {
-      const post = await Post.findById(commentId);
+    getPost: async (parent, { postId }) => {
+      const post = await Post.findById(postId);
+
+      post.views += 1;
+
+      return await post.save();
+    },
+
+    getCommentsOfPost: async (parent, { postId }) => {
+      const post = await Post.findById(postId);
 
       return post.comments;
+    },
+
+    getClapsOfPost: async (parent, { postId }) => {
+      const post = await Post.findById(postId);
+
+      return post.claps;
     }
   },
 
   User: {
     posts: async parent => {
-      return await Post.find({ userId: parent._id });
+      return await Post.find({
+        userId: parent._id
+      });
     }
   },
 
@@ -109,7 +123,7 @@ module.exports = {
       return { token, ...user._doc, password: null };
     },
 
-    addPost: async (parent, { title, content, userId }) => {
+    addPost: async (parent, { title, content }, { userId }) => {
       const user = await User.findById(userId);
 
       const post = await new Post({
@@ -124,15 +138,79 @@ module.exports = {
       return post.save();
     },
 
-    addComment: async (parent, { content, userId, postId }) => {
+    updatePost: async (
+      parent,
+      { title, content, postId },
+      { userId, requireLogin, isSameUser }
+    ) => {
+      requireLogin(userId);
       const post = await Post.findById(postId);
+      isSameUser(post.userId, userId);
 
-      await post.comments.push({ userId, content });
+      post.title = title;
+      post.content = content;
 
       return await post.save();
     },
 
-    likeComment: async (parent, { postId, userId, commentId }) => {
+    deletePost: async (
+      parent,
+      { postId },
+      { userId, requireLogin, isSameUser }
+    ) => {
+      requireLogin(userId);
+      const post = await Post.findByIdAndDelete(postId);
+
+      return true;
+    },
+
+    addComment: async (parent, { content, postId }, { userId }) => {
+      const post = await Post.findById(postId);
+
+      await post.comments.push({ userId, content });
+      await post.save();
+
+      return post.comments[post.comments.length - 1];
+    },
+
+    updateComment: async (
+      parent,
+      { content, postId, commentId },
+      { requireLogin, userId, isSameUser }
+    ) => {
+      requireLogin(userId);
+      const post = await Post.findById(postId);
+      const comment = post.comments.find(
+        com => com._id.toString() === commentId
+      );
+
+      isSameUser(comment.userId, userId);
+      comment.content = content;
+      await post.save();
+
+      return comment;
+    },
+
+    deleteComment: async (
+      parent,
+      { postId, commentId },
+      { requireLogin, userId, isSameUser }
+    ) => {
+      requireLogin(userId);
+      const post = await Post.findById(postId);
+      const comment = post.comments.find(
+        com => com._id.toString() === commentId
+      );
+      isSameUser(comment.userId, userId);
+
+      post.comments = post.comments.filter(
+        com => com._id.toString() !== commentId
+      );
+      await post.save();
+      return true;
+    },
+
+    likeComment: async (parent, { postId, commentId }, { userId }) => {
       const post = await Post.findById(postId);
 
       const comment = post.comments.find(
@@ -149,10 +227,12 @@ module.exports = {
 
       await comment.likes.push({ userId });
 
-      return await post.save();
+      await post.save();
+
+      return true;
     },
 
-    unlikeComment: async (parent, { postId, userId, commentId }) => {
+    unlikeComment: async (parent, { postId, commentId }, { userId }) => {
       const post = await Post.findById(postId);
 
       const comment = post.comments.find(
@@ -170,7 +250,44 @@ module.exports = {
 
       await comment.likes.splice(idx, 1);
 
-      return await post.save();
+      await post.save();
+
+      return true;
+    },
+
+    addClap: async (parent, { postId }, { userId }) => {
+      const post = await Post.findById(postId);
+
+      isAlreadyClappedByUser = post.claps.find(clap => clap.userId.toString() === userId);
+
+      if (isAlreadyClappedByUser)
+        throw new Error(
+          'We know you liked the post very much, but you can only clap once'
+        );
+
+      post.claps.push({ userId });
+
+      await post.save();
+
+      return true;
+    },
+
+    removeClap: async (parent, { postId }, { userId }) => {
+      const post = await Post.findById(postId);
+
+      isAlreadyClappedByUser = post.claps.find(
+        clap => clap.userId.toString() === userId
+      );
+
+      if (!isAlreadyClappedByUser) throw new Error('Post not yet clapped');
+
+      const idx = post.claps.indexOf(isAlreadyClappedByUser);
+
+      await post.claps.splice(idx, 1);
+
+      await post.save();
+
+      return true;
     }
   }
 };

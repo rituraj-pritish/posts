@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { CircularProgress, TextField, Button, Grid } from '@material-ui/core';
+import { CircularProgress, TextField, Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux'
 
-import { getCommentsOfPostQuery } from '../graphql/queries';
-import { addCommentMutation } from '../graphql/mutations';
+import { getCommentsOfPostQuery } from '../../graphql/queries';
+import { addCommentMutation } from '../../graphql/mutations';
 import Comment from './Comment';
+import {setAlert} from '../../actions/alerts'
 
 const useStyles = makeStyles(theme => ({
   commentField: {
@@ -15,11 +17,10 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     display: 'block',
     right: 75,
-    backgroundColor: theme.palette.primary.light
   }
 }));
 
-const CommentsList = ({ postId, userId }) => {
+const CommentsList = ({ postId, userId,setAlert,auth }) => {
   const classes = useStyles();
   const [comment, setComment] = useState('');
   const [addComment, addCommentRes] = useMutation(addCommentMutation);
@@ -36,6 +37,10 @@ const CommentsList = ({ postId, userId }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    if(!auth.isAuth) {
+      setAlert('You need to sign in to comment on a post', 'error')
+    }
 
     addComment({
       variables: { content: comment, postId },
@@ -58,21 +63,30 @@ const CommentsList = ({ postId, userId }) => {
         multiline
         value={comment}
         onChange={e => setComment(e.target.value)}
+        color='secondary'
       />
       <Grid container justify='flex-end'>
         <Button
+        className={classes.commentButton}
           variant='contained'
+          color='primary'
           disabled={!comment}
           onClick={handleSubmit}
         >
           Comment
         </Button>
       </Grid>
-      {data.getCommentsOfPost.map(comment => (
+      {data.getCommentsOfPost === [] ?
+        <Typography>No comments yet...</Typography> :
+        data.getCommentsOfPost.map(comment => (
         <Comment key={comment._id} postId={postId} {...comment} />
       ))}
     </div>
   );
 };
 
-export default CommentsList;
+const mapStateToProps = (state) => ({
+  auth: state.auth
+})
+
+export default connect(mapStateToProps,{setAlert})(CommentsList);

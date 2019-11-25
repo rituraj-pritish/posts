@@ -20,11 +20,6 @@ import { setAlert } from '../actions/alerts';
 import { loginQuery } from '../graphql/queries';
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white
-    }
-  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -41,6 +36,9 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  textField: {
+
   }
 }));
 
@@ -102,13 +100,14 @@ const SignIn = ({
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <LockOutlinedIcon color='primary' />
         </Avatar>
         <Typography component='h1' variant='h5'>
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <TextField
+          color='secondary'
             variant='outlined'
             margin='normal'
             required
@@ -120,6 +119,7 @@ const SignIn = ({
             value={email}
             onChange={handleChange}
             autoFocus
+            className={classes.textField}
           />
           <TextField
             variant='outlined'
@@ -133,11 +133,9 @@ const SignIn = ({
             value={password}
             onChange={handleChange}
             autoComplete='current-password'
+            color='secondary'
           />
-          <FormControlLabel
-            control={<Checkbox value={'remember'} color='primary' />}
-            label='Remember me'
-          />
+
           <Button
             type='submit'
             fullWidth

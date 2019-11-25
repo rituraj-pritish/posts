@@ -137,6 +137,7 @@ const SignUp = ({
                 label='First Name'
                 autoFocus
                 onChange={handleChange}
+                color='secondary'
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -150,6 +151,7 @@ const SignUp = ({
                 value={lastName}
                 autoComplete='lname'
                 onChange={handleChange}
+                color='secondary'
               />
             </Grid>
             <Grid item xs={12}>
@@ -163,6 +165,7 @@ const SignUp = ({
                 value={email}
                 autoComplete='email'
                 onChange={handleChange}
+                color='secondary'
               />
             </Grid>
             <Grid item xs={12}>
@@ -176,6 +179,7 @@ const SignUp = ({
                 id='password'
                 onChange={handleChange}
                 value={password}
+                color='secondary'
               />
             </Grid>
             <Grid item xs={12}>
@@ -189,6 +193,7 @@ const SignUp = ({
                 id='password'
                 value={confirmPassword}
                 onChange={handleChange}
+                color='secondary'
               />
             </Grid>
           </Grid>
