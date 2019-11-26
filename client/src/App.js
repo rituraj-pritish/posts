@@ -47,10 +47,10 @@ const App = ({ alert, auth, authError, setUser, isLight }) => {
 
   return (
     <ThemeProvider theme={isLight === true ? lightTheme : darkTheme}>
-      <AppContainer>
+      <AppContainer >
         <Router>
           <Navbar />
-          <Grid container spacing={5} >
+          <Grid container spacing={5} style={{padding: '30px'}} >
             <Grid sm={12} md={8} item>
               <Switch>
                 <Route exact path='/signin' component={SignIn} />
@@ -65,9 +65,9 @@ const App = ({ alert, auth, authError, setUser, isLight }) => {
                 <Route path='/' component={Home} />
               </Switch>
             </Grid>
-            <Grid item md={4}>
+
               <SidePanel />
-            </Grid>
+
           </Grid>
         </Router>
         {alert.length !== 0 && (

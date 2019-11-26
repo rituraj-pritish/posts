@@ -13,6 +13,8 @@ export const lightTheme = createMuiTheme({
     secondary:{main: '#000', contrastText: '#fff'},
     text: {primary: '#000', secondary: '#000'},
     bg: '#eee',
+    delete: '#db6565',
+
     divider: '#000',
     action: {
       selected: '#000'
@@ -27,6 +29,7 @@ export const darkTheme = createMuiTheme({
     text: {primary: '#fff', secondary: '#eee'},
     secondary:{main: '#fff', contrastText: '#000'},
     bg: '#000',
+    delete: '#db6565',
     divider: '#fff',
     action: {
       selected: '#fff'

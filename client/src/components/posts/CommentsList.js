@@ -13,11 +13,6 @@ const useStyles = makeStyles(theme => ({
   commentField: {
     margin: '10px 0'
   },
-  commentButton: {
-    position: 'absolute',
-    display: 'block',
-    right: 75,
-  }
 }));
 
 const CommentsList = ({ postId, userId,setAlert,auth }) => {
@@ -67,7 +62,6 @@ const CommentsList = ({ postId, userId,setAlert,auth }) => {
       />
       <Grid container justify='flex-end'>
         <Button
-        className={classes.commentButton}
           variant='contained'
           color='primary'
           disabled={!comment}

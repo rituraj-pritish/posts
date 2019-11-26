@@ -26,14 +26,17 @@ const Dashboard = ({ auth: { user } }) => {
 
   const posts = data.getUser.posts
 
-  const mostViewedPost = posts.sort((a,b) => b.views - a.views)[0].title
+  let mostViewedPost, mostClappedPost;
+  if(posts.length > 0) {
+  mostViewedPost = posts.sort((a,b) => b.views - a.views)[0].title
 
-  const mostClappedPost = posts.sort((a,b) => b.claps.length - a.claps.length)[0].title
+  mostClappedPost = posts.sort((a,b) => b.claps.length - a.claps.length)[0].title
+  }
 
   return (
     <div>
       {`Hi ${user.firstName}, how are you today ?`}
-      <Grid container alignItems='center' >
+      <Grid container alignItems='center' justify='space-between' >
         <Grid item>
           Most Viewed Post : {mostViewedPost}
           <br/>
@@ -44,9 +47,6 @@ const Dashboard = ({ auth: { user } }) => {
         </Grid>
       </Grid>
       filter by drop down
-      <Button variant='contained'>
-        <Link className={classes.link} to='/create-post'>New Post</Link>
-      </Button>
       <br />
       visitor count graph
       <br />

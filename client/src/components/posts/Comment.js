@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '-10px'
   },
   delete: {
-    color: '#db6565'
+    color: theme.palette.delete
   }
 }));
 

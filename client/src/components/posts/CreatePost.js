@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, TextareaAutosize, Button } from '@material-ui/core';
+import { TextField, TextareaAutosize, Button, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
@@ -9,13 +9,24 @@ import { getPostsQuery, getUserQuery } from '../../graphql/queries';
 import { setAlert } from '../../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
+  '@global': {
+    '.side-panel': {
+      display: 'none'
+    }
+  },
+  root: {
+    maxWidth: '88vw',
+    width: '86vw'
+  },
   textArea: {
     backgroundColor: theme.palette.bg,
-    width: '99%',
+    width: '98%',
     height: '380px',
+    margin: '20px 0',
+    padding: '10px',
     color: theme.palette.text.primary,
     '&:focus': {
-      outlineColor: theme.palette.text.primary,
+      outlineColor: theme.palette.text.primary
     }
   }
 }));
@@ -59,7 +70,7 @@ const CreatePost = ({ history, setAlert, auth }) => {
   };
 
   return (
-    <div>
+    <div className={classes.root}>
       <TextField
         multiline={true}
         label='Title'
@@ -75,15 +86,17 @@ const CreatePost = ({ history, setAlert, auth }) => {
       <TextareaAutosize
         className={classes.textArea}
         style={{ height: '380px', overflow: 'scroll', overflowX: 'hidden' }}
-        required
+        placeholder='Write content here'
         name='content'
         value={content}
         onChange={handleChange}
       />
 
-      <Button variant='contained' color='primary' onClick={handleSubmit}>
-        Submit
-      </Button>
+      <Grid container justify='flex-end'>
+        <Button variant='contained' color='primary' onClick={handleSubmit}>
+          Submit
+        </Button>
+      </Grid>
     </div>
   );
 };

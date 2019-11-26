@@ -8,20 +8,24 @@ import {
   Grid,
   Container,
   Badge,
-  Typography
+  Typography,
+  ButtonGroup,
+  Button
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
+import {Redirect} from 'react-router-dom'
 
 import { setAlert } from '../../actions/alerts';
-import { getPostQuery, getClapsOfPostQuery } from '../../graphql/queries';
-import { addClapMutation, removeClapMutation } from '../../graphql/mutations';
+import { getPostQuery, getClapsOfPostQuery, getPostsQuery,getUserQuery } from '../../graphql/queries';
+import { addClapMutation, removeClapMutation, deletePostMutation } from '../../graphql/mutations';
 import CommentsList from './CommentsList';
+import DeletePostDialog from './DeletePostDialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: '30px'
+
   },
   divider: {
     height: '2px',
@@ -33,6 +37,11 @@ const useStyles = makeStyles(theme => ({
   },
   commentsList: {
     marginTop: '20px'
+  },
+  deleteButton: {
+    '&:hover' : {
+    backgroundColor: theme.palette.delete
+    }
   }
 }));
 
@@ -40,6 +49,8 @@ const Post = props => {
   const classes = useStyles();
   const postId = props.match.params.postId;
 
+  const [open, setOpen] = useState(false);
+  const [deletePost,deletePostRes] = useMutation(deletePostMutation);
   const [addClap, addClapRes] = useMutation(addClapMutation, {
     variables: { postId },
     refetchQueries: [
@@ -75,7 +86,11 @@ const Post = props => {
     if (!getClaps.loading && !getClaps.error) {
       setClapsCount(getClaps.data.getClapsOfPost.length);
     }
-  }, [removeClapRes.loading, addClapRes.loading, loading, error, getClaps]);
+
+    if(deletePostRes.data && deletePostRes.data.deletePost) {
+      props.history.push('/dashboard')
+    }
+  }, [removeClapRes.loading, addClapRes.loading, loading, error, getClaps, deletePostRes.loading, deletePostRes.error]);
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
@@ -99,16 +114,52 @@ const Post = props => {
     }
   };
 
+  const handleEdit = () => {
+
+  }
+
+  const handleDelete = () => {
+    deletePost({variables: {postId},
+    refetchQueries: [{
+      query: getPostsQuery
+    },
+  {
+    query: getUserQuery,
+    variables: {userId: currentUserId}
+  }] })
+  }
+
   return (
+    <div>
     <Container className={classes.root}>
       <Grid container justify='space-between'>
         <Grid item>
-          <Moment format='DD/MM/YYYY'>{date}</Moment>
+          <Moment format='D MMM YYYY'>{date}</Moment>
         </Grid>
-        <Grid item>edit and delete buttons</Grid>
+        <Grid item>
+          { userId === currentUserId && 
+          <ButtonGroup>
+            <Button
+              startIcon={<Icon className='fas fa-edit' />}
+              onClick={handleEdit}
+            >
+              Edit
+            </Button>
+            <Button
+              startIcon={<Icon className='fas fa-trash-alt' />}
+              onClick={() => setOpen(true)}
+              className={classes.deleteButton}
+            >
+              Delete
+            </Button>
+          </ButtonGroup>
+          }
+        </Grid>
       </Grid>
       <Grid container justify='center'>
-        <Typography variant='h4' >{title[0].toUpperCase() + title.slice(1)}</Typography>
+        <Typography variant='h4'>
+          {title[0].toUpperCase() + title.slice(1)}
+        </Typography>
       </Grid>
       <div className={classes.lineBreaks}>{content}</div>
       Author -{' '}
@@ -130,6 +181,8 @@ const Post = props => {
         <CommentsList postId={postId} comments={comments} />
       </div>
     </Container>
+    <DeletePostDialog open={open} setOpen={setOpen} handleDelete={handleDelete} />
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PostItem from './PostItem';
@@ -16,6 +16,10 @@ const useStyles = makeStyles(theme => ({
 
 const PostsList = ({ posts }) => {
   const classes = useStyles();
+
+  if(posts.length === 0) {
+    return <Typography>No posts from you yet...</Typography>
+  }
 
   const render = posts.map(post => (
     <Grid

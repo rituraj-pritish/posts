@@ -40,7 +40,7 @@ const PostItem = ({
       <Typography className={classes.details}>
         <span>{views} Views</span>
         <span>{claps.length} Claps</span>
-        <span><Moment format='DD/MM/YYYY' >{date}</Moment></span>
+        <span><Moment format='D MMM YYYY' >{date}</Moment></span>
       </Typography>
       <Typography className={classes.author}>
         {'-' +

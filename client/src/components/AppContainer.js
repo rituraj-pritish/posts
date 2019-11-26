@@ -11,11 +11,16 @@ const useStyles = makeStyles(theme => ({
     },
     '.MuiOutlinedInput-notchedOutline': {
       borderColor: theme.palette.text.primary
+    },
+    '.MuiInput-underline': {
+      '&:before': {
+        borderBottom: `1px solid ${theme.palette.text.primary}`
+      }
     }
   },
   root: {
     color: theme.palette.text.primary,
-    width: '100%'
+    width: '100%',
   }
   }))
 
