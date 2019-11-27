@@ -5,28 +5,19 @@ import { connect } from 'react-redux';
 
 import { getPostsQuery } from '../graphql/queries';
 import PostsList from './posts/PostsList';
+import TagsList from './TagsList';
+import SelectedTagsList from './SelectedTagsList';
+import {setPosts, filterPosts} from '../actions/posts'
 
-const Home = ({ auth }) => {
+const Home = ({ auth,setPosts, posts:{posts,filtered},filterPosts }) => {
   let [sortCategory, setSortCategory] = useState('date')
-  const { loading, error, data } = useQuery(getPostsQuery);
-
-  const [posts,setPosts] = useState(data ? data.getPosts : undefined)
 
   useEffect(() => {
-    console.log('ran');
-    switch(sortCategory) {
-      case 'claps':
-        setPosts(posts.sort((a,b) => b.claps.length - a.claps.length )) 
-      case 'views':
-        setPosts(posts.sort((a,b) => b.views - a.views))
-      default:
-        setPosts(data ? data.getPosts : undefined)
+    if(posts.length > 0 ) {
+    filterPosts(sortCategory, filtered.length > 0 ? filtered : posts) 
     }
+
   },[sortCategory])
-
-  if (loading) return <CircularProgress />;
-
-  if (error) return <div>Oooops... Something went wrong. Please try again</div>;
 
   const handleSelectChange = e => {
 
@@ -34,14 +25,10 @@ const Home = ({ auth }) => {
 
   }
 
-  console.log(posts);
-
-  if(posts === undefined) {
-  setPosts(data.getPosts)
-  }
-  const sort = true
   return (
     <div>
+      <TagsList/>
+      <SelectedTagsList/>
       filter by drop down
       <InputLabel>Sort By</InputLabel>
       <Select value={sortCategory} onChange={handleSelectChange} >
@@ -49,13 +36,14 @@ const Home = ({ auth }) => {
         <MenuItem value={'date'}>Date</MenuItem>
         <MenuItem value={'views'}>Most Viewed</MenuItem>
       </Select>
-      <PostsList sort={!sort} posts={posts} />
+      <PostsList posts={filtered.length > 0 ? filtered :posts} />
     </div>
   );
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  posts: state.posts
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps,{setPosts, filterPosts})(Home);

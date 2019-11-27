@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, TextareaAutosize, Button, Grid } from '@material-ui/core';
+import {
+  TextField,
+  TextareaAutosize,
+  Button,
+  Grid,
+  CircularProgress
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { addPostMutation } from '../../graphql/mutations';
-import { getPostsQuery, getUserQuery } from '../../graphql/queries';
+import { updatePostMutation } from '../../graphql/mutations';
+import {
+  getPostsQuery,
+  getUserQuery,
+  getPostQuery
+} from '../../graphql/queries';
 import { setAlert } from '../../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
@@ -31,23 +41,42 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreatePost = ({ history, setAlert, auth }) => {
+const EditPost = ({ history, setAlert, auth, match }) => {
+  const postId = match.params.postId;
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     tags: ''
   });
-  const { title, content,tags } = formData;
+  const { title, content, tags } = formData;
   const classes = useStyles();
-  const [addPost, { loading, error, data }] = useMutation(addPostMutation);
+  const { loading, error, data } = useQuery(getPostQuery, {
+    variables: { postId }
+  });
+  const [updatePost, updatePostRes] = useMutation(updatePostMutation);
 
   useEffect(() => {
     if (!loading && data && !error) {
-      setFormData({ title: '', content: '',tags: '' });
-      return history.push('/dashboard');
+      setFormData({
+        title: data.getPost.title,
+        content: data.getPost.content,
+        tags: data.getPost.tags.join(', ')
+      });
+    }
+
+    if (
+      !updatePostRes.loading &&
+      !updatePostRes.error &&
+      updatePostRes.data &&
+      updatePostRes.data.updatePost
+    ) {
+      history.push(`/post/${postId}`);
     }
     //eslint-disable-next-line
-  }, [loading, error, data]);
+  }, [loading, error, data, updatePostRes.loading, updatePostRes.error]);
+
+  if (error) return <div>oopps</div>;
+  if (loading) return <CircularProgress />;
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -61,9 +90,10 @@ const CreatePost = ({ history, setAlert, auth }) => {
       return;
     }
 
-    addPost({
-      variables: { title, content,tags },
+    updatePost({
+      variables: { title, content, postId, tags },
       refetchQueries: [
+        { query: getPostQuery, variables: { postId } },
         { query: getPostsQuery },
         { query: getUserQuery, variables: { userId: auth.user._id } }
       ]
@@ -120,4 +150,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { setAlert }
-)(CreatePost);
+)(EditPost);

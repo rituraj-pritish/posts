@@ -19,9 +19,13 @@ import { signupMutation } from '../graphql/mutations';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white
-    }
+    '.side-panel': {
+      display: 'none'
+    },
+    '.left-grid' : {
+      maxWidth: '100%',
+      flexBasis: '100%'
+  }
   },
   paper: {
     marginTop: theme.spacing(2), // 1 === 8px
@@ -115,10 +119,9 @@ const SignUp = ({
 
   return (
     <Container component='main' maxWidth='xs'>
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <LockOutlinedIcon color='primary' />
         </Avatar>
         <Typography component='h1' variant='h5'>
           Sign up

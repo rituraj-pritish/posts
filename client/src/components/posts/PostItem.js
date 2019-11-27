@@ -2,12 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Typography, Icon, Badge } from '@material-ui/core';
-import Moment from 'react-moment'
+import Moment from 'react-moment';
 
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.primary.main,
-    padding: '10px'
+    padding: '10px',
+    height: '300px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    textAlign: 'center'
   },
   link: theme.link,
   author: {
@@ -23,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 const PostItem = ({
   _id,
   title,
+  content,
   claps,
   date,
   user: { firstName, lastName },
@@ -31,26 +37,36 @@ const PostItem = ({
   const classes = useStyles();
   return (
     <Card className={classes.root}>
+      <div>
       <Link className={classes.link} to={`/post/${_id}`}>
         <Typography variant='h5' color='secondary'>
-          {title[0].toUpperCase() + title.slice(1)}
+          <b>{title[0].toUpperCase() + title.slice(1)}</b>
         </Typography>
-      </Link>
-      <br />
-      <Typography className={classes.details}>
-        <span>{views} Views</span>
-        <span>{claps.length} Claps</span>
-        <span><Moment format='D MMM YYYY' >{date}</Moment></span>
-      </Typography>
-      <Typography className={classes.author}>
-        {'-' +
-          ' ' +
+        <Typography className={classes.author}>
+        <i>by</i>
+        {' ' +
           firstName[0].toUpperCase() +
           firstName.slice(1) +
           ' ' +
           lastName[0].toUpperCase() +
-          lastName.slice(1)}
+          lastName.slice(1) + ' ' + '/' + ' '}
+        <span>
+          <Moment format='D MMM YYYY'>{date}</Moment>
+        </span>
       </Typography>
+      </Link>
+      </div>
+
+      <div>
+      <Typography>
+        {content.trim().split('').filter((word,idx) => idx < 150).join('') + '...' + 'read more'}
+      </Typography>
+      <Typography className={classes.details}>
+        <span>{views} Views</span>
+        <span>{claps.length} Claps</span>
+      </Typography>
+      </div>
+      
     </Card>
   );
 };

@@ -80,7 +80,7 @@ const Navbar = ({
 
   return (
     <div className={classes.root}>
-      <AppBar position='static' >
+      <AppBar position='fixed' >
         <Toolbar>
           <Typography variant='h6' className={classes.title}>
             <Link className={classes.link} to='/'>

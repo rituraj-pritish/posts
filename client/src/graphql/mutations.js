@@ -13,17 +13,24 @@ export const signupMutation = gql`
 `
 
 export const addPostMutation = gql`
-  mutation($title: String!, $content: String!) {
-    addPost(title: $title, content: $content) {
+  mutation($title: String!, $content: String!, $tags: String) {
+    addPost(title: $title, content: $content, tags: $tags) {
       _id
       title
       content
+      tags
       user {
         firstName
         lastName
       }
       date
     }
+  }
+`
+
+export const updatePostMutation = gql`
+  mutation($postId: ID!,$title: String!,$tags: String, $content: String!) {
+    updatePost(postId: $postId, title: $title, content: $content, tags: $tags) 
   }
 `
 

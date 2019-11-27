@@ -13,7 +13,7 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
   },
-  categories: [String],
+  tags: [String],
   claps: [
     {
       userId: {

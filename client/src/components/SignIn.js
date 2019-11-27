@@ -20,6 +20,15 @@ import { setAlert } from '../actions/alerts';
 import { loginQuery } from '../graphql/queries';
 
 const useStyles = makeStyles(theme => ({
+  '@global': {
+    '.side-panel': {
+      display: 'none'
+    },
+    '.left-grid' : {
+        maxWidth: '100%',
+        flexBasis: '100%'
+    }
+  },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -97,7 +106,6 @@ const SignIn = ({
 
   return (
     <Container component='main' maxWidth='xs'>
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon color='primary' />

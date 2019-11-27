@@ -16,9 +16,6 @@ export const lightTheme = createMuiTheme({
     delete: '#db6565',
 
     divider: '#000',
-    action: {
-      selected: '#000'
-    }
   }
 });
 
@@ -31,8 +28,5 @@ export const darkTheme = createMuiTheme({
     bg: '#000',
     delete: '#db6565',
     divider: '#fff',
-    action: {
-      selected: '#fff'
-    }
   }
 });

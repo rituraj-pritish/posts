@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   CircularProgress,
@@ -15,32 +16,50 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 
 import { setAlert } from '../../actions/alerts';
-import { getPostQuery, getClapsOfPostQuery, getPostsQuery,getUserQuery } from '../../graphql/queries';
-import { addClapMutation, removeClapMutation, deletePostMutation } from '../../graphql/mutations';
+import {
+  getPostQuery,
+  getClapsOfPostQuery,
+  getPostsQuery,
+  getUserQuery
+} from '../../graphql/queries';
+import {
+  addClapMutation,
+  removeClapMutation,
+  deletePostMutation
+} from '../../graphql/mutations';
 import CommentsList from './CommentsList';
 import DeletePostDialog from './DeletePostDialog';
+import Author from './Author';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-
+  root: {},
+  content: {
+    margin: '25px 0',
+    whiteSpace: 'pre-line'
+  },
+  header: {
+    marginBottom: '25px'
+  },
+  clap: {
+    fontSize: '50px'
+  },
+  aboutClap: {
+    color: theme.palette.primary.dark
   },
   divider: {
     height: '2px',
     backgroundColor: theme.palette.secondary.main,
     margin: '10px 0'
   },
-  lineBreaks: {
-    whiteSpace: 'pre-line'
-  },
   commentsList: {
     marginTop: '20px'
   },
   deleteButton: {
-    '&:hover' : {
-    backgroundColor: theme.palette.delete
+    '&:hover': {
+      backgroundColor: theme.palette.delete
     }
   }
 }));
@@ -50,7 +69,7 @@ const Post = props => {
   const postId = props.match.params.postId;
 
   const [open, setOpen] = useState(false);
-  const [deletePost,deletePostRes] = useMutation(deletePostMutation);
+  const [deletePost, deletePostRes] = useMutation(deletePostMutation);
   const [addClap, addClapRes] = useMutation(addClapMutation, {
     variables: { postId },
     refetchQueries: [
@@ -87,10 +106,18 @@ const Post = props => {
       setClapsCount(getClaps.data.getClapsOfPost.length);
     }
 
-    if(deletePostRes.data && deletePostRes.data.deletePost) {
-      props.history.push('/dashboard')
+    if (deletePostRes.data && deletePostRes.data.deletePost) {
+      props.history.push('/dashboard');
     }
-  }, [removeClapRes.loading, addClapRes.loading, loading, error, getClaps, deletePostRes.loading, deletePostRes.error]);
+  }, [
+    removeClapRes.loading,
+    addClapRes.loading,
+    loading,
+    error,
+    getClaps,
+    deletePostRes.loading,
+    deletePostRes.error
+  ]);
 
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
@@ -115,73 +142,97 @@ const Post = props => {
   };
 
   const handleEdit = () => {
-
-  }
+    return props.history.push(`/edit-post/${postId}`)
+  };
 
   const handleDelete = () => {
-    deletePost({variables: {postId},
-    refetchQueries: [{
-      query: getPostsQuery
-    },
-  {
-    query: getUserQuery,
-    variables: {userId: currentUserId}
-  }] })
-  }
+    deletePost({
+      variables: { postId },
+      refetchQueries: [
+        {
+          query: getPostsQuery
+        },
+        {
+          query: getUserQuery,
+          variables: { userId: currentUserId }
+        }
+      ]
+    });
+  };
 
   return (
     <div>
-    <Container className={classes.root}>
-      <Grid container justify='space-between'>
-        <Grid item>
-          <Moment format='D MMM YYYY'>{date}</Moment>
+      <Container className={classes.root}>
+
+        <Grid className={classes.header} container justify='space-between'>
+          <Grid item>
+            <Moment format='D MMM YYYY'>{date}</Moment>
+          </Grid>
+          <Grid item>
+            {userId !== currentUserId ? (
+              <Typography>
+                <i>by</i>
+                {' ' +
+                  user.firstName.toUpperCase() +
+                  ' ' +
+                  user.lastName.toUpperCase()}
+              </Typography>
+            ) : (
+              <ButtonGroup>
+                <Button
+                  startIcon={<Icon className='fas fa-edit' />}
+                  onClick={handleEdit}
+                >
+                  Edit
+                </Button>
+                <Button
+                  startIcon={<Icon className='fas fa-trash-alt' />}
+                  onClick={() => setOpen(true)}
+                  className={classes.deleteButton}
+                >
+                  Delete
+                </Button>
+              </ButtonGroup>
+            )}
+          </Grid>
         </Grid>
-        <Grid item>
-          { userId === currentUserId && 
-          <ButtonGroup>
-            <Button
-              startIcon={<Icon className='fas fa-edit' />}
-              onClick={handleEdit}
-            >
-              Edit
-            </Button>
-            <Button
-              startIcon={<Icon className='fas fa-trash-alt' />}
-              onClick={() => setOpen(true)}
-              className={classes.deleteButton}
-            >
-              Delete
-            </Button>
-          </ButtonGroup>
-          }
+
+        <Grid container justify='center'>
+          <Typography variant='h4'>
+            {title[0].toUpperCase() + title.slice(1)}
+          </Typography>
         </Grid>
-      </Grid>
-      <Grid container justify='center'>
-        <Typography variant='h4'>
-          {title[0].toUpperCase() + title.slice(1)}
-        </Typography>
-      </Grid>
-      <div className={classes.lineBreaks}>{content}</div>
-      Author -{' '}
-      {user.firstName.toUpperCase() + ' ' + user.lastName.toUpperCase()}
-      claps : {claps.length}
-      {currentUserId === userId ? 'delete' : null}
-      <Badge badgeContent={clapsCount} color='secondary'>
-        <IconButton
-          disabled={!props.auth.isAuth}
-          color='secondary'
-          onClick={handleClapButton}
-        >
-          <Icon className='fas fa-sign-language' />
-        </IconButton>
-      </Badge>
-      <br />
-      <Divider className={classes.divider} />
-      <div className={classes.commentsList}>
-        <CommentsList postId={postId} comments={comments} />
-      </div>
-    </Container>
-    <DeletePostDialog open={open} setOpen={setOpen} handleDelete={handleDelete} />
+
+        <Typography className={classes.content}>{content}</Typography>
+
+        <Grid container justify='center' alignItems='center' >
+          <span className={classes.aboutClap}>
+            CLAP and make noise for the post
+          </span>
+          <Badge badgeContent={clapsCount} color='secondary'>
+            <IconButton
+              disabled={!props.auth.isAuth}
+              color='secondary'
+              onClick={handleClapButton}
+            >
+              <Icon className={clsx('fas fa-sign-language', classes.clap)} color='secondary' />
+            </IconButton>
+          </Badge>
+        </Grid>
+
+        <Divider className={classes.divider} />
+        <Author {...user} />
+        <Divider className={classes.divider} />
+        
+        <div className={classes.commentsList}>
+          <CommentsList postId={postId} comments={comments} />
+        </div>
+      </Container>
+      <DeletePostDialog
+        open={open}
+        setOpen={setOpen}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

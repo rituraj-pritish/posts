@@ -123,14 +123,19 @@ module.exports = {
       return { token, ...user._doc, password: null };
     },
 
-    addPost: async (parent, { title, content }, { userId }) => {
+    addPost: async (parent, { title, content, tags }, { userId }) => {
       const user = await User.findById(userId);
-
       const post = await new Post({
         title,
         content,
         userId
-      }).save();
+      });
+
+      const tagsArr = [];
+      tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
+
+      post.tags = tagsArr;
+      await post.save();
 
       await user.postIds.push({ post: post._id });
       await user.save();
@@ -140,17 +145,25 @@ module.exports = {
 
     updatePost: async (
       parent,
-      { title, content, postId },
+      { title, content, tags, postId },
       { userId, requireLogin, isSameUser }
     ) => {
       requireLogin(userId);
       const post = await Post.findById(postId);
       isSameUser(post.userId, userId);
 
+      if (!post) throw new Error('No post found');
+
       post.title = title;
       post.content = content;
 
-      return await post.save();
+      const tagsArr = [];
+      tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
+
+      post.tags = tagsArr;
+      await post.save();
+
+      return true;
     },
 
     deletePost: async (
@@ -258,7 +271,9 @@ module.exports = {
     addClap: async (parent, { postId }, { userId }) => {
       const post = await Post.findById(postId);
 
-      isAlreadyClappedByUser = post.claps.find(clap => clap.userId.toString() === userId);
+      isAlreadyClappedByUser = post.claps.find(
+        clap => clap.userId.toString() === userId
+      );
 
       if (isAlreadyClappedByUser)
         throw new Error(

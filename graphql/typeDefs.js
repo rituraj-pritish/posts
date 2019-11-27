@@ -14,13 +14,6 @@ module.exports = gql`
     dateCreated: String!
   }
 
-  type Category {
-    _id: ID!
-    name: String
-    postIds: [ID]
-    posts: [Post]
-  }
-
   type Post {
     _id: ID!
     title: String!
@@ -28,7 +21,7 @@ module.exports = gql`
     userId: ID!
     user: User!
     views: Int!
-    categories: [Category]
+    tags: [String]
     claps: [Clap] #userId
     comments: [Comment]
     date: String!
@@ -73,9 +66,9 @@ module.exports = gql`
       password: String!
     ): User
 
-    addPost(title: String!, content: String!): Post
+    addPost(title: String!, content: String!, tags: String): Post
 
-    updatePost(title: String!, content: String!, postId: ID!): Post
+    updatePost(title: String!, content: String!, tags: String, postId: ID!): Boolean
 
     deletePost(postId: ID!): Boolean
 

@@ -5,12 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import PostItem from './PostItem';
 
 const useStyles = makeStyles(theme => ({
-  gridContainer: {
-    justifyContent: 'center'
-  },
   gridItem: {
     textAlign: 'center',
-    [theme.breakpoints.up('md')]: {}
   }
 }));
 
@@ -37,7 +33,7 @@ const PostsList = ({ posts }) => {
   ));
 
   return (
-    <Grid className={classes.gridContainer} container spacing={4}>
+    <Grid container spacing={4} justify='center'>
       {render}
     </Grid>
   );

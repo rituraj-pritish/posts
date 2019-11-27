@@ -33,6 +33,7 @@ export const getUserQuery = gql`
         _id
         title
         content
+        tags
         date
         views
         claps {
@@ -53,8 +54,10 @@ export const getPostsQuery = gql`
       _id
       title
       content
+      tags
       date
       views
+      userId
       claps {
         userId
       }
@@ -73,6 +76,7 @@ export const getPostQuery = gql`
       userId
       title
       content
+      tags
       date
       views
       user {

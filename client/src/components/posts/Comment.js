@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   commentDate: {
     marginLeft: '10px',
     fontSize: '15px',
-    color: '#9ea3a0'
+    color: theme.palette.primary.dark
   },
   bottom: {
     marginLeft: '70px',
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     width: '100px',
     display: 'flex',
     justifyContent: 'space-between',
-    color: '#9ea3a0'
+    color: theme.palette.primary.dark
   },
   thumb: {
     cursor: 'pointer'
@@ -168,7 +168,7 @@ const Comment = ({
         </div>
 
         {auth.isAuth && (userId === auth.user._id) ? (
-          <IconButton onClick={handleDelete}>
+          <IconButton onClick={handleDelete} color='secondary' >
             <DeleteRoundedIcon className={classes.delete} />
           </IconButton>
         ) : null}
