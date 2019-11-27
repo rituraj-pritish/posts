@@ -22,6 +22,7 @@ const isSameUser = (id, givenId) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true,
   context: async ({ req }) => {
     const token = req.headers.authorization;
     if (token) {
