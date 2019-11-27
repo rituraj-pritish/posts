@@ -23,6 +23,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
+  playground: true,
   context: async ({ req }) => {
     const token = req.headers.authorization;
     if (token) {
