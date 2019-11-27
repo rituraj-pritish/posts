@@ -16,7 +16,6 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 
 import { setAlert } from '../../actions/alerts';
 import {
@@ -30,9 +29,9 @@ import {
   removeClapMutation,
   deletePostMutation
 } from '../../graphql/mutations';
-import CommentsList from './CommentsList';
-import DeletePostDialog from './DeletePostDialog';
-import Author from './Author';
+import CommentsList from '../posts/CommentsList';
+import DeletePostDialog from '../posts/DeletePostDialog';
+import Author from '../posts/Author';
 
 const useStyles = makeStyles(theme => ({
   root: {},

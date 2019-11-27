@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, Typography, Icon, Badge } from '@material-ui/core';
+import { Card, Typography } from '@material-ui/core';
 import Moment from 'react-moment';
 
 const useStyles = makeStyles(theme => ({

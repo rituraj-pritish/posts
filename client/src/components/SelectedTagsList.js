@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Chip, Container, Typography } from '@material-ui/core';
+import React from 'react';
+import { Chip, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-import {removeTags} from '../actions/posts'
+import { removeTags } from '../actions/posts';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,35 +17,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const tags = [
-  'tech',
-  'life',
-  'outdoors',
-  'book',
-  'book review',
-  'movie',
-  'movie review',
-  'travel',
-  'show',
-  'television',
-  'celebrities'
-];
-
-const SelectedTagsList = ({removeTags, posts}) => {
+const SelectedTagsList = ({ removeTags, posts }) => {
   const classes = useStyles();
-  const [selectedTags,setSelectedTags] = useState([])
 
-  const handleClick = (tag) => {
-    
-  }
+  const handleClick = tag => {};
 
-  if(posts.selectedTags.length === 0) {
-    return null
+  if (posts.selectedTags.length === 0) {
+    return null;
   }
   return (
     <Container className={classes.root}>
-      <Chip className={classes.deleteAll} label='remove all' onDelete={removeTags} size='small' />
-      {posts.selectedTags.map((tag,idx) => (
+      <Chip
+        className={classes.deleteAll}
+        label='remove all'
+        onDelete={removeTags}
+        size='small'
+      />
+      {posts.selectedTags.map((tag, idx) => (
         <Chip
           size='small'
           className={classes.chip}
@@ -59,8 +47,11 @@ const SelectedTagsList = ({removeTags, posts}) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   posts: state.posts
-})
+});
 
-export default connect(mapStateToProps,{removeTags})(SelectedTagsList);
+export default connect(
+  mapStateToProps,
+  { removeTags }
+)(SelectedTagsList);

@@ -4,12 +4,10 @@ import {
   Container,
   Button,
   Typography,
-  Divider
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PostsList from './posts/PostsList';
 import PostItem from './posts/PostItem';
 
 const useStyles = makeStyles(theme => ({
@@ -49,8 +47,6 @@ const SidePanel = ({ auth, posts, history }) => {
     (a, b) => b.claps.length - a.claps.length
   )[0];
 
-  console.log(userPosts);
-
   const onlyForDashboard = (
     <div>
       <Typography className={classes.text}>Most Popular Post</Typography>
@@ -66,8 +62,8 @@ const SidePanel = ({ auth, posts, history }) => {
       {posts.posts
         .sort((a, b) => b.views - a.views)
         .map(post => (
-          <div>
-            <PostItem className={classes.postItem} {...post} key={post._id} />
+          <div key={post._id}>
+            <PostItem className={classes.postItem} {...post}  />
             <span style={{ margin: '20px' }} />
           </div>
         ))}

@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, Link } from 'react-router-dom';
 import { useMutation } from '@apollo/react-hooks';
-
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -13,9 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { setAlert } from '../actions/alerts';
-import { authError, authSuccess } from '../actions/auth';
-import { signupMutation } from '../graphql/mutations';
+import { setAlert } from '../../actions/alerts';
+import { authError, authSuccess } from '../../actions/auth';
+import { signupMutation } from '../../graphql/mutations';
 
 const useStyles = makeStyles(theme => ({
   '@global': {

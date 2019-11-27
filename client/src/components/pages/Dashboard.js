@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { CircularProgress, Button, Grid, Typography } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { CircularProgress, Grid, Typography } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { getUserQuery } from '../graphql/queries';
-import PostsList from './posts/PostsList';
-import Chart from './Chart';
+import { getUserQuery } from '../../graphql/queries';
+import PostsList from '../posts/PostsList';
+import Chart from '../Chart';
 
 const useStyles = makeStyles(theme => ({
-  link: theme.link
+  link: theme.link,
+  text: {
+    marginBottom: '20px'
+  }
 }));
 
 const Dashboard = ({ auth: { user } }) => {
@@ -26,23 +28,16 @@ const Dashboard = ({ auth: { user } }) => {
 
   const posts = data.getUser.posts;
 
-  let mostViewedPost, mostClappedPost;
-  if (posts.length > 0) {
-    mostViewedPost = posts.sort((a, b) => b.views - a.views)[0].title;
-
-    mostClappedPost = posts.sort((a, b) => b.claps.length - a.claps.length)[0]
-      .title;
-  }
-
   return (
     <div>
-      {`Hi ${user.firstName}, how are you today ?`}
+      <Typography className={classes.text} >{`Hi ${user.firstName[0].toUpperCase() + user.firstName.slice(1)}, how are you today ?`}</Typography>
       <Grid container direction='row' alignItems='center' justify='center'>
         <Chart />
       </Grid>
-      filter by drop down
       <Grid container justify='center'>
-        <Typography variant='h4'>Posts by you</Typography>
+        <Typography className={classes.text} variant='h4'>
+          Posts by you
+        </Typography>
       </Grid>
       <PostsList posts={posts} />
     </div>

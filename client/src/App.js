@@ -1,29 +1,27 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Container } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CircularProgress, Grid } from '@material-ui/core';
 
 import './App.css';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import Home from './components/Home';
-import Dashboard from './components/Dashboard';
+import SignIn from './components/pages/SignIn';
+import SignUp from './components/pages/SignUp';
+import Home from './components/pages/Home';
+import Dashboard from './components/pages/Dashboard';
 import CustomAlert from './components/CustomAlert';
 import Navbar from './components/Navbar';
-
-import CreatePost from './components/posts/CreatePost';
+import CreatePost from './components/pages/CreatePost';
 import { setUser, authError } from './actions/auth';
 import { setPosts } from './actions/posts';
 import { getUserByTokenQuery,getPostsQuery } from './graphql/queries';
-import Post from './components/posts/Post';
+import Post from './components/pages/Post';
 import PrivateRoute from './components/PrivateRoute';
 import SidePanel from './components/SidePanel';
 import { lightTheme, darkTheme } from './theme';
 import AppContainer from './components/AppContainer';
-import EditPost from './components/posts/EditPost';
+import EditPost from './components/pages/EditPost';
 
 const token = window.localStorage.getItem('token') || '';
 

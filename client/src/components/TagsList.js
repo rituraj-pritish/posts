@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Chip, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
-import {addTag} from '../actions/posts'
+import { addTag } from '../actions/posts';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,19 +31,17 @@ const tags = [
   'celebrities'
 ];
 
-const TagsList = ({addTag}) => {
+const TagsList = ({ addTag }) => {
   const classes = useStyles();
-  const [selectedTags,setSelectedTags] = useState([])
 
-  const handleClick = (tag) => {
-    
-    addTag(tag)
-  }
+  const handleClick = tag => {
+    addTag(tag);
+  };
 
   return (
     <Container className={classes.root}>
       <Typography className={classes.text}>Filter by tags</Typography>
-      {tags.map((tag,idx) => (
+      {tags.map((tag, idx) => (
         <Chip
           className={classes.chip}
           label={tag}
@@ -57,4 +55,7 @@ const TagsList = ({addTag}) => {
   );
 };
 
-export default connect(null,{addTag})(TagsList);
+export default connect(
+  null,
+  { addTag }
+)(TagsList);

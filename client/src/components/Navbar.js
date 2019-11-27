@@ -7,7 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Tooltip, Switch } from '@material-ui/core';
 
@@ -29,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   link: {
     ...theme.link,
     color: theme.palette.text.primary
+  },
+  switch: {
+    marginRight: '30px'
   }
 }));
 
@@ -87,7 +89,8 @@ const Navbar = ({
               Posts
             </Link>
           </Typography>
-          <Switch checked={!isLight} onChange={() => changeTheme(isLight)} />
+          <Icon className='fas fa-adjust' />
+          <Switch className={classes.switch} checked={!isLight} onChange={() => changeTheme(isLight)} />
           {isAuth ? authLinks : noAuthLinks}
         </Toolbar>
       </AppBar>
