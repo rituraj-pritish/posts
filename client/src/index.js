@@ -11,7 +11,7 @@ import App from './App';
 import reducers from './reducers';
 
 const client = new ApolloClient({
-  uri: 'https://posts-posts-posts.herokuapp.com/graphql',
+  uri: process.env === 'production' ? 'https://posts-posts-posts.herokuapp.com/graphql' : 'http://localhost:5000/graphql' ,
   request: operation => {
     const token = window.localStorage.getItem('token')
 

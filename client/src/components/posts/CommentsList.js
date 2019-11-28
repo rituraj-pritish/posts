@@ -35,6 +35,7 @@ const CommentsList = ({ postId, userId,setAlert,auth }) => {
 
     if(!auth.isAuth) {
       setAlert('You need to sign in to comment on a post', 'error')
+      return
     }
 
     addComment({
