@@ -40,11 +40,12 @@ const SidePanel = ({ auth, posts, history }) => {
 
   if (posts.loading) return null;
 
+  let mostViewed, mostClapped
   if(auth.isAuth) {
   const userPosts = posts.posts.filter(post => post.userId === auth.user._id);
 
-  const mostViewed = userPosts.sort((a, b) => b.views - a.views)[0];
-  const mostClapped = userPosts.sort(
+  mostViewed = userPosts.sort((a, b) => b.views - a.views)[0];
+  mostClapped = userPosts.sort(
     (a, b) => b.claps.length - a.claps.length
   )[0];
   }
