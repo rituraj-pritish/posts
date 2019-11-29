@@ -33,6 +33,7 @@ export const getUserQuery = gql`
         _id
         title
         content
+        imageUrl
         tags
         date
         views
@@ -54,6 +55,7 @@ export const getPostsQuery = gql`
       _id
       title
       content
+      imageUrl
       tags
       date
       views
@@ -76,6 +78,7 @@ export const getPostQuery = gql`
       userId
       title
       content
+      imageUrl
       tags
       date
       views

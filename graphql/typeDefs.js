@@ -16,6 +16,7 @@ module.exports = gql`
 
   type Post {
     _id: ID!
+    image: Image
     title: String!
     content: String!
     userId: ID!
@@ -25,6 +26,12 @@ module.exports = gql`
     claps: [Clap] #userId
     comments: [Comment]
     date: String!
+  }
+
+  type Image {
+    fileName: String!
+    mimetype: String!
+    encoding: String!
   }
 
   type Comment {
@@ -66,9 +73,20 @@ module.exports = gql`
       password: String!
     ): User
 
-    addPost(title: String!, content: String!, tags: String): Post
+    addPost(
+      title: String!
+      content: String!
+      tags: String
+      image: Upload
+      imageUrl: String
+    ): Boolean
 
-    updatePost(title: String!, content: String!, tags: String, postId: ID!): Boolean
+    updatePost(
+      title: String!
+      content: String!
+      tags: String
+      postId: ID!
+    ): Boolean
 
     deletePost(postId: ID!): Boolean
 

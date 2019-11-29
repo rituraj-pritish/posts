@@ -15,7 +15,7 @@ import Navbar from './components/Navbar';
 import CreatePost from './components/pages/CreatePost';
 import { setUser, authError } from './actions/auth';
 import { setPosts } from './actions/posts';
-import { getUserByTokenQuery,getPostsQuery } from './graphql/queries';
+import { getUserByTokenQuery, getPostsQuery } from './graphql/queries';
 import Post from './components/pages/Post';
 import PrivateRoute from './components/PrivateRoute';
 import SidePanel from './components/SidePanel';
@@ -25,11 +25,11 @@ import EditPost from './components/pages/EditPost';
 
 const token = window.localStorage.getItem('token') || '';
 
-const App = ({ alert, auth, posts,setPosts, authError, setUser, isLight }) => {
+const App = ({ alert, auth, posts, setPosts, authError, setUser, isLight }) => {
   const { loading, error, data } = useQuery(getUserByTokenQuery, {
     variables: { token }
   });
-  const getPostsRes = useQuery(getPostsQuery)
+  const getPostsRes = useQuery(getPostsQuery);
 
   useEffect(() => {
     if (error) {
@@ -40,8 +40,13 @@ const App = ({ alert, auth, posts,setPosts, authError, setUser, isLight }) => {
       setUser(data.getUserByToken);
     }
 
-    if(!getPostsRes.loading && !getPostsQuery.error && getPostsRes.data && getPostsRes.data.getPosts) {
-      setPosts(getPostsRes.data.getPosts)
+    if (
+      !getPostsRes.loading &&
+      !getPostsQuery.error &&
+      getPostsRes.data &&
+      getPostsRes.data.getPosts
+    ) {
+      setPosts(getPostsRes.data.getPosts);
     }
     // eslint-disable-next-line
   }, [loading, error, data, getPostsRes]);
@@ -96,5 +101,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setUser, authError,setPosts }
+  { setUser, authError, setPosts }
 )(App);

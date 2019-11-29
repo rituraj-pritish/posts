@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, TextareaAutosize, Button, Grid } from '@material-ui/core';
+import {
+  TextField,
+  TextareaAutosize,
+  Button,
+  Grid,
+  Input,
+  CircularProgress
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { useMutation } from '@apollo/react-hooks';
@@ -13,10 +20,10 @@ const useStyles = makeStyles(theme => ({
     '.side-panel': {
       display: 'none'
     },
-    '.left-grid' : {
+    '.left-grid': {
       maxWidth: '100%',
       flexBasis: '100%'
-    },
+    }
   },
   textArea: {
     backgroundColor: theme.palette.bg,
@@ -28,6 +35,11 @@ const useStyles = makeStyles(theme => ({
     '&:focus': {
       outlineColor: theme.palette.text.primary
     }
+  },
+  imagePreview: {
+    width: '100%',
+    height: '400px',
+    objectFit: 'cover'
   }
 }));
 
@@ -35,22 +47,54 @@ const CreatePost = ({ history, setAlert, auth }) => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    tags: ''
+    tags: '',
+    imageUrl: ''
   });
-  const { title, content,tags } = formData;
+  const [image, setImage] = useState(null);
+  const [imgPrevUrl, setImgPrevUrl] = useState('');
+
+  const { title, content, tags, imageUrl } = formData;
   const classes = useStyles();
   const [addPost, { loading, error, data }] = useMutation(addPostMutation);
 
   useEffect(() => {
-    if (!loading && data && !error) {
-      setFormData({ title: '', content: '',tags: '' });
+    if (!loading && data.addPost && !error) {
+      setFormData({ title: '', content: '', tags: '',imageUrl: '' });
       return history.push('/dashboard');
     }
     //eslint-disable-next-line
   }, [loading, error, data]);
 
+  if(loading) return <CircularProgress/>
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    if (e.target.name === 'imageUrl') {
+      const extension = e.target.value.split('.').pop();
+
+      if (extension !== 'jpg' && extension !== 'jpeg' && extension !== 'png') {
+        setAlert('Please provide URL of an image', 'error');
+        setFormData({ ...formData, imageUrl: '' });
+      }
+      return;
+    }
+
+    if (e.target.name === 'image') {
+      let reader = new FileReader();
+      let file = e.target.files[0];
+      
+      reader.onloadend = () => {
+        if (file.type !== 'image/jpeg' && file.type !== 'img/jpg') {
+          setAlert('Please select a valid image', 'error');
+          return;
+        }
+
+        setImage(file);
+        setImgPrevUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = e => {
@@ -62,13 +106,14 @@ const CreatePost = ({ history, setAlert, auth }) => {
     }
 
     addPost({
-      variables: { title, content,tags },
+      variables: { title, content, tags, image, imageUrl },
       refetchQueries: [
         { query: getPostsQuery },
         { query: getUserQuery, variables: { userId: auth.user._id } }
       ]
     });
   };
+
 
   return (
     <div className={classes.root}>
@@ -91,6 +136,25 @@ const CreatePost = ({ history, setAlert, auth }) => {
         fullWidth
         name='tags'
         value={tags}
+        onChange={handleChange}
+        color='secondary'
+      />
+
+      <Input type='file' name='image' onChange={handleChange} />
+      {(image || imageUrl) && (
+        <img
+          src={imageUrl ? imageUrl : imgPrevUrl}
+          alt={image ? image.name : 'post-image'}
+          className={classes.imagePreview}
+        />
+      )}
+
+      <TextField
+        label='Image Url'
+        placeholder='Paste image url here'
+        fullWidth
+        name='imageUrl'
+        value={imageUrl}
         onChange={handleChange}
         color='secondary'
       />

@@ -123,13 +123,25 @@ module.exports = {
       return { token, ...user._doc, password: null };
     },
 
-    addPost: async (parent, { title, content, tags }, { userId }) => {
+    addPost: async (
+      parent,
+      { title, content, tags, image, imageUrl },
+      { userId }
+    ) => {
+      let imgUrl;
+      if (image) {
+        const { createReadStream } = await image;
+        imgUrl = await utils.imageUpload(createReadStream);
+      }
+
+      imgUrl = await utils.imageUrlUpload(imageUrl);
+
       const user = await User.findById(userId);
       const post = await new Post({
         title,
         content,
         userId
-      });
+      }).save();
 
       const tagsArr = [];
       tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
@@ -138,9 +150,10 @@ module.exports = {
       await post.save();
 
       await user.postIds.push({ post: post._id });
+      post.imageUrl = imgUrl;
       await user.save();
-
-      return post.save();
+      await post.save();
+      return true;
     },
 
     updatePost: async (

@@ -29,6 +29,7 @@ const PostItem = ({
   _id,
   title,
   content,
+  imageUrl,
   claps,
   date,
   user: { firstName, lastName },
@@ -37,36 +38,50 @@ const PostItem = ({
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <div>
-      <Link className={classes.link} to={`/post/${_id}`}>
-        <Typography variant='h5' color='secondary'>
-          <b>{title[0].toUpperCase() + title.slice(1)}</b>
-        </Typography>
-        <Typography className={classes.author}>
-        <i>by</i>
-        {' ' +
-          firstName[0].toUpperCase() +
-          firstName.slice(1) +
-          ' ' +
-          lastName[0].toUpperCase() +
-          lastName.slice(1) + ' ' + '/' + ' '}
-        <span>
-          <Moment format='D MMM YYYY'>{date}</Moment>
-        </span>
-      </Typography>
-      </Link>
+      <div
+        style={{
+          backgroundImage: `url(${imageUrl})`,
+          height: '200px',
+          width: '100%'
+        }}
+      >
+        <Link className={classes.link} to={`/post/${_id}`}>
+          <Typography variant='h5' color='secondary'>
+            <b>{title[0].toUpperCase() + title.slice(1)}</b>
+          </Typography>
+          <Typography className={classes.author}>
+            <i>by</i>
+            {' ' +
+              firstName[0].toUpperCase() +
+              firstName.slice(1) +
+              ' ' +
+              lastName[0].toUpperCase() +
+              lastName.slice(1) +
+              ' ' +
+              '/' +
+              ' '}
+            <span>
+              <Moment format='D MMM YYYY'>{date}</Moment>
+            </span>
+          </Typography>
+        </Link>
       </div>
 
       <div>
-      <Typography>
-        {content.trim().split('').filter((word,idx) => idx < 150).join('') + '...' + 'read more'}
-      </Typography>
-      <Typography className={classes.details}>
-        <span>{views} Views</span>
-        <span>{claps.length} Claps</span>
-      </Typography>
+        <Typography>
+          {content
+            .trim()
+            .split('')
+            .filter((word, idx) => idx < 150)
+            .join('') +
+            '...' +
+            'read more'}
+        </Typography>
+        <Typography className={classes.details}>
+          <span>{views} Views</span>
+          <span>{claps.length} Claps</span>
+        </Typography>
       </div>
-      
     </Card>
   );
 };

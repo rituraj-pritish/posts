@@ -4,23 +4,27 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
-import ApolloClient from 'apollo-boost';
+import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
+import {createUploadLink} from 'apollo-upload-client'
+import {InMemoryCache} from 'apollo-cache-inmemory'
+// import {setContext} from 'apollo-link-context'
+
 
 import App from './App';
 import reducers from './reducers';
+const token = window.localStorage.getItem('token')
+const link = createUploadLink({
+  uri: '/graphql',
+  headers: {
+    authorization: token ? token : ''
+  }
+})
+
 
 const client = new ApolloClient({
-  uri: process.env.NODE_ENV === 'production' ? 'https://posts-posts-posts.herokuapp.com/graphql' : 'http://localhost:5000/graphql' ,
-  request: operation => {
-    const token = window.localStorage.getItem('token')
-
-    operation.setContext({
-      headers: {
-        authorization: token ? token : ''
-      }
-    })
-  }
+  link,
+  cache: new InMemoryCache(),
 });
 
 const middlewares = [reduxThunk];
