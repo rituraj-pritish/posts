@@ -54,15 +54,12 @@ module.exports = {
 
   imageUrlUpload: async imageUrl => {
     let resultUrl;
-    await cloudinary.uploader.upload(
-      'https://images.pexels.com/photos/326055/pexels-photo-326055.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      (err, res) => {
-        if (res) {
-          resultUrl = res.secure_url;
-        }
-        if (err) throw new Error('Something went wrong');
+    await cloudinary.uploader.upload(imageUrl, (err, res) => {
+      if (res) {
+        resultUrl = res.secure_url;
       }
-    );
+      if (err) throw new Error('Something went wrong');
+    });
     return resultUrl;
   }
 };

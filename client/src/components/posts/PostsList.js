@@ -13,10 +13,6 @@ const useStyles = makeStyles(theme => ({
 const PostsList = ({ posts }) => {
   const classes = useStyles();
 
-  if(posts.length === 0) {
-    return <Typography>No posts from you yet...</Typography>
-  }
-
   const render = posts.map(post => (
     <Grid
       key={post._id}

@@ -134,7 +134,9 @@ module.exports = {
         imgUrl = await utils.imageUpload(createReadStream);
       }
 
+      if(imageUrl) {
       imgUrl = await utils.imageUrlUpload(imageUrl);
+      }
 
       const user = await User.findById(userId);
       const post = await new Post({

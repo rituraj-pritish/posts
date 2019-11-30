@@ -60,6 +60,11 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: theme.palette.delete
     }
+  },
+  image: {
+    height: '400px',
+    width: '100%',
+    marginBottom: '15px'
   }
 }));
 
@@ -121,7 +126,7 @@ const Post = props => {
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
 
-  const { title, content, user, userId, date, comments, claps } = data.getPost;
+  const { title, content,imageUrl, user, userId, date, comments, claps } = data.getPost;
 
   let currentUserId = '';
   if (props.auth.isAuth) {
@@ -195,6 +200,8 @@ const Post = props => {
             )}
           </Grid>
         </Grid>
+
+        {imageUrl && <img className={classes.image} src={imageUrl} alt={title} />}
 
         <Grid container justify='center'>
           <Typography variant='h4'>

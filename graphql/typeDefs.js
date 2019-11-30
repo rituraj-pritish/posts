@@ -16,7 +16,7 @@ module.exports = gql`
 
   type Post {
     _id: ID!
-    image: Image
+    imageUrl: String
     title: String!
     content: String!
     userId: ID!
@@ -26,12 +26,6 @@ module.exports = gql`
     claps: [Clap] #userId
     comments: [Comment]
     date: String!
-  }
-
-  type Image {
-    fileName: String!
-    mimetype: String!
-    encoding: String!
   }
 
   type Comment {

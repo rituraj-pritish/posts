@@ -13,7 +13,10 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
   },
-  imageUrl: String,
+  imageUrl: {
+    type: String,
+    default: 'https://www.onblastblog.com/wp-content/uploads/2018/05/free-images-for-blogs.jpeg'
+  },
   tags: [String],
   claps: [
     {

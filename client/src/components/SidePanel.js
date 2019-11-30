@@ -8,7 +8,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PostItem from './posts/PostItem';
+import SidePanelPostItem from './posts/SidePanelPostItem';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,9 +53,9 @@ const SidePanel = ({ auth, posts, history }) => {
   const onlyForDashboard = (
     <div>
       <Typography className={classes.text}>Most Popular Post</Typography>
-      <PostItem className={classes.postItem} {...mostViewed} />
+      <SidePanelPostItem className={classes.postItem} {...mostViewed} />
       <Typography className={classes.text}>Most Clapped Post</Typography>
-      <PostItem className={classes.postItem} {...mostClapped} />
+      <SidePanelPostItem className={classes.postItem} {...mostClapped} />
     </div>
   );
 
@@ -66,7 +66,7 @@ const SidePanel = ({ auth, posts, history }) => {
         .sort((a, b) => b.views - a.views)
         .map(post => (
           <div key={post._id}>
-            <PostItem className={classes.postItem} {...post}  />
+            <SidePanelPostItem className={classes.postItem} {...post}  />
             <span style={{ margin: '20px' }} />
           </div>
         ))}

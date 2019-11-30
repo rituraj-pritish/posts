@@ -5,7 +5,8 @@ import {
   Button,
   Grid,
   Input,
-  CircularProgress
+  CircularProgress,
+  Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -58,14 +59,14 @@ const CreatePost = ({ history, setAlert, auth }) => {
   const [addPost, { loading, error, data }] = useMutation(addPostMutation);
 
   useEffect(() => {
-    if (!loading && data.addPost && !error) {
-      setFormData({ title: '', content: '', tags: '',imageUrl: '' });
+    if (!loading && data && data.addPost && !error) {
+      setFormData({ title: '', content: '', tags: '', imageUrl: '' });
       return history.push('/dashboard');
     }
     //eslint-disable-next-line
   }, [loading, error, data]);
 
-  if(loading) return <CircularProgress/>
+  if (loading) return <CircularProgress />;
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,7 +84,7 @@ const CreatePost = ({ history, setAlert, auth }) => {
     if (e.target.name === 'image') {
       let reader = new FileReader();
       let file = e.target.files[0];
-      
+
       reader.onloadend = () => {
         if (file.type !== 'image/jpeg' && file.type !== 'img/jpg') {
           setAlert('Please select a valid image', 'error');
@@ -114,7 +115,6 @@ const CreatePost = ({ history, setAlert, auth }) => {
     });
   };
 
-
   return (
     <div className={classes.root}>
       <TextField
@@ -140,7 +140,9 @@ const CreatePost = ({ history, setAlert, auth }) => {
         color='secondary'
       />
 
-      <Input type='file' name='image' onChange={handleChange} />
+      <Input style={{marginTop: '20px'}} type='file' label='Choose Image' name='image' onChange={handleChange} />
+
+      <Typography>OR</Typography>
       {(image || imageUrl) && (
         <img
           src={imageUrl ? imageUrl : imgPrevUrl}
@@ -148,13 +150,13 @@ const CreatePost = ({ history, setAlert, auth }) => {
           className={classes.imagePreview}
         />
       )}
-
+      <Typography>Paste image url</Typography>
       <TextField
         label='Image Url'
         placeholder='Paste image url here'
         fullWidth
         name='imageUrl'
-        value={imageUrl}
+        value={imageUrl}a
         onChange={handleChange}
         color='secondary'
       />
@@ -168,7 +170,10 @@ const CreatePost = ({ history, setAlert, auth }) => {
         onChange={handleChange}
       />
 
-      <Grid container justify='flex-end'>
+      <Grid container justify='space-between'>
+        <Button variant='contained' color='primary' onClick={() => history.push('/dashboard') }>
+          Back
+        </Button>
         <Button variant='contained' color='primary' onClick={handleSubmit}>
           Submit
         </Button>

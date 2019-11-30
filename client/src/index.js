@@ -6,25 +6,23 @@ import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
-import {createUploadLink} from 'apollo-upload-client'
-import {InMemoryCache} from 'apollo-cache-inmemory'
+import { createUploadLink } from 'apollo-upload-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 // import {setContext} from 'apollo-link-context'
-
 
 import App from './App';
 import reducers from './reducers';
-const token = window.localStorage.getItem('token')
+const token = window.localStorage.getItem('token');
 const link = createUploadLink({
-  uri: '/graphql',
+  uri: 'http://localhost:5000/graphql',
   headers: {
     authorization: token ? token : ''
   }
-})
-
+});
 
 const client = new ApolloClient({
   link,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache()
 });
 
 const middlewares = [reduxThunk];

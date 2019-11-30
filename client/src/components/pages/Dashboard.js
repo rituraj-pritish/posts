@@ -1,17 +1,26 @@
 import React from 'react';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { CircularProgress, Grid, Typography } from '@material-ui/core';
+import { CircularProgress, Grid, Typography, Button } from '@material-ui/core';
 import { useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 import { getUserQuery } from '../../graphql/queries';
 import PostsList from '../posts/PostsList';
 import Chart from '../Chart';
 
 const useStyles = makeStyles(theme => ({
-  link: theme.link,
+  link: { ...theme.link, color: theme.palette.bg },
   text: {
     marginBottom: '20px'
+  },
+  createPost: {
+    background: theme.palette.text.primary,
+    [theme.breakpoints.up('md')] : {
+      display: 'none',
+      pointerEvents: 'none'
+    }
   }
 }));
 
@@ -30,7 +39,17 @@ const Dashboard = ({ auth: { user } }) => {
 
   return (
     <div>
-      <Typography className={classes.text} >{`Hi ${user.firstName[0].toUpperCase() + user.firstName.slice(1)}, how are you today ?`}</Typography>
+      <Grid container justify='space-between'>
+        <Typography
+          className={classes.text}
+        >{`Hi ${user.firstName[0].toUpperCase() +
+          user.firstName.slice(1)}, how are you today ?`}</Typography>
+        <Button variant='contained' className={classes.createPost}>
+          <Link className={classes.link} to='/create-post'>
+            Create Post
+          </Link>
+        </Button>
+      </Grid>
       <Grid container direction='row' alignItems='center' justify='center'>
         <Chart />
       </Grid>
@@ -39,7 +58,11 @@ const Dashboard = ({ auth: { user } }) => {
           Posts by you
         </Typography>
       </Grid>
-      <PostsList posts={posts} />
+      {posts.length === 0 ? (
+        <Typography>No posts from you yet</Typography>
+      ) : (
+        <PostsList posts={posts} />
+      )}
     </div>
   );
 };
