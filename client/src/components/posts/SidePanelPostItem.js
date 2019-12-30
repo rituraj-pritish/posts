@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary
   },
   image: {
-    width: '100px'
+    width: '100px',
+    objectFit: 'cover'
   },
   right: {
     width: '100%',

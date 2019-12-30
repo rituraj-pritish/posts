@@ -79,7 +79,9 @@ module.exports = gql`
       title: String!
       content: String!
       tags: String
-      postId: ID!
+      postId: ID!,
+      image: Upload
+      imageUrl: String
     ): Boolean
 
     deletePost(postId: ID!): Boolean

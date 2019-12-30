@@ -8,6 +8,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
+  black: {
+    color: '#000 !important'
+  },
   deleteButton: {
     backgroundColor: theme.palette.delete
   }
@@ -26,16 +29,24 @@ const DeletePostDialog = ({ setOpen, open, handleDelete }) => {
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id='alert-dialog-title'>
-        {"Use Google's location service?"}
+      <DialogTitle id='alert-dialog-title' className={classes.black}>
+        {'Delete Post'}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
+        <DialogContentText
+          id='alert-dialog-description'
+          className={classes.black}
+        >
           Sure to delete this post, this can't be undone ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color='secondary' autoFocus>
+        <Button
+          onClick={handleClose}
+          className={classes.black}
+          color='secondary'
+          autoFocus
+        >
           Cancel
         </Button>
         <Button

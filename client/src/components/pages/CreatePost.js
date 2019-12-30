@@ -15,6 +15,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { addPostMutation } from '../../graphql/mutations';
 import { getPostsQuery, getUserQuery } from '../../graphql/queries';
 import { setAlert } from '../../actions/alerts';
+import Loader from '../Loader';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -61,12 +62,13 @@ const CreatePost = ({ history, setAlert, auth }) => {
   useEffect(() => {
     if (!loading && data && data.addPost && !error) {
       setFormData({ title: '', content: '', tags: '', imageUrl: '' });
+      setAlert('Post created', 'success')
       return history.push('/dashboard');
     }
     //eslint-disable-next-line
   }, [loading, error, data]);
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <Loader />;
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -116,7 +118,7 @@ const CreatePost = ({ history, setAlert, auth }) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <TextField
         multiline={true}
         label='Title'
@@ -156,7 +158,7 @@ const CreatePost = ({ history, setAlert, auth }) => {
         placeholder='Paste image url here'
         fullWidth
         name='imageUrl'
-        value={imageUrl}a
+        value={imageUrl}
         onChange={handleChange}
         color='secondary'
       />

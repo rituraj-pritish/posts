@@ -160,7 +160,7 @@ module.exports = {
 
     updatePost: async (
       parent,
-      { title, content, tags, postId },
+      { title, content, tags, postId,image,imageUrl },
       { userId, requireLogin, isSameUser }
     ) => {
       requireLogin(userId);
@@ -169,8 +169,19 @@ module.exports = {
 
       if (!post) throw new Error('No post found');
 
+      let imgUrl;
+      if (image) {
+        const { createReadStream } = await image;
+        imgUrl = await utils.imageUpload(createReadStream);
+      }
+
+      if(imageUrl) {
+      imgUrl = await utils.imageUrlUpload(imageUrl);
+      }
+
       post.title = title;
       post.content = content;
+      post.imageUrl = imgUrl;
 
       const tagsArr = [];
       tags.split(',').forEach(tag => tagsArr.push(tag.trim()));

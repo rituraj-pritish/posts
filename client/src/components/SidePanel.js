@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  Grid,
-  Container,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import { Grid, Container, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SidePanelPostItem from './posts/SidePanelPostItem';
+import { setAlert } from '../actions/alerts';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,20 +31,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SidePanel = ({ auth, posts, history }) => {
+const SidePanel = ({ auth, posts, history, setAlert }) => {
   const classes = useStyles();
 
   if (posts.loading) return null;
 
-  let mostViewed, mostClapped
-  if(auth.isAuth) {
-  const userPosts = posts.posts.filter(post => post.userId === auth.user._id);
+  let mostViewed, mostClapped;
+  if (auth.isAuth) {
+    const userPosts = posts.posts.filter(post => post.userId === auth.user._id);
 
-  mostViewed = userPosts.sort((a, b) => b.views - a.views)[0];
-  mostClapped = userPosts.sort(
-    (a, b) => b.claps.length - a.claps.length
-  )[0];
+    mostViewed = userPosts.sort((a, b) => b.views - a.views)[0];
+    mostClapped = userPosts.sort((a, b) => b.claps.length - a.claps.length)[0];
   }
+
+  const handleNewPost = () => {
+    if (!auth.isAuth) {
+      setAlert('Login to create a post', 'error');
+      return;
+    }
+    history.push('/create-post');
+  };
 
   const onlyForDashboard = (
     <div>
@@ -64,9 +66,10 @@ const SidePanel = ({ auth, posts, history }) => {
       <Typography className={classes.text}>Most popular posts</Typography>
       {posts.posts
         .sort((a, b) => b.views - a.views)
+        .filter((post, idx) => idx < 5)
         .map(post => (
           <div key={post._id}>
-            <SidePanelPostItem className={classes.postItem} {...post}  />
+            <SidePanelPostItem className={classes.postItem} {...post} />
             <span style={{ margin: '20px' }} />
           </div>
         ))}
@@ -76,15 +79,15 @@ const SidePanel = ({ auth, posts, history }) => {
   return (
     <Grid className={`${classes.root} side-panel`} item md={4}>
       <Container>
-        {auth.isAuth && (
-          <div>
-            <Button className={classes.newpost} variant='contained'>
-              <Link className={classes.link} to='/create-post'>
-                New Post
-              </Link>
-            </Button>
-          </div>
-        )}
+        <div>
+          <Button
+            className={classes.newpost}
+            variant='contained'
+            onClick={handleNewPost}
+          >
+            <Link className={classes.link}>New Post</Link>
+          </Button>
+        </div>
         {history.location.pathname === '/dashboard' ? onlyForDashboard : others}
       </Container>
     </Grid>
@@ -96,4 +99,9 @@ const mapStateToProps = state => ({
   posts: state.posts
 });
 
-export default withRouter(connect(mapStateToProps)(SidePanel));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { setAlert }
+  )(SidePanel)
+);

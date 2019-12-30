@@ -126,18 +126,33 @@ const Post = props => {
   if (loading) return <CircularProgress />;
   if (error) return <div>Ooops... , Something went wrong</div>;
 
-  const { title, content,imageUrl, user, userId, date, comments, claps } = data.getPost;
+  const {
+    title,
+    content,
+    imageUrl,
+    user,
+    userId,
+    date,
+    comments,
+    claps
+  } = data.getPost;
 
   let currentUserId = '';
   if (props.auth.isAuth) {
     currentUserId = props.auth.user._id;
   }
 
-  const isAlreadyClapped = getClaps.data.getClapsOfPost.find(
-    clap => clap.userId.toString() === currentUserId
-  );
+  let isAlreadyClapped;
+  if (getClaps.data && props.auth.isAuth) {
+    isAlreadyClapped = getClaps.data.getClapsOfPost.find(
+      clap => clap.userId.toString() === currentUserId
+    );
+  }
 
   const handleClapButton = () => {
+    if (!props.auth.isAuth) {
+      props.setAlert('Log in to continue', 'error');
+    }
     if (isAlreadyClapped) {
       removeClap();
     } else {
@@ -146,7 +161,7 @@ const Post = props => {
   };
 
   const handleEdit = () => {
-    return props.history.push(`/edit-post/${postId}`)
+    return props.history.push(`/edit-post/${postId}`);
   };
 
   const handleDelete = () => {
@@ -167,7 +182,6 @@ const Post = props => {
   return (
     <div>
       <Container className={classes.root}>
-
         <Grid className={classes.header} container justify='space-between'>
           <Grid item>
             <Moment format='D MMM YYYY'>{date}</Moment>
@@ -201,7 +215,9 @@ const Post = props => {
           </Grid>
         </Grid>
 
-        {imageUrl && <img className={classes.image} src={imageUrl} alt={title} />}
+        {imageUrl && (
+          <img className={classes.image} src={imageUrl} alt={title} />
+        )}
 
         <Grid container justify='center'>
           <Typography variant='h4'>
@@ -211,17 +227,16 @@ const Post = props => {
 
         <Typography className={classes.content}>{content}</Typography>
 
-        <Grid container justify='center' alignItems='center' >
+        <Grid container justify='center' alignItems='center'>
           <span className={classes.aboutClap}>
             CLAP and make noise for the post
           </span>
           <Badge badgeContent={clapsCount} color='secondary'>
-            <IconButton
-              disabled={!props.auth.isAuth}
-              color='secondary'
-              onClick={handleClapButton}
-            >
-              <Icon className={clsx('fas fa-sign-language', classes.clap)} color='secondary' />
+            <IconButton color='secondary' onClick={handleClapButton}>
+              <Icon
+                className={clsx('fas fa-sign-language', classes.clap)}
+                color='secondary'
+              />
             </IconButton>
           </Badge>
         </Grid>
@@ -229,7 +244,7 @@ const Post = props => {
         <Divider className={classes.divider} />
         <Author {...user} />
         <Divider className={classes.divider} />
-        
+
         <div className={classes.commentsList}>
           <CommentsList postId={postId} comments={comments} />
         </div>

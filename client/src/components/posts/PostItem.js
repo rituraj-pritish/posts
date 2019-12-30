@@ -46,7 +46,8 @@ const PostItem = ({
         <Grid container justify='center'>
           <div
             style={{
-              background: `url(${imageUrl}) no-repeat center center `,
+              background: `url(${imageUrl})`,
+              backgroundSize: 'cover',
               width: '100%',
               height: '150px'
             }}

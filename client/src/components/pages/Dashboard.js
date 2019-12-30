@@ -21,6 +21,13 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
       pointerEvents: 'none'
     }
+  },
+  circularLoader: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }));
 
@@ -31,9 +38,9 @@ const Dashboard = ({ auth: { user } }) => {
   });
 
   if (loading) {
-    return <CircularProgress />;
+    return <div className={classes.circularLoader}><CircularProgress /></div>;
   }
-  if (error) return <div>Oppps</div>;
+  if (error) return <div>Ooops, Something went wrong...! Please try again.</div>;
 
   const posts = data.getUser.posts;
 

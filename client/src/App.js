@@ -22,6 +22,8 @@ import SidePanel from './components/SidePanel';
 import { lightTheme, darkTheme } from './theme';
 import AppContainer from './components/AppContainer';
 import EditPost from './components/pages/EditPost';
+import Loader from './components/Loader';
+import Footer from './components/footer/Footer';
 
 const token = window.localStorage.getItem('token') || '';
 
@@ -51,8 +53,8 @@ const App = ({ alert, auth, posts, setPosts, authError, setUser, isLight }) => {
     // eslint-disable-next-line
   }, [loading, error, data, getPostsRes]);
 
-  if (auth.loading) {
-    return <CircularProgress />;
+  if (auth.loading || posts.loading) {
+    return <Loader />;
   }
 
   return (
@@ -60,7 +62,7 @@ const App = ({ alert, auth, posts, setPosts, authError, setUser, isLight }) => {
       <AppContainer>
         <Router>
           <Navbar />
-          <Grid container spacing={5} style={{ padding: '30px' }}>
+          <Grid container spacing={0}>
             <Grid className='left-grid' sm={12} md={8} item>
               <Switch>
                 <Route exact path='/signin' component={SignIn} />
@@ -88,6 +90,7 @@ const App = ({ alert, auth, posts, setPosts, authError, setUser, isLight }) => {
           <CustomAlert variant={alert[0].variant} message={alert[0].message} />
         )}
       </AppContainer>
+      <Footer />
     </ThemeProvider>
   );
 };

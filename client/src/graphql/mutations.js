@@ -41,8 +41,22 @@ export const addPostMutation = gql`
 `;
 
 export const updatePostMutation = gql`
-  mutation($postId: ID!, $title: String!, $tags: String, $content: String!) {
-    updatePost(postId: $postId, title: $title, content: $content, tags: $tags)
+  mutation(
+    $postId: ID!
+    $title: String!
+    $tags: String
+    $content: String!
+    $image: Upload
+    $imageUrl: String
+  ) {
+    updatePost(
+      postId: $postId
+      title: $title
+      content: $content
+      tags: $tags
+      imageUrl: $imageUrl
+      image: $image
+    )
   }
 `;
 

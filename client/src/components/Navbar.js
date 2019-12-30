@@ -21,6 +21,8 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2)
   },
   title: {
+    fontFamily: 'Ma Shan Zheng, cursive' ,
+    fontSize: '2rem',
     flexGrow: 1,
     textDecoration: 'none',
     color: '#fff'

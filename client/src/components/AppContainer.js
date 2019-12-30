@@ -1,10 +1,10 @@
-import React from 'react'
-import {makeStyles} from '@material-ui/core/styles'
-import {Container} from '@material-ui/core'
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
-    'html': { 
+    html: {
       backgroundColor: theme.palette.bg,
       width: '100vw',
       overflowX: 'hidden'
@@ -21,17 +21,15 @@ const useStyles = makeStyles(theme => ({
   root: {
     color: theme.palette.text.primary,
     width: '100%',
-    marginTop: '64px'
+    marginTop: '64px',
+    paddingTop: '30px',
+    paddingBottom: '30px'
   }
-  }))
+}));
 
-const AppContainer = ({children}) => {
-  const classes = useStyles()
-  return (
-    <Container className={classes.root} >
-    {children}
-    </Container>
-  )
-}
+const AppContainer = ({ children }) => {
+  const classes = useStyles();
+  return <Container className={classes.root}>{children}</Container>;
+};
 
-export default AppContainer
+export default AppContainer;

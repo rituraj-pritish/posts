@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Select,
-  MenuItem,
-  InputLabel
-} from '@material-ui/core';
+import { Select, MenuItem, InputLabel, Typography } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 import PostsList from '../posts/PostsList';
@@ -23,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Home = ({ posts: { posts, filtered }, filterPosts }) => {
+const Home = ({ posts: { posts, filtered, selectedTags }, filterPosts }) => {
   const classes = useStyles();
 
   let [sortCategory, setSortCategory] = useState('date');
@@ -42,17 +38,21 @@ const Home = ({ posts: { posts, filtered }, filterPosts }) => {
     <div>
       <TagsList />
       <SelectedTagsList />
-        <InputLabel>Sort By</InputLabel>
-        <Select
-          className={classes.select}
-          value={sortCategory}
-          onChange={handleSelectChange}
-        >
-          <MenuItem value={'claps'}>Most Clapped</MenuItem>
-          <MenuItem value={'date'}>Date</MenuItem>
-          <MenuItem value={'views'}>Most Viewed</MenuItem>
-        </Select>
-      <PostsList posts={filtered.length > 0 ? filtered : posts} />
+      <InputLabel>Sort By</InputLabel>
+      <Select
+        className={classes.select}
+        value={sortCategory}
+        onChange={handleSelectChange}
+      >
+        <MenuItem value={'claps'}>Most Clapped</MenuItem>
+        <MenuItem value={'date'}>Date</MenuItem>
+        <MenuItem value={'views'}>Most Viewed</MenuItem>
+      </Select>
+      {selectedTags.length > 0 && filtered.length === 0 ? (
+        <Typography>No posts with selected tags</Typography>
+      ) : (
+        <PostsList posts={filtered.length > 0 ? filtered : posts} />
+      )}
     </div>
   );
 };
