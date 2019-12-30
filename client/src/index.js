@@ -14,7 +14,10 @@ import App from './App';
 import reducers from './reducers';
 const token = window.localStorage.getItem('token');
 const link = createUploadLink({
-  uri: 'http://localhost:5000/graphql',
+  uri:
+    process.env.NODE_ENV === 'production'
+      ? 'https://posts-posts-posts.herokuapp.com/graphql'
+      : 'http://localhost:5000/graphql',
   headers: {
     authorization: token ? token : ''
   }
