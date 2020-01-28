@@ -8,9 +8,8 @@ import ApolloClient from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-// import {setContext} from 'apollo-link-context'
 
-import App from './App';
+import App from './components/app/App';
 import reducers from './reducers';
 const token = window.localStorage.getItem('token');
 const link = createUploadLink({
@@ -30,10 +29,12 @@ const client = new ApolloClient({
 
 const middlewares = [reduxThunk];
 
-const store = createStore(
-  reducers,
-  composeWithDevTools(applyMiddleware(...middlewares))
-);
+const devTools =
+  process.env.NODE_ENV === 'production'
+    ? applyMiddleware(...middlewares)
+    : composeWithDevTools(applyMiddleware(...middlewares));
+
+const store = createStore(reducers, devTools);
 
 ReactDOM.render(
   <Provider store={store}>
