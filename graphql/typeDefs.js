@@ -1,5 +1,4 @@
 const { gql } = require('apollo-server-express');
-const { DateTime } = require('graphql-iso-date');
 
 module.exports = gql`
   type User {
@@ -79,7 +78,7 @@ module.exports = gql`
       title: String!
       content: String!
       tags: String
-      postId: ID!,
+      postId: ID!
       image: Upload
       imageUrl: String
     ): Boolean
