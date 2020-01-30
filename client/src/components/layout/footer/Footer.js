@@ -1,7 +1,9 @@
 import React from 'react'
 import { StyledFooter, Container } from './Footer.styles'
+import { withRouter } from 'react-router-dom';
 
-const Footer = () => {
+const Footer = ({location}) => {
+  if(location.pathname === '/signin' || location.pathname === '/signup') return null;
   return (
     <StyledFooter>
       <Container>
@@ -11,4 +13,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default withRouter(Footer)

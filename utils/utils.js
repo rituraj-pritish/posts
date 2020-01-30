@@ -4,22 +4,34 @@ const keys = require('../config/keys');
 const cloudinary = require('cloudinary').v2;
 
 module.exports = {
+  //jwt related
   hashPassword: async password => {
     return await bcrypt.hash(password, 10);
   },
   signToken: id => {
     return jwt.sign({ id }, keys.jwtKey, {
-      expiresIn: '10days'
+      expiresIn: '1day'
     });
   },
-  verifyToken: async token => {
-    return await jwt.verify(token, keys.jwtKey);
+  getUserIdFromToken: async token => {
+    const res = await jwt.verify(token, keys.jwtKey);
+    return res.id;
   },
   verifyPassword: async (password, hashPassword) => {
     return await bcrypt.compare(password, hashPassword);
   },
-  getUser: async req => {},
 
+  //authorization related
+  userExists: user => {
+    if (!user) throw new Error('Unauthorized');
+  },
+
+  isSameUser: (user, currentUser) => {
+    if (user.toString() !== currentUser.toString())
+      throw new Error('Not authorized for this action');
+  },
+
+  //image related
   imageUpload: async createReadStream => {
     stream = createReadStream();
 

@@ -4,7 +4,8 @@ export default {
     secondary: '#4e413b',
     black: '#202020',
     grey: '#e2ded3',
-    white: '#ffffff'
+    white: '#ffffff',
+    footer: '#c4c4c4'
   },
   padding: {
     xxl: '50px'

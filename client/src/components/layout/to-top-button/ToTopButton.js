@@ -20,9 +20,9 @@ const Top = styled.div`
   height: 40px;
   font-size: 30px;
   width: 40px;
-  background: #202020;
+  background: #000000bf;
   color: white;
-  border-radius: 5px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;

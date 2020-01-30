@@ -1,4 +1,4 @@
-import {CHANGE_THEME} from './types'
+import {CHANGE_THEME} from '../types'
 
 export const changeTheme = (isLight) => {
   // window.localStorage.setItem('token')

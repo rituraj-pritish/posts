@@ -1,56 +1,9 @@
-const User = require('../models/User');
-const Post = require('../models/Post');
-const utils = require('../utils/utils');
+const {userExists} = require('../../utils/utils');
+const Post = require('../../models/Post');
 
 module.exports = {
   Query: {
-    login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
-
-      if (!user) {
-        throw new Error('Invalid Credentials');
-      }
-
-      const isMatch = await utils.verifyPassword(password, user.password);
-
-      if (!isMatch) {
-        throw new Error('Invalid Credentials');
-      }
-
-      const token = utils.signToken(user._id);
-
-      return { token, ...user._doc, password: null };
-    },
-
-    getUser: async (parent, { userId }) => {
-      const user = await User.findById(userId).select('-password');
-
-      if (!user) {
-        throw new Error('No user found');
-      }
-
-      return user;
-    },
-
-    getUserByToken: async (parent, { token }) => {
-      const decoded = await utils.verifyToken(token);
-
-      if (!decoded.id) {
-        throw new Error('Invalid token');
-      }
-
-      const id = decoded.id;
-
-      const user = await User.findById(id).select('-password');
-
-      if (!user) {
-        throw new Error('No user found');
-      }
-
-      return user;
-    },
-
-    getPosts: async () => {
+    getPosts: async (parent, args, {currentUser}) => {
       return await Post.find({});
     },
 
@@ -75,67 +28,22 @@ module.exports = {
     }
   },
 
-  User: {
-    posts: async parent => {
-      return await Post.find({
-        userId: parent._id
-      });
-    }
-  },
-
-  Post: {
-    user: async parent => {
-      return await User.findById(parent.userId);
-    }
-  },
-
-  Comment: {
-    user: async parent => await User.findById(parent.userId)
-  },
-
   Mutation: {
-    addUser: async (parent, { firstName, lastName, email, password }) => {
-      const existingUser = await User.findOne({ email });
-
-      if (existingUser) {
-        throw new Error('User already exists');
-      }
-
-      const emailExpression = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-      if (!emailExpression.test(String(email).toLowerCase())) {
-        throw new Error('Please provide valid email address');
-      }
-
-      const hashedPassword = await utils.hashPassword(password);
-
-      const user = new User({
-        firstName,
-        lastName,
-        email,
-        password: hashedPassword
-      });
-
-      await user.save();
-
-      const token = await utils.signToken(user._id);
-
-      return { token, ...user._doc, password: null };
-    },
-
     addPost: async (
       parent,
       { title, content, tags, image, imageUrl },
-      { userId }
+      { currentUser }
     ) => {
+      userExists(currentUser);
+
       let imgUrl;
       if (image) {
         const { createReadStream } = await image;
         imgUrl = await utils.imageUpload(createReadStream);
       }
 
-      if(imageUrl) {
-      imgUrl = await utils.imageUrlUpload(imageUrl);
+      if (imageUrl) {
+        imgUrl = await utils.imageUrlUpload(imageUrl);
       }
 
       const user = await User.findById(userId);
@@ -145,11 +53,13 @@ module.exports = {
         userId
       }).save();
 
-      const tagsArr = [];
-      tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
+      if (tags) {
+        const tagsArr = [];
+        tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
 
-      post.tags = tagsArr;
-      await post.save();
+        post.tags = tagsArr;
+        await post.save();
+      }
 
       await user.postIds.push({ post: post._id });
       post.imageUrl = imgUrl;
@@ -160,7 +70,7 @@ module.exports = {
 
     updatePost: async (
       parent,
-      { title, content, tags, postId,image,imageUrl },
+      { title, content, tags, postId, image, imageUrl },
       { userId, requireLogin, isSameUser }
     ) => {
       requireLogin(userId);
@@ -175,8 +85,8 @@ module.exports = {
         imgUrl = await utils.imageUpload(createReadStream);
       }
 
-      if(imageUrl) {
-      imgUrl = await utils.imageUrlUpload(imageUrl);
+      if (imageUrl) {
+        imgUrl = await utils.imageUrlUpload(imageUrl);
       }
 
       post.title = title;

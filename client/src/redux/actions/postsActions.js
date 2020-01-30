@@ -4,7 +4,7 @@ import {
   ADD_TAG,
   REMOVE_TAGS,
   SET_POSTS
-} from './types';
+} from '../types';
 
 export const setPosts = posts => ({
   type: SET_POSTS,

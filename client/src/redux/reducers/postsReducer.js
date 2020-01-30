@@ -4,7 +4,7 @@ import {
   ADD_FILTERED,
   REMOVE_FILTERED,
   SET_POSTS
-} from '../actions/types';
+} from '../types';
 
 const initialState = {
   filtered: [],

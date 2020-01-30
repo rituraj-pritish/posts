@@ -1,4 +1,4 @@
-import { CHANGE_THEME } from '../actions/types';
+import { CHANGE_THEME } from '../types';
 
 const theme = window.localStorage.getItem('isLight');
 

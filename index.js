@@ -2,24 +2,11 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const typeDefs = require('./graphql/typeDefs');
-const resolvers = require('./graphql/resolvers');
 const utils = require('./utils/utils');
 const keys = require('./config/keys');
 const cloudinary = require('cloudinary');
-
-const requireLogin = id => {
-  if (!id) {
-    throw new Error('Login to continue');
-  }
-};
-
-const isSameUser = (id, givenId) => {
-  if (id.toString() !== givenId) {
-    throw new Error('Not authorized');
-  }
-  return true;
-};
+const typeDefs = require('./graphql/typeDefs/index');
+const resolvers = require('./graphql/resolvers/index');
 
 const server = new ApolloServer({
   typeDefs,
@@ -27,14 +14,20 @@ const server = new ApolloServer({
   introspection: true,
   playground: true,
   context: async ({ req }) => {
-    const token = req.headers.authorization;
-    if (token) {
-      const { id } = await utils.verifyToken(token);
-      if (!id) throw new Error('Invalid token');
+    let authToken = null;
+    let currentUser = null;
 
-      return { userId: id, requireLogin, isSameUser };
+    try {
+      authToken = req.headers['authorization'];
+
+      if (authToken) currentUser = await utils.getUserIdFromToken(authToken);
+    } catch (err) {
+      //todo error handling
+      console.warn('Unable to authorize with token');
     }
-    return { userId: null, requireLogin, isSameUser };
+
+    console.log(authToken, currentUser);
+    return { authToken, currentUser };
   }
 });
 
@@ -51,8 +44,6 @@ app.use(bodyParser.json());
 
 server.applyMiddleware({ app, path: '/graphql' });
 
-const PORT = process.env.PORT || 5000;
-
 if (process.env.NODE_ENV === 'production') {
   //Express will serve up production assets like main.js file or main.css
 
@@ -63,5 +54,7 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname00, 'client', 'build', 'index.html'));
   });
 }
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log('listening'));

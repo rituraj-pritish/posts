@@ -15,7 +15,8 @@ const postSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    default: 'https://www.onblastblog.com/wp-content/uploads/2018/05/free-images-for-blogs.jpeg'
+    default:
+      'https://www.onblastblog.com/wp-content/uploads/2018/05/free-images-for-blogs.jpeg'
   },
   tags: [String],
   claps: [
