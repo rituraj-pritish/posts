@@ -38,11 +38,21 @@ const devTools =
 
 const store = createStore(reducers, devTools);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </Provider>,
-  document.getElementById('root')
-);
+const render = () =>
+  ReactDOM.render(
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </Provider>,
+    document.getElementById('root')
+  );
+
+if (process.env.NODE_ENV !== 'production') {
+  import('react-axe').then(axe => {
+    axe.default(React, ReactDOM, 1000);
+    render();
+  });
+} else {
+  render();
+}

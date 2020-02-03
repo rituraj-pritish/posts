@@ -23,12 +23,6 @@ export const authError = () => async dispatch => {
   });
 };
 
-export const setUser = ({ firstName, lastName, _id, email }) => dispatch => {
-  const user = { firstName, lastName, _id, email };
-
-  dispatch({ type: SET_USER, payload: user });
-};
-
 export const setAlert = (message, type) => {
   let title;
   switch (type) {

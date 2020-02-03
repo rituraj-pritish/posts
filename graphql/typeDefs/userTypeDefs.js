@@ -5,6 +5,8 @@ module.exports = {
       firstName: String!
       lastName: String!
       email: String!
+      provider: String
+      providerId: String
       password: String
       token: String
       postIds: [ID]
@@ -16,15 +18,24 @@ module.exports = {
   query: `
     getUserByToken(token: String!): User
     getUser(userId: ID!): User
-    login(email: String!, password: String!): User
+    signIn(email: String!, password: String!): User
+    socialSignIn(email: String!, providerId: String!): User
   `,
 
   mutation: `
-    addUser(
+    signUp(
       firstName: String!
       lastName: String!
       email: String!
       password: String!
+    ): User
+    
+    socialSignUp(
+      provider: String!
+      providerId: String!
+      firstName: String!
+      lastName: String
+      email: String!
     ): User
   `
 };

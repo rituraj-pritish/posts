@@ -22,6 +22,6 @@ export const Container = styled.div`
   align-items: center;
 `;
 
-export const Logo = styled.img`
-  width: auto;
+export const StyledLogo = styled.div`
+  width: fit-content;
 `     

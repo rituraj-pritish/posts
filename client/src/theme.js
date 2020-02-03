@@ -4,13 +4,17 @@ export default {
     secondary: '#4e413b',
     black: '#202020',
     grey: '#e2ded3',
+    darkGrey: '#6d6d6d',
     white: '#ffffff',
-    footer: '#c4c4c4'
+    footer: '#c4c4c4',
+    black: '#484848'
   },
   padding: {
     xxl: '50px'
   },
   navHeight: '50px',
   footerHeight: '400px',
-  maxWidth: '1366px'
+  maxWidth: '1366px',
+
+  breakpoints: ['420px'],
 };

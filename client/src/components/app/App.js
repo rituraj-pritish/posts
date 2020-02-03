@@ -9,7 +9,7 @@ import 'react-notifications-component/dist/theme.css';
 import theme from '../../theme';
 import './App.css';
 
-import { getUserByTokenQuery } from '../../graphql/queries/authQueries';
+import { getUserByTokenQuery } from '../../graphql/queries/userQueries';
 import { authError, authSuccess } from '../../redux/actions/userActions';
 import PrivateRoute from '../PrivateRoute';
 import NavbarContainer from '../layout/navbar/NavbarContainer';

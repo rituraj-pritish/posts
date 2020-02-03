@@ -1,12 +1,33 @@
-import React from 'react'
-import Footer from './Footer'
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { StyledFooter, MaxWidthContainer } from './Footer.styles';
 
-const FooterContainer = () => {
+import NewsLetterForm from './newsletter-form/NewsLetterForm';
+
+const FooterContainer = ({ location }) => {
+  const [newsLetterEmail, setNewsLetterEmail] = useState('');
+  if (location.pathname === '/signin' || location.pathname === '/signup')
+    return null;
+
+  const handleChange = e => {
+    setNewsLetterEmail(e.target.value);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+  };
+
   return (
-    <div>
-      <Footer/>
-    </div>
-  )
-}
+    <StyledFooter>
+      <MaxWidthContainer>
+        <NewsLetterForm
+          newsLetterEmail={newsLetterEmail}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
+      </MaxWidthContainer>
+    </StyledFooter>
+  );
+};
 
-export default FooterContainer
+export default withRouter(FooterContainer);

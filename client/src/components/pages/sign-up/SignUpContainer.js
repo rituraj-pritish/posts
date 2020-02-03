@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import formValidator from '../../../utils/formValidator';
-import { setAlert } from '../../../redux/actions/userActions';
+import { setAlert, authError } from '../../../redux/actions/userActions';
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom';
 
 import Page from '../../common/Page';
-import SignUp from './SignUp';
+import Logo from '../../../assets/Logo';
+import SignUp from './SignUpForm';
 import AuthButtonContainer from '../../auth-button/AuthButtonContainer';
 import SignUpMutation from './SignUpMutation';
+import Div from '../../common/Div';
+import Text from '../../common/Text';
 
-const SignUpContainer = ({ setAlert }) => {
+const SignUpContainer = ({ setAlert, authError, isAuth }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,6 +23,11 @@ const SignUpContainer = ({ setAlert }) => {
   const { firstName, lastName, email, password1, password2 } = formData;
 
   const signUpRef = useRef();
+
+  if (isAuth) {
+    return <Redirect to='/' />;
+  }
+
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -58,21 +66,48 @@ const SignUpContainer = ({ setAlert }) => {
   };
 
   return (
-    <Page>
-      <SignUp
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        formData={formData}
-      />
-      <AuthButtonContainer provider='google' buttonText='Sign Up with Google' />
-      <AuthButtonContainer
-        provider='facebook'
-        buttonText='Sign Up with Facebook'
-      />
-      Already have an account ? <Link to='/signin'>Sign In</Link>
-      <SignUpMutation ref={signUpRef} resetForm={resetForm} />
+    <Page m='1rem 0' pb='0'>
+      <Div maxWidth='500px' m='0 auto' textAlign='center'>
+        <Link to='/'>
+          <Logo />
+        </Link>
+        <SignUp
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          formData={formData}
+        />
+
+        <Text m='0.5rem 0'>or</Text>
+
+        <Div display='grid' gridTemplateColumns='1fr 1fr' gridGap='2rem'>
+          <AuthButtonContainer
+            provider='google'
+            buttonText='Sign Up with Google'
+            type='signup'
+            signUpRef={signUpRef}
+            authError={authError}
+          />
+          <AuthButtonContainer
+            provider='facebook'
+            buttonText='Sign Up with Facebook'
+            type='signup'
+            signUpRef={signUpRef}
+            authError={authError}
+          />
+        </Div>
+        <Text m='2rem 0'>
+          Already have an account ? <Link to='/signin'>Sign In</Link>
+        </Text>
+        <SignUpMutation ref={signUpRef} resetForm={resetForm} />
+      </Div>
     </Page>
   );
 };
 
-export default connect(null, { setAlert })(SignUpContainer);
+const mapStateToProps = state => ({
+  isAuth: state.user.isAuth
+});
+
+export default connect(mapStateToProps, { setAlert, authError })(
+  SignUpContainer
+);

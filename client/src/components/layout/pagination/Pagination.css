@@ -1,0 +1,41 @@
+.pagination {
+  display: flex;
+  width: fit-content;
+  list-style-type: none;
+  margin: 5rem auto 2rem auto;
+  font-size: 1.6rem;
+}
+
+li {
+  padding: 1rem 0;
+  border: 2px solid #ff6d24;
+  color: #ff6d24;
+  text-transform: capitalize;
+}
+
+.page,.break-me {
+  border-right: 1px solid;
+  border-left: 1px solid;
+}
+
+li:first-child {
+  border-right: 1px solid;
+  border-radius: 5px 0 0 5px;
+}
+
+li:last-child {
+  border-left: 1px solid;
+  border-radius: 0 5px 5px 0;
+}
+
+li a {
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+}
+
+.active {
+  background: #ff6d24;
+  color: #fff;
+  border: none;
+  outline: none;
+}

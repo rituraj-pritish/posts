@@ -8,7 +8,7 @@ export const StyledFooter = styled.footer`
   bottom: 0;
 `;
 
-export const Container = styled.div`
+export const MaxWidthContainer = styled.div`
   max-width: ${({ theme }) => theme.maxWidth};
   padding: ${({ theme }) => theme.padding.xxl};
   height: 100%;

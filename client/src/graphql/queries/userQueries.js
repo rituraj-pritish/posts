@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
-export const loginQuery = gql`
+export const signInQuery = gql`
   query($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+    signIn(email: $email, password: $password) {
       _id
       firstName
       lastName
@@ -11,6 +11,18 @@ export const loginQuery = gql`
     }
   }
 `;
+
+export const socialSignInQuery = gql`
+  query($email: String!, $providerId: String!) {
+    socialSignIn(email: $email, providerId: $providerId) {
+      _id
+      firstName
+      lastName
+      email
+      token
+    }
+  }
+`
 
 export const getUserByTokenQuery = gql`
   query($token: String!) {
