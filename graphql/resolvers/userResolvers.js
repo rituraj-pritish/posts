@@ -46,7 +46,6 @@ module.exports = {
 
     getUserByToken: async (parent, { token }) => {
       const userId = await utils.getUserIdFromToken(token);
-      console.log('userid', userId);
       if (!userId) throw new Error('Invalid token');
 
       const user = await User.findById(userId).select('-password');

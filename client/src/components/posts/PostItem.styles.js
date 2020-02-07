@@ -22,7 +22,7 @@ export const StyledPostItem = styled.div`
     color: black;
   }
 
-  & > div > p:first-child:hover {
+  & > div > p:first-child:hover,p:last-child span:hover {
     transition: 0.2s;
     color: ${({theme}) => theme.colors.primary};
   }

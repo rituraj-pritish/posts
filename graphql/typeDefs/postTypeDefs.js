@@ -1,5 +1,6 @@
 module.exports = {
   type: `
+
     type Post {
       _id: ID!
       imageUrl: String
@@ -9,9 +10,10 @@ module.exports = {
       user: User!
       views: Int!
       tags: [String]
-      claps: [Clap] #userId
+      likes: [Clap] #userId
       comments: [Comment]
       date: String!
+      trending: Boolean
     }
 
     type Comment {
@@ -36,11 +38,12 @@ module.exports = {
   `,
 
   query: `
-    getPosts: [Post]
+    getTotalPages : Int
+    getPosts(page: Int): [Post]
     getPost(postId: ID!): Post
     getPostsByUserId: [Post]
     getCommentsOfPost(postId: ID!): [Comment]
-    getClapsOfPost(postId: ID!): [Clap]
+    getLikesOfPost(postId: ID!): [Clap]
   `,
 
   mutation: `
@@ -73,8 +76,8 @@ module.exports = {
 
     unlikeComment(postId: ID!, commentId: ID!): Boolean
 
-    addClap(postId: ID!): Boolean
+    likePost(postId: ID!): Boolean
 
-    removeClap(postId: ID!): Boolean
+    unlikePost(postId: ID!): Boolean
   `
 };

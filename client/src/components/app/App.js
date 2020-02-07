@@ -19,6 +19,7 @@ import ScrollToTop from '../ScrollToTop';
 import ToTopButton from '../layout/to-top-button/ToTopButton';
 import SignUpContainer from '../pages/sign-up/SignUpContainer';
 import SignInContainer from '../pages/sign-in/SignInContainer';
+import PostContainer from '../pages/post/post/PostContainer';
 
 const App = ({ authLoading, authError, authSuccess }) => {
   const token = window.localStorage.getItem('token');
@@ -49,7 +50,12 @@ const App = ({ authLoading, authError, authSuccess }) => {
             <Route exact path='/' component={HomeContainer} />
             <Route exact path='/signup' component={SignUpContainer} />
             <Route exact path='/signin' component={SignInContainer} />
-            <PrivateRoute exact path='/post/create-post' component={SignInContainer} />
+            <Route exact path='/post/:postId' component={PostContainer} />
+            <PrivateRoute
+              exact
+              path='/post/create-post'
+              component={SignInContainer}
+            />
           </Switch>
         </ScrollToTop>
         <FooterContainer />

@@ -69,12 +69,12 @@ export const unlikeCommentMutation = gql`
   }
 `;
 
-export const addClapMutation = gql`
+export const likePostMutation = gql`
   mutation($postId: ID!) {
     addClap(postId: $postId)
   }
 `;
-export const removeClapMutation = gql`
+export const unlikePostMutation = gql`
   mutation($postId: ID!) {
     removeClap(postId: $postId)
   }

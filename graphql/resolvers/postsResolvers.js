@@ -1,10 +1,19 @@
-const {userExists} = require('../../utils/utils');
+const { userExists, isSameUser } = require('../../utils/utils');
 const Post = require('../../models/Post');
+
+const PAGE_LENGTH = 7;
 
 module.exports = {
   Query: {
-    getPosts: async (parent, args, {currentUser}) => {
-      return await Post.find({});
+    getPosts: async (parent, { page }) => {
+      return await Post.find()
+        .sort({ date: -1 })
+        .skip(PAGE_LENGTH * (page - 1))
+        .limit(PAGE_LENGTH);
+    },
+
+    getTotalPages: async () => {
+      return parseInt((await Post.find().countDocuments()) / PAGE_LENGTH) + 1;
     },
 
     getPost: async (parent, { postId }) => {
@@ -21,10 +30,10 @@ module.exports = {
       return post.comments;
     },
 
-    getClapsOfPost: async (parent, { postId }) => {
+    getLikesOfPost: async (parent, { postId }) => {
       const post = await Post.findById(postId);
 
-      return post.claps;
+      return post.likes;
     }
   },
 
@@ -50,7 +59,7 @@ module.exports = {
       const post = await new Post({
         title,
         content,
-        userId
+        userId: currentUser
       }).save();
 
       if (tags) {
@@ -71,13 +80,14 @@ module.exports = {
     updatePost: async (
       parent,
       { title, content, tags, postId, image, imageUrl },
-      { userId, requireLogin, isSameUser }
+      { currentUser }
     ) => {
-      requireLogin(userId);
-      const post = await Post.findById(postId);
-      isSameUser(post.userId, userId);
+      userExists(currentUser);
 
+      const post = await Post.findById(postId);
       if (!post) throw new Error('No post found');
+
+      isSameUser(post.userId, currentUser);
 
       let imgUrl;
       if (image) {
@@ -102,55 +112,51 @@ module.exports = {
       return true;
     },
 
-    deletePost: async (
-      parent,
-      { postId },
-      { userId, requireLogin, isSameUser }
-    ) => {
-      requireLogin(userId);
-      const post = await Post.findByIdAndDelete(postId);
+    deletePost: async (parent, { postId }, { currentUser }) => {
+      userExists(currentUser);
+      const post = await Post.findById(postId);
+      isSameUser(post.userId, currentUser);
 
+      await post.remove();
       return true;
     },
 
-    addComment: async (parent, { content, postId }, { userId }) => {
+    addComment: async (parent, { content, postId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
 
-      await post.comments.push({ userId, content });
+      await post.comments.push({ userId: currentUser, content });
       await post.save();
 
+      //comment will be saved at end of array
       return post.comments[post.comments.length - 1];
     },
 
     updateComment: async (
       parent,
       { content, postId, commentId },
-      { requireLogin, userId, isSameUser }
+      { currentUser }
     ) => {
-      requireLogin(userId);
+      userExists(currentUser);
       const post = await Post.findById(postId);
       const comment = post.comments.find(
         com => com._id.toString() === commentId
       );
 
-      isSameUser(comment.userId, userId);
+      isSameUser(comment.userId, currentUser);
       comment.content = content;
       await post.save();
 
       return comment;
     },
 
-    deleteComment: async (
-      parent,
-      { postId, commentId },
-      { requireLogin, userId, isSameUser }
-    ) => {
-      requireLogin(userId);
+    deleteComment: async (parent, { postId, commentId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
       const comment = post.comments.find(
         com => com._id.toString() === commentId
       );
-      isSameUser(comment.userId, userId);
+      isSameUser(comment.userId, currentUser);
 
       post.comments = post.comments.filter(
         com => com._id.toString() !== commentId
@@ -159,7 +165,8 @@ module.exports = {
       return true;
     },
 
-    likeComment: async (parent, { postId, commentId }, { userId }) => {
+    likeComment: async (parent, { postId, commentId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
 
       const comment = post.comments.find(
@@ -167,21 +174,22 @@ module.exports = {
       );
 
       const alreadyLiked = comment.likes.find(
-        like => like.userId.toString() === userId
+        like => like.userId.toString() === currentUser
       );
 
       if (alreadyLiked) {
         throw new Error('Comment already liked');
       }
 
-      await comment.likes.push({ userId });
+      await comment.likes.push({ userId: currentUser });
 
       await post.save();
 
       return true;
     },
 
-    unlikeComment: async (parent, { postId, commentId }, { userId }) => {
+    unlikeComment: async (parent, { postId, commentId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
 
       const comment = post.comments.find(
@@ -189,7 +197,7 @@ module.exports = {
       );
 
       const alreadyLiked = comment.likes.find(
-        like => like.userId.toString() === userId
+        like => like.userId.toString() === currentUser
       );
       const idx = comment.likes.indexOf(alreadyLiked);
 
@@ -204,37 +212,38 @@ module.exports = {
       return true;
     },
 
-    addClap: async (parent, { postId }, { userId }) => {
+    likePost: async (parent, { postId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
 
-      isAlreadyClappedByUser = post.claps.find(
+      isAlreadyLikedByUser = post.claps.find(
         clap => clap.userId.toString() === userId
       );
 
-      if (isAlreadyClappedByUser)
+      if (isAlreadyLikedByUser)
         throw new Error(
-          'We know you liked the post very much, but you can only clap once'
+          'We know you liked the post very much, but you can only like once'
         );
 
-      post.claps.push({ userId });
+      post.likes.push({ userId: currentUser });
 
       await post.save();
 
       return true;
     },
 
-    removeClap: async (parent, { postId }, { userId }) => {
+    unlikePost: async (parent, { postId }, { userId }) => {
       const post = await Post.findById(postId);
 
-      isAlreadyClappedByUser = post.claps.find(
+      isAlreadyLikedByUser = post.claps.find(
         clap => clap.userId.toString() === userId
       );
 
-      if (!isAlreadyClappedByUser) throw new Error('Post not yet clapped');
+      if (!isAlreadyLikedByUser) throw new Error('Post not yet liked');
 
-      const idx = post.claps.indexOf(isAlreadyClappedByUser);
+      const idx = post.claps.indexOf(isAlreadyLikedByUser);
 
-      await post.claps.splice(idx, 1);
+      await post.likes.splice(idx, 1);
 
       await post.save();
 

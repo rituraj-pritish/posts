@@ -33,4 +33,8 @@ const Button = ({ children, ...otherProps }) => {
   return <StyledButton {...otherProps}>{children}</StyledButton>;
 };
 
+Button.defaultProps = {
+  variant: 'primary'
+}
+
 export default Button;

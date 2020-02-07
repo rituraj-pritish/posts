@@ -13,13 +13,9 @@ const postSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
   },
-  imageUrl: {
-    type: String,
-    default:
-      'https://www.onblastblog.com/wp-content/uploads/2018/05/free-images-for-blogs.jpeg'
-  },
+  imageUrl: String,
   tags: [String],
-  claps: [
+  likes: [
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -56,6 +52,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: new Date()
+  },
+  trending: {
+    type: Boolean,
+    default: false
   }
 });
 

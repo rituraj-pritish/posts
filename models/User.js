@@ -31,7 +31,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: new Date()
-  }
+  },
+  bio: String,
+  profileUrl: String
 });
 
 module.exports = User = mongoose.model('user', userSchema);

@@ -61,7 +61,7 @@ const SignUpForm = ({ formData, handleChange, handleSubmit }) => {
         id='confirm-password'
         bg='grey'
       />
-      <Button variant='primary' height='38px' fontWeight='bold' mt='2rem'>
+      <Button height='38px' fontWeight='bold' mt='2rem'>
         SIGN UP
       </Button>
     </Form>

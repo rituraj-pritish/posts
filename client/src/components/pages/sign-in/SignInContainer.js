@@ -54,6 +54,7 @@ const SignInContainer = ({ setAlert, isAuth }) => {
         <Link to='/'>
           <Logo />
         </Link>
+
         <SignInForm
           handleChange={handleChange}
           handleSubmit={handleSubmit}
@@ -62,11 +63,7 @@ const SignInContainer = ({ setAlert, isAuth }) => {
 
         <Text m='0.5rem 0'>or</Text>
 
-        <Div
-          display='grid'
-          gridTemplateColumns='1fr 1fr'
-          gridGap='2rem'
-        >
+        <Div display='grid' gridTemplateColumns='1fr 1fr' gridGap='2rem'>
           <AuthButtonContainer
             provider='google'
             buttonText='Sign In with Google'
@@ -83,6 +80,7 @@ const SignInContainer = ({ setAlert, isAuth }) => {
         <Text m='2rem 0'>
           New here ? <Link to='/signup'>Sign Up</Link>
         </Text>
+
         <SignInQuery ref={signInRef} resetForm={resetForm} />
       </Div>
     </Page>

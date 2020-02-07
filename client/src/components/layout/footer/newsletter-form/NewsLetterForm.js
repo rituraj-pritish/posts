@@ -27,7 +27,7 @@ const NewsLetterForm = ({ newsLetterEmail, handleChange, handleSubmit }) => {
         fontSize='1.6rem'
         borderRadius='10px 0 0 10px'
       />
-      <Button variant='primary' height='100%' borderRadius='0 10px 10px 0'>
+      <Button height='100%' borderRadius='0 10px 10px 0'>
         Subscribe
       </Button>
     </StyledNewsLetterForm>

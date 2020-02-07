@@ -33,7 +33,7 @@ const SignInForm = ({ handleChange, handleSubmit, formData }) => {
         id='password'
         bg='grey'
       />
-      <Button variant='primary' height='38px' fontWeight='bold' mt='2rem'>
+      <Button height='38px' fontWeight='bold' mt='2rem'>
         SIGN IN
       </Button>
     </Form>

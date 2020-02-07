@@ -12,6 +12,8 @@ module.exports = {
       postIds: [ID]
       posts: [Post]
       dateCreated: String!
+      bio: String
+      profileUrl: String
     }
   `,
 

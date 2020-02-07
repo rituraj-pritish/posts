@@ -26,7 +26,6 @@ const server = new ApolloServer({
       console.warn('Unable to authorize with token');
     }
 
-    console.log(authToken, currentUser);
     return { authToken, currentUser };
   }
 });

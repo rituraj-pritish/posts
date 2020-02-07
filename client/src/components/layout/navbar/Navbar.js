@@ -22,7 +22,7 @@ const Navbar = ({ isAuth, signout }) => {
               <Button variant='secondary' >Sign Up</Button>
             </Link>
             <Link to='/signin' style={{marginLeft: '2rem'}}>
-              <Button variant='primary' p='1rem 3rem'>Sign In</Button>
+              <Button p='1rem 3rem'>Sign In</Button>
             </Link>
             </>
         ) : (

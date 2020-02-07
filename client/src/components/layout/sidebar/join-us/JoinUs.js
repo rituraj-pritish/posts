@@ -33,7 +33,7 @@ const JoinUs = () => {
         Join our Mailing List
       </Text>
       <Input type='text' placeholder='Email' height='4rem' mb='1rem' />
-      <Button variant='primary' width='100%' height='4rem' mb='1rem'>
+      <Button width='100%' height='4rem' mb='1rem'>
         Subscribe
       </Button>
     </Div>

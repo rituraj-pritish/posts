@@ -1,8 +1,14 @@
 import { gql } from 'apollo-boost';
 
+export const getTotalPagesQuery = gql`
+  query {
+    getTotalPages
+  }
+`
+
 export const getPostsQuery = gql`
-  {
-    getPosts {
+  query($page: Int) {
+    getPosts(page: $page) {
       _id
       title
       content
@@ -11,13 +17,14 @@ export const getPostsQuery = gql`
       date
       views
       userId
-      claps {
+      likes {
         userId
       }
       user {
         firstName
         lastName
       }
+      trending
     }
   }
 `;
@@ -36,6 +43,9 @@ export const getPostQuery = gql`
       user {
         firstName
         lastName
+        _id
+        bio
+        profileUrl
       }
       comments {
         _id
@@ -51,7 +61,7 @@ export const getPostQuery = gql`
           userId
         }
       }
-      claps {
+      likes {
         userId
       }
     }
@@ -69,6 +79,7 @@ export const getCommentsOfPostQuery = gql`
         _id
         firstName
         lastName
+        profileUrl
       }
       likes {
         userId
@@ -77,7 +88,7 @@ export const getCommentsOfPostQuery = gql`
   }
 `;
 
-export const getClapsOfPostQuery = gql`
+export const getLikesOfPost = gql`
   query($postId: ID!) {
     getClapsOfPost(postId: $postId) {
       userId

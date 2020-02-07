@@ -12,6 +12,7 @@ const initialState = {
   mostClapped: [],
   popular: [],
   posts: [],
+  currentPosts: [],
   selectedTags: [],
   loading: true
 };

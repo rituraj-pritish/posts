@@ -1,6 +1,4 @@
 import React, {
-  useRef,
-  useEffect,
   forwardRef,
   useImperativeHandle
 } from 'react';
@@ -25,28 +23,26 @@ const SignUpQuery = (props, ref) => {
     { loading: socialLoading, error: socialError, data: socialData }
   ] = useMutation(socialSignUpMutation);
 
-  useEffect(() => {
-    if (error) {
-      setAlert(error.graphQLErrors[0].message, 'danger');
-      authError();
-    }
+  if (error) {
+    setAlert(error.graphQLErrors[0].message, 'danger');
+    authError();
+  }
 
-    if (socialError) {
-      setAlert(socialError.graphQLErrors[0].message, 'danger');
-      authError();
-    }
+  if (socialError) {
+    setAlert(socialError.graphQLErrors[0].message, 'danger');
+    authError();
+  }
 
-    if (data && data.signUp) {
-      resetForm();
-      authSuccess(data.signUp);
-      setAlert('Sign Up Successful', 'success');
-    }
+  if (data && data.signUp) {
+    resetForm();
+    authSuccess(data.signUp);
+    setAlert('Sign Up Successful', 'success');
+  }
 
-    if (socialData && socialData.socialSignUp) {
-      authSuccess(socialData.socialSignUp);
-      setAlert('Sign Up Successful', 'success');
-    }
-  }, [loading, error, data, socialLoading, socialError, socialData]);
+  if (socialData && socialData.socialSignUp) {
+    authSuccess(socialData.socialSignUp);
+    setAlert('Sign Up Successful', 'success');
+  }
 
   useImperativeHandle(ref, () => ({
     callSignUpMutation(data) {
@@ -58,7 +54,8 @@ const SignUpQuery = (props, ref) => {
     }
   }));
 
-  if (loading || socialLoading) return <div style={{color: 'orange', fontSize: '3rem'}}>SPINNER</div>;
+  if (loading || socialLoading)
+    return <div style={{ color: 'orange', fontSize: '3rem' }}>SPINNER</div>;
 
   //todo loader/spinner if necessary
   return null;
