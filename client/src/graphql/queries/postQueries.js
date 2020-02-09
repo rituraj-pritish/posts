@@ -88,9 +88,9 @@ export const getCommentsOfPostQuery = gql`
   }
 `;
 
-export const getLikesOfPost = gql`
+export const getLikesOfPostQuery = gql`
   query($postId: ID!) {
-    getClapsOfPost(postId: $postId) {
+    getLikesOfPost(postId: $postId) {
       userId
     }
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Avatar from 'react-avatar';
 
 import { Divider } from './AuthorRow.styles';
 import Text from '../../../common/Text';
@@ -18,12 +19,16 @@ const AuthorRow = ({ firstName, lastName, id, bio, profileUrl }) => {
     <Div m='2rem 0'>
       <Divider />
       <Div display='flex' p='2rem'>
-        <Background
-          url={profileUrl}
-          borderRadius='50%'
-          height='150px'
-          minWidth='150px'
-        />
+        {profileUrl ? (
+          <Background
+            url={profileUrl}
+            borderRadius='50%'
+            height='150px'
+            minWidth='150px'
+          />
+        ) : (
+          <Avatar round='50%' size='150px' name={name} />
+        )}
         <Div textAlign='left' ml='2rem' display='flex' flexDirection='column'>
           <Text color='primary' fontSize='2.2rem'>
             {name}

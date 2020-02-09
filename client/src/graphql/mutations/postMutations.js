@@ -71,11 +71,11 @@ export const unlikeCommentMutation = gql`
 
 export const likePostMutation = gql`
   mutation($postId: ID!) {
-    addClap(postId: $postId)
+    likePost(postId: $postId)
   }
 `;
 export const unlikePostMutation = gql`
   mutation($postId: ID!) {
-    removeClap(postId: $postId)
+    unlikePost(postId: $postId)
   }
 `;

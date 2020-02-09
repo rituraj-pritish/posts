@@ -5,6 +5,7 @@ import Avatar from 'react-avatar';
 import Div from '../../../common/Div';
 import Text from '../../../common/Text';
 import Background from '../../../common/Background';
+import Icon from '../../../common/Icon';
 
 const Comment = ({
   content,
@@ -49,9 +50,13 @@ const Comment = ({
           <Text m='0.8rem 0' fontSize='1.8rem' color='#191919'>
             {content}
           </Text>
-          <div onClick={like}>like</div>
-          <div onClick={unlike}>unlike</div>
-          {isAuthor && <div onClick={deleteComment}>delete</div>}
+          <Icon>
+            <i className='fas fa-thumbs-up' onClick={like} />
+          </Icon>
+          <Icon>
+            <i className='fas fa-thumbs-down' onClick={unlike} />
+          </Icon>
+          {isAuthor && <i className='fas fa-trash' onClick={deleteComment} />}
           {likes.length}
         </Div>
       </Div>

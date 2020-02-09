@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, lazy, Suspense, useRef } from 'react';
 import formValidator from '../../../utils/formValidator';
 import { setAlert, authError } from '../../../redux/actions/userActions';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 
 import Page from '../../common/Page';
-import Logo from '../../../assets/Logo';
-import SignUp from './SignUpForm';
-import AuthButtonContainer from '../../auth-button/AuthButtonContainer';
-import SignUpMutation from './SignUpMutation';
-import Div from '../../common/Div';
-import Text from '../../common/Text';
+import { StyledSocilaAuth } from './SignUp.styles';
+
+//dynamic imports
+const SignUpForm = lazy(() => import('./SignUpForm'));
+const SignUpMutation = lazy(() => import('./SignUpMutation'));
+const AuthButtonContainer = lazy(() =>
+  import('../../auth-button/AuthButtonContainer')
+);
+const Logo = lazy(() => import('../../../assets/Logo'));
+const Div = lazy(() => import('../../common/Div'));
+const Text = lazy(() => import('../../common/Text'));
 
 const SignUpContainer = ({ setAlert, authError, isAuth }) => {
   const [formData, setFormData] = useState({
@@ -67,39 +72,49 @@ const SignUpContainer = ({ setAlert, authError, isAuth }) => {
 
   return (
     <Page m='1rem 0' pb='0'>
-      <Div maxWidth='500px' m='0 auto' textAlign='center'>
-        <Link to='/'>
-          <Logo />
-        </Link>
-        <SignUp
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          formData={formData}
-        />
+      <Suspense fallback='loader loader'>
+        <Div maxWidth='500px' m='0 auto' textAlign='center'>
+          <Link to='/'>
+            <Logo />
+          </Link>
 
-        <Text m='0.5rem 0'>or</Text>
+          <StyledSocilaAuth>
+            <AuthButtonContainer
+              provider='google'
+              buttonText='Sign Up with Google'
+              type='signup'
+              signUpRef={signUpRef}
+              authError={authError}
+            />
+            <AuthButtonContainer
+              provider='facebook'
+              buttonText='Sign Up with Facebook'
+              type='signup'
+              signUpRef={signUpRef}
+              authError={authError}
+            />
+          </StyledSocilaAuth>
 
-        <Div display='grid' gridTemplateColumns='1fr 1fr' gridGap='2rem'>
-          <AuthButtonContainer
-            provider='google'
-            buttonText='Sign Up with Google'
-            type='signup'
-            signUpRef={signUpRef}
-            authError={authError}
+          <Text mt='2rem'>or</Text>
+          <Text mt='1rem' mb='2rem' text>
+            Sign up using email
+          </Text>
+
+          <SignUpForm
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            formData={formData}
           />
-          <AuthButtonContainer
-            provider='facebook'
-            buttonText='Sign Up with Facebook'
-            type='signup'
-            signUpRef={signUpRef}
-            authError={authError}
-          />
+
+          <Div m='2rem 0'>
+            Already have an account ?{' '}
+            <Text inline color='blue' style={{ textDecoration: 'underline' }}>
+              <Link to='/signin'>Sign In</Link>
+            </Text>
+          </Div>
+          <SignUpMutation ref={signUpRef} resetForm={resetForm} />
         </Div>
-        <Text m='2rem 0'>
-          Already have an account ? <Link to='/signin'>Sign In</Link>
-        </Text>
-        <SignUpMutation ref={signUpRef} resetForm={resetForm} />
-      </Div>
+      </Suspense>
     </Page>
   );
 };

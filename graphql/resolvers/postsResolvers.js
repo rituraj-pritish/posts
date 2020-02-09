@@ -216,8 +216,8 @@ module.exports = {
       userExists(currentUser);
       const post = await Post.findById(postId);
 
-      isAlreadyLikedByUser = post.claps.find(
-        clap => clap.userId.toString() === userId
+      isAlreadyLikedByUser = post.likes.find(
+        like => like.userId.toString() === currentUser
       );
 
       if (isAlreadyLikedByUser)
@@ -232,16 +232,17 @@ module.exports = {
       return true;
     },
 
-    unlikePost: async (parent, { postId }, { userId }) => {
+    unlikePost: async (parent, { postId }, { currentUser }) => {
+      userExists(currentUser);
       const post = await Post.findById(postId);
 
-      isAlreadyLikedByUser = post.claps.find(
-        clap => clap.userId.toString() === userId
+      isAlreadyLikedByUser = post.likes.find(
+        like => like.userId.toString() === currentUser
       );
 
       if (!isAlreadyLikedByUser) throw new Error('Post not yet liked');
 
-      const idx = post.claps.indexOf(isAlreadyLikedByUser);
+      const idx = post.likes.indexOf(isAlreadyLikedByUser);
 
       await post.likes.splice(idx, 1);
 
