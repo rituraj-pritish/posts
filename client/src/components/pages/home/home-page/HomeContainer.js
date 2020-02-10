@@ -6,8 +6,9 @@ import BlogSliderContainer from '../blog-slider/BlogSliderContainer';
 import Pagination from '../../../layout/pagination/Pagination';
 import SidebarContainer from '../../../layout/sidebar/sidebar/SidebarContainer';
 import PostsContainer from '../../../posts/PostsContainer';
+import { connect } from 'react-redux';
 
-const HomeContainer = () => {
+const HomeContainer = ({ posts }) => {
   return (
     <Page>
       <BlogSliderContainer />
@@ -17,7 +18,7 @@ const HomeContainer = () => {
         gridGap='2rem'
         margin='2rem 0'
       >
-        <PostsContainer />
+        <PostsContainer posts={posts} />
         <SidebarContainer />
       </Div>
       <Pagination />
@@ -25,4 +26,8 @@ const HomeContainer = () => {
   );
 };
 
-export default HomeContainer;
+const mapStateToProps = state => ({
+  posts: state.posts.posts,
+});
+
+export default connect(mapStateToProps)(HomeContainer);

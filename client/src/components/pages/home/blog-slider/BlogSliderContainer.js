@@ -1,29 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { connect } from 'react-redux';
 
-import BlogSlider from './BlogSlider'
+import { setTrendingPosts } from '../../../../redux/actions/postsActions';
+import { getTrendingPostsQuery } from '../../../../graphql/queries/postQueries';
+import BlogSlider from './BlogSlider';
+import ComponentLoader from '../../../ComponentLoader';
 
-const BlogSliderContainer = () => {
-  const posts = [
-    {
-      title: '5 Hot recipies for parties',
-      imageUrl: 'https://demo.goodlayers.com/akea/homepage2/wp-content/uploads/2018/11/yiran-ding-624696-unsplash-600x898.jpg',
-      date: '15 Jan 2019',
-      author: 'John Doe'
-    },
+const BlogSliderContainer = ({ trendingPosts, setTrendingPosts }) => {
+  const [getTrendingPosts, { loading, error, data }] = useLazyQuery(
+    getTrendingPostsQuery
+  );
+  useEffect(() => {
+    if (trendingPosts.length === 0) getTrendingPosts();
+  }, []);
+  if (data && data.getTrendingPosts) setTrendingPosts(data.getTrendingPosts);
 
-    {
-      title: 'Indian thali ',
-      imageUrl: 'https://demo.goodlayers.com/akea/homepage2/wp-content/uploads/2018/11/post-beach.jpg',
-      date: '15 Jan 2019',
-      author: 'John Doe'
-    },
-  ]
+  if (loading) return <ComponentLoader />;
+  return <BlogSlider posts={trendingPosts} />;
+};
 
-  return (
-    <div>
-      <BlogSlider posts={posts}/>
-    </div>
-  )
-}
+const mapStateToProps = state => ({
+  trendingPosts: state.posts.trending
+});
 
-export default BlogSliderContainer
+export default connect(mapStateToProps, { setTrendingPosts })(
+  BlogSliderContainer
+);

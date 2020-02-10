@@ -4,7 +4,75 @@ export const getTotalPagesQuery = gql`
   query {
     getTotalPages
   }
-`
+`;
+
+export const getTrendingPostsQuery = gql`
+  query {
+    getTrendingPosts {
+      _id
+      title
+      imageUrl
+      tags
+      date
+      views
+      userId
+      likes {
+        userId
+      }
+      user {
+        firstName
+        lastName
+      }
+      trending
+    }
+  }
+`;
+
+export const getPostsByUserIdQuery = gql`
+  query($userId: ID!) {
+    getPostsByUserId(userId: $userId) {
+      _id
+      title
+      content
+      imageUrl
+      views
+      date
+      tags
+      userId
+      user {
+        firstName
+        lastName
+      }
+      likes {
+        userId
+      }
+      trending
+    }
+  }
+`;
+
+export const getPostsByTagQuery = gql`
+  query($tag: String!) {
+    getPostsByTag(tag: $tag) {
+      _id
+      title
+      content
+      imageUrl
+      views
+      userId
+      user {
+        firstName
+        lastName
+      }
+      date
+      tags
+      likes {
+        userId
+      }
+      trending
+    }
+  }
+`;
 
 export const getPostsQuery = gql`
   query($page: Int) {

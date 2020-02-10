@@ -2,11 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
-const PrivateRoute = ({
-  component: Component,
-  auth: { isAuth, loading },
-  ...rest
-}) => (
+const PrivateRoute = ({ component: Component, isAuth, loading, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -16,7 +12,8 @@ const PrivateRoute = ({
 );
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  isAuth: state.user.isAuth,
+  loading: state.user.loading
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

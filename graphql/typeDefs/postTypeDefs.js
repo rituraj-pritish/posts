@@ -40,8 +40,10 @@ module.exports = {
   query: `
     getTotalPages : Int
     getPosts(page: Int): [Post]
+    getTrendingPosts: [Post]
     getPost(postId: ID!): Post
-    getPostsByUserId: [Post]
+    getPostsByUserId(userId: ID!): [Post]
+    getPostsByTag(tag: String!): [Post]
     getCommentsOfPost(postId: ID!): [Comment]
     getLikesOfPost(postId: ID!): [Clap]
   `,

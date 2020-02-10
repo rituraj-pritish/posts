@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import PostsItem from './PostsItem';
 
-const PostsContainer = ({ posts, loading }) => {
-  if (loading && posts.length === []) return 'component loader';
+const PostsContainer = ({ posts }) => {
   return (
     <div>
       {posts.map(post => (
@@ -17,9 +16,12 @@ const PostsContainer = ({ posts, loading }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  posts: state.posts.posts,
-  loading: state.posts.loading
-});
+PostsContainer.propTypes = {
+  posts: PropTypes.array
+};
 
-export default connect(mapStateToProps)(PostsContainer);
+PostsContainer.defaultProps = {
+  posts: []
+};
+
+export default PostsContainer;

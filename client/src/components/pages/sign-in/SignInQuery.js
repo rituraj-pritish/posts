@@ -8,12 +8,12 @@ import { connect } from 'react-redux';
 
 import {
   authSuccess,
-  authError,
-  setAlert
+  authError
 } from '../../../redux/actions/userActions';
+import setAlert from '../../../utils/setAlert'
 
 const SignInQuery = (props, ref) => {
-  const { authError, authSuccess, setAlert, resetForm } = props;
+  const { authError, authSuccess, resetForm } = props;
 
   let [signIn, { loading, error, data }] = useLazyQuery(signInQuery);
   let [
@@ -60,6 +60,6 @@ const SignInQuery = (props, ref) => {
   return null;
 };
 
-export default connect(null, { authSuccess, authError, setAlert }, null, {
+export default connect(null, { authSuccess, authError }, null, {
   forwardRef: true
 })(forwardRef(SignInQuery));

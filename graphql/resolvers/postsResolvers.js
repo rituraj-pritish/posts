@@ -1,4 +1,9 @@
-const { userExists, isSameUser } = require('../../utils/utils');
+const {
+  userExists,
+  isSameUser,
+  imageUpload,
+  imageUrlUpload
+} = require('../../utils/utils');
 const Post = require('../../models/Post');
 
 const PAGE_LENGTH = 7;
@@ -6,10 +11,14 @@ const PAGE_LENGTH = 7;
 module.exports = {
   Query: {
     getPosts: async (parent, { page }) => {
-      return await Post.find()
-        .sort({ date: -1 })
+      return await Post.find({})
+        .sort({ _id: -1 })
         .skip(PAGE_LENGTH * (page - 1))
         .limit(PAGE_LENGTH);
+    },
+
+    getTrendingPosts: async () => {
+      return await Post.find({ trending: true }).limit(5);
     },
 
     getTotalPages: async () => {
@@ -22,6 +31,15 @@ module.exports = {
       post.views += 1;
 
       return await post.save();
+    },
+
+    getPostsByUserId: async (parent, { userId }) => {
+      return await Post.find({ userId });
+    },
+
+    getPostsByTag: async (parent, { tag }) => {
+      const posts = await Post.find({});
+      return posts.filter(post => post.tags.includes(tag));
     },
 
     getCommentsOfPost: async (parent, { postId }) => {
@@ -48,14 +66,14 @@ module.exports = {
       let imgUrl;
       if (image) {
         const { createReadStream } = await image;
-        imgUrl = await utils.imageUpload(createReadStream);
+        imgUrl = await imageUpload(createReadStream);
       }
 
       if (imageUrl) {
-        imgUrl = await utils.imageUrlUpload(imageUrl);
+        imgUrl = await imageUrlUpload(imageUrl);
       }
 
-      const user = await User.findById(userId);
+      const user = await User.findById(currentUser);
       const post = await new Post({
         title,
         content,
@@ -64,7 +82,7 @@ module.exports = {
 
       if (tags) {
         const tagsArr = [];
-        tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
+        tags.split(',').forEach(tag => tagsArr.push(tag.trim().toLowerCase()));
 
         post.tags = tagsArr;
         await post.save();
@@ -92,11 +110,11 @@ module.exports = {
       let imgUrl;
       if (image) {
         const { createReadStream } = await image;
-        imgUrl = await utils.imageUpload(createReadStream);
+        imgUrl = await imageUpload(createReadStream);
       }
 
       if (imageUrl) {
-        imgUrl = await utils.imageUrlUpload(imageUrl);
+        imgUrl = await imageUrlUpload(imageUrl);
       }
 
       post.title = title;
@@ -104,7 +122,7 @@ module.exports = {
       post.imageUrl = imgUrl;
 
       const tagsArr = [];
-      tags.split(',').forEach(tag => tagsArr.push(tag.trim()));
+      tags.split(',').forEach(tag => tagsArr.push(tag.trim().toLowerCase()));
 
       post.tags = tagsArr;
       await post.save();

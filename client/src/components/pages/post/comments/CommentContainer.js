@@ -3,7 +3,7 @@ import Comment from './Comment';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 
-import { setAlert } from '../../../../redux/actions/userActions';
+import setAlert from '../../../../utils/setAlert';
 import {
   likeCommentMutation,
   unlikeCommentMutation,
@@ -12,7 +12,7 @@ import {
 import { getCommentsOfPostQuery } from '../../../../graphql/queries/postQueries';
 
 const CommentContainer = props => {
-  const { comment, postId, isAuth, user, setAlert } = props;
+  const { comment, postId, isAuth, user } = props;
   const {
     _id: commentId,
     user: { _id: userId }
@@ -114,4 +114,4 @@ const mapStateToProps = state => ({
   user: state.user.user
 });
 
-export default connect(mapStateToProps, { setAlert })(CommentContainer);
+export default connect(mapStateToProps)(CommentContainer);

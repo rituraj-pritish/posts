@@ -1,11 +1,12 @@
 import React, { useState, useRef, Suspense, lazy } from 'react';
-import { setAlert } from '../../../redux/actions/userActions';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 
+import setAlert from '../../../utils/setAlert';
 import formValidator from '../../../utils/formValidator';
+import ComponentLoader from '../../ComponentLoader';
 import Page from '../../common/Page';
-import { StyledSocilaAuth } from './SignIn.styles';
+import { StyledSocialAuth } from './SignIn.styles';
 
 //dynamic imports
 const SignInForm = lazy(() => import('./SignInForm'));
@@ -17,7 +18,7 @@ const Logo = lazy(() => import('../../../assets/Logo'));
 const Div = lazy(() => import('../../common/Div'));
 const Text = lazy(() => import('../../common/Text'));
 
-const SignInContainer = ({ setAlert, isAuth }) => {
+const SignInContainer = ({ isAuth }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -55,13 +56,13 @@ const SignInContainer = ({ setAlert, isAuth }) => {
 
   return (
     <Page m='1rem 0' pb='0'>
-      <Suspense fallback='loader loader'>
+      <Suspense fallback={<ComponentLoader />}>
         <Div maxWidth='500px' m='0 auto' textAlign='center'>
           <Link to='/'>
             <Logo />
           </Link>
 
-          <StyledSocilaAuth>
+          <StyledSocialAuth>
             <AuthButtonContainer
               provider='google'
               buttonText='Sign In with Google'
@@ -74,7 +75,7 @@ const SignInContainer = ({ setAlert, isAuth }) => {
               signInRef={signInRef}
               type='signin'
             />
-          </StyledSocilaAuth>
+          </StyledSocialAuth>
 
           <Text mt='2rem'>or</Text>
           <Text mt='1rem' mb='2rem' text>
@@ -105,4 +106,4 @@ const mapStateToProps = state => ({
   isAuth: state.user.isAuth
 });
 
-export default connect(mapStateToProps, { setAlert })(SignInContainer);
+export default connect(mapStateToProps)(SignInContainer);

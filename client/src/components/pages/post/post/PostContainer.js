@@ -11,10 +11,11 @@ import {
 } from '../../../../graphql/mutations/postMutations';
 import Page from '../../../common/Page';
 import Post from './Post';
-import { setAlert } from '../../../../redux/actions/userActions';
+import setAlert from '../../../../utils/setAlert';
 import { connect } from 'react-redux';
+import ComponentLoader from '../../../ComponentLoader';
 
-const PostContainer = ({ match, setAlert, isAuth, user }) => {
+const PostContainer = ({ match, isAuth, user }) => {
   const postId = match.params.postId;
   const { loading, error, data } = useQuery(getPostQuery, {
     variables: {
@@ -80,7 +81,7 @@ const PostContainer = ({ match, setAlert, isAuth, user }) => {
     }
   };
 
-  if (loading) return 'component loader';
+  if (loading) return <ComponentLoader />;
   if (likeError) setAlert(likeError.graphQLErrors[0].message, 'danger');
   if (unlikeError) setAlert(unlikeError.graphQLErrors[0].message, 'danger');
   if (error) console.log(error);
@@ -91,6 +92,8 @@ const PostContainer = ({ match, setAlert, isAuth, user }) => {
         {...data.getPost}
         likes={likes && likes.length}
         handleClick={handleClick}
+        currentUser={user}
+        isAuth={isAuth}
       />
     </Page>
   );
@@ -101,4 +104,4 @@ const mapStateToProps = state => ({
   user: state.user.user
 });
 
-export default connect(mapStateToProps, { setAlert })(PostContainer);
+export default connect(mapStateToProps)(PostContainer);

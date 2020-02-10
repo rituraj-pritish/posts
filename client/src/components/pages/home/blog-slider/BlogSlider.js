@@ -1,4 +1,6 @@
 import React from 'react';
+import Moment from 'react-moment';
+import { Link } from 'react-router-dom';
 import Swiper from 'react-id-swiper';
 import 'swiper/css/swiper.css';
 import './BlogSlider.css';
@@ -27,26 +29,38 @@ const params = {
 };
 
 const BlogSlider = ({ posts }) => {
-  const slides = posts.map(({ title, author, imageUrl, date }) => (
-    //todo change key to id
-    <Slide key={imageUrl}>
-      <Background url={imageUrl} />
-      <BannerContainer>
-        <Banner>
-          <Text fontSize='2rem' fontWeight='bold' mb='10px'>
-            {title}
-          </Text>
-          <Text color='gray'>- {author}</Text>
-          <Text color='gray' position='absolute' right='25px' top='25px'>
-            {date}
-          </Text>
-          <Button variant='secondary' bg='transparent'>
-            Read more
-          </Button>
-        </Banner>
-      </BannerContainer>
-    </Slide>
-  ));
+  const slides = posts.map(
+    ({ title, user: { firstName, lastName }, imageUrl, date, _id }) => {
+      const name =
+        firstName[0].toUpperCase() +
+        firstName.slice(1) +
+        ' ' +
+        lastName[0].toUpperCase() +
+        lastName.slice(1);
+
+      return (
+        <Slide key={_id}>
+          <Link to={`/post/${_id}`}>
+            <Background url={imageUrl} />
+            <BannerContainer>
+              <Banner>
+                <Text fontSize='2rem' fontWeight='bold' mb='10px'>
+                  {title[0].toUpperCase() + title.slice(1)}
+                </Text>
+                <Text color='gray'>- {name}</Text>
+                <Text color='gray' position='absolute' right='25px' top='25px'>
+                  <Moment format='D MMM YYYY'>{date}</Moment>
+                </Text>
+                <Button variant='secondary' bg='transparent'>
+                  Read more
+                </Button>
+              </Banner>
+            </BannerContainer>
+          </Link>
+        </Slide>
+      );
+    }
+  );
 
   return (
     <SwiperContainer>

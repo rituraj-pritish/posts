@@ -4,12 +4,12 @@ import { getCommentsOfPostQuery } from '../../../../graphql/queries/postQueries'
 import { addCommentMutation } from '../../../../graphql/mutations/postMutations';
 import { connect } from 'react-redux';
 
-import { setAlert } from '../../../../redux/actions/userActions';
+import setAlert from '../../../../utils/setAlert';
 import Input from '../../../common/Input';
 import Button from '../../../common/Button';
 import CommentContainer from './CommentContainer';
 
-const CommentsContainer = ({ postId, setAlert, isAuth }) => {
+const CommentsContainer = ({ postId, isAuth }) => {
   const [text, setText] = useState('');
   const { loading, error, data } = useQuery(getCommentsOfPostQuery, {
     variables: {
@@ -73,4 +73,4 @@ const mapStateToProps = state => ({
   isAuth: state.user.isAuth
 });
 
-export default connect(mapStateToProps, { setAlert })(CommentsContainer);
+export default connect(mapStateToProps)(CommentsContainer);

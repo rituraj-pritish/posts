@@ -15,21 +15,26 @@ const Navbar = ({ isAuth, signout }) => {
             <Logo />
           </Link>
         </StyledLogo>
-          <Div gridColumn='3' textAlign='right'>
-        {!isAuth ? (
+        <Div gridColumn='3' textAlign='right'>
+          {!isAuth ? (
             <>
-            <Link to='/signup'>
-              <Button variant='secondary' >Sign Up</Button>
-            </Link>
-            <Link to='/signin' style={{marginLeft: '2rem'}}>
-              <Button p='1rem 3rem'>Sign In</Button>
-            </Link>
+              <Link to='/signup'>
+                <Button variant='secondary'>Sign Up</Button>
+              </Link>
+              <Link to='/signin' style={{ marginLeft: '2rem' }}>
+                <Button p='1rem 3rem'>Sign In</Button>
+              </Link>
             </>
-        ) : (
-          <Button onClick={signout} gridColumn='3' width='50%'>Logout</Button>
-        )}
-          </Div>
-      </Container>  
+          ) : (
+            <>
+              <Link to='/create-post'>Create post</Link>
+              <Button onClick={signout} gridColumn='3' width='50%'>
+                Logout
+              </Button>
+            </>
+          )}
+        </Div>
+      </Container>
     </StyledNavbar>
   );
 };

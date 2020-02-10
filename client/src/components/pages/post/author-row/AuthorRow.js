@@ -7,7 +7,7 @@ import Text from '../../../common/Text';
 import Background from '../../../common/Background';
 import Div from '../../../common/Div';
 
-const AuthorRow = ({ firstName, lastName, id, bio, profileUrl }) => {
+const AuthorRow = ({ firstName, lastName, _id, bio, profileUrl }) => {
   const name =
     firstName[0].toUpperCase() +
     firstName.slice(1) +
@@ -40,7 +40,7 @@ const AuthorRow = ({ firstName, lastName, id, bio, profileUrl }) => {
             alignSelf='flex-end'
             style={{ textDecoration: 'underline' }}
           >
-            <Link>See all posts from {name}</Link>
+            <Link to={`/posts/${name}/${_id}`}>See all posts from {name}</Link>
           </Text>
         </Div>
       </Div>

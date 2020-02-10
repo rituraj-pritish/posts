@@ -1,7 +1,4 @@
-import React, {
-  forwardRef,
-  useImperativeHandle
-} from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 
@@ -9,14 +6,11 @@ import {
   signUpMutation,
   socialSignUpMutation
 } from '../../../graphql/mutations/userMutations';
-import {
-  setAlert,
-  authError,
-  authSuccess
-} from '../../../redux/actions/userActions';
+import { authError, authSuccess } from '../../../redux/actions/userActions';
+import setAlert from '../../../utils/setAlert.js';
 
 const SignUpQuery = (props, ref) => {
-  const { resetForm, setAlert, authSuccess, authError } = props;
+  const { resetForm, authSuccess, authError } = props;
   const [signUp, { loading, error, data }] = useMutation(signUpMutation);
   const [
     socialSignUp,
@@ -61,6 +55,6 @@ const SignUpQuery = (props, ref) => {
   return null;
 };
 
-export default connect(null, { setAlert, authError, authSuccess }, null, {
+export default connect(null, { authError, authSuccess }, null, {
   forwardRef: true
 })(forwardRef(SignUpQuery));

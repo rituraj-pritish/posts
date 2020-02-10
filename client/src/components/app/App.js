@@ -20,6 +20,10 @@ import ToTopButton from '../layout/to-top-button/ToTopButton';
 import SignUpContainer from '../pages/sign-up/SignUpContainer';
 import SignInContainer from '../pages/sign-in/SignInContainer';
 import PostContainer from '../pages/post/post/PostContainer';
+import EditPostContainer from '../pages/edit-post/EditPostContainer';
+import ComponentLoader from '../ComponentLoader';
+import UserPostsContainer from '../pages/user-posts/UserPostsContainer';
+import TagPostsContainer from '../pages/tag-posts/TagPostsContainer';
 
 const App = ({ authLoading, authError, authSuccess }) => {
   const token = window.localStorage.getItem('token');
@@ -38,7 +42,7 @@ const App = ({ authLoading, authError, authSuccess }) => {
   if (error) authError();
 
   if (authLoading) {
-    return 'app loader';
+    return <ComponentLoader />;
   }
 
   return (
@@ -51,10 +55,22 @@ const App = ({ authLoading, authError, authSuccess }) => {
             <Route exact path='/signup' component={SignUpContainer} />
             <Route exact path='/signin' component={SignInContainer} />
             <Route exact path='/post/:postId' component={PostContainer} />
+            <Route exact path='/posts/:tag' component={TagPostsContainer} />
+            <Route
+              exact
+              path='/posts/:name/:userId'
+              component={UserPostsContainer}
+            />
             <PrivateRoute
               exact
-              path='/post/create-post'
-              component={SignInContainer}
+              path='/create-post'
+              createPost={true}
+              component={EditPostContainer}
+            />
+            <PrivateRoute
+              exact
+              path='/edit-post/:postId'
+              component={EditPostContainer}
             />
           </Switch>
         </ScrollToTop>

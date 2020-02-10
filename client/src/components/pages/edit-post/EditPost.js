@@ -1,14 +1,59 @@
-import React from 'react'
-import Input from '../../common/Input'
+import React from 'react';
 
-const EditPost = ({handleSubmit, handleChange}) => {
+import Input from '../../common/Input';
+import Page from '../../common/Page';
+import Button from '../../common/Button';
+import { StyledTextArea } from './EditPost.styles';
+import ImageUploader from './ImageUploader';
+
+const EditPost = ({
+  handleSubmit,
+  handleChange,
+  formData,
+  imageUrl,
+  setImageUrl,
+  setImage,
+  deletePost
+}) => {
+  const { title, content, tags } = formData;
+
   return (
-    <div>
+    <Page>
+      <button onClick={deletePost}>delete Post</button>
       <form onSubmit={handleSubmit}>
-        <Input onChange={handleChange} value={}/>
+        <Input
+          type='text'
+          onChange={handleChange}
+          value={title}
+          name='title'
+          id='title'
+          bg='grey'
+        />
+        <ImageUploader
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+          setImage={setImage}
+        />
+        <StyledTextArea
+          onChange={handleChange}
+          value={content}
+          name='content'
+          id='content'
+          bg='grey'
+        />
+        <Input
+          placeholder='comma separated tags'
+          type='text'
+          onChange={handleChange}
+          value={tags}
+          name='tags'
+          id='tags'
+          bg='grey'
+        />
+        <Button>Submit</Button>
       </form>
-    </div>
-  )
-}
+    </Page>
+  );
+};
 
-export default EditPost
+export default EditPost;

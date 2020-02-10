@@ -3,14 +3,15 @@ import {
   REMOVE_TAGS,
   ADD_FILTERED,
   REMOVE_FILTERED,
-  SET_POSTS
+  SET_POSTS,
+  SET_TRENDING_POSTS
 } from '../types';
 
 const initialState = {
   filtered: [],
   mostViewed: [],
   mostClapped: [],
-  popular: [],
+  trending: JSON.parse(localStorage.getItem('trending')) || [],
   posts: [],
   currentPosts: [],
   selectedTags: [],
@@ -23,60 +24,14 @@ export default (state = initialState, action) => {
     case SET_POSTS:
       return {
         ...state,
-        posts: payload.sort((a, b) => new Date(b.date) - new Date(a.date)),
+        posts: payload,
         loading: false
       };
-    case ADD_TAG:
-      const alreadyThere = state.selectedTags.find(tag => tag === payload);
-      if (alreadyThere) return { ...state };
-      const { posts, selectedTags } = state;
-      selectedTags.push(payload);
-      let filtered;
-      if (
-        state.posts.filter(post => post.tags.includes(payload)).length === 0
-      ) {
-        filtered = [];
-      } else if (selectedTags.length === 1) {
-        filtered = state.posts.filter(post => post.tags.includes(payload));
-      } else {
-        filtered = state.filtered.concat(
-          selectedTags.map(tag => posts.filter(post => post.tags.includes(tag)))
-        );
-      }
+    case SET_TRENDING_POSTS:
       return {
         ...state,
-        selectedTags: selectedTags,
-        filtered: Array.from(new Set([].concat(...filtered)))
-      };
-    case REMOVE_TAGS:
-      return {
-        ...state,
-        selectedTags: []
-      };
-    case ADD_FILTERED:
-      let filter;
-      if (payload.sortType === 'claps') {
-        filter = payload.posts.sort((a, b) => b.claps.length - a.claps.length);
-      }
-
-      if (payload.sortType === 'views') {
-        filter = payload.posts.sort((a, b) => b.views - a.views);
-      }
-
-      if (payload.sortType === 'date') {
-        filter = payload.posts.sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-      }
-
-      return {
-        ...state,
-        filtered: filter
-      };
-    case REMOVE_FILTERED:
-      return {
-        ...state,
-        filtered: []
+        trending: payload,
+        loading: false
       };
     default:
       return state;

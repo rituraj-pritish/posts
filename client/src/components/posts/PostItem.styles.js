@@ -8,7 +8,6 @@ export const StyledPostItem = styled.div`
   padding: 1rem 1rem 1rem 0;
   transition: 0.2s;
   background: #fff;
-  cursor: pointer;
   min-height: 220px;
   color: ${({theme}) => theme.colors.black};
 
@@ -28,7 +27,7 @@ export const StyledPostItem = styled.div`
   }
 `
 export const Divider = styled.div`
-  height: 1px;
+  height: 2px;
   background: grey;
   width: 100%;
 `

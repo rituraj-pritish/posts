@@ -1,11 +1,13 @@
 import React, { useState, lazy, Suspense, useRef } from 'react';
 import formValidator from '../../../utils/formValidator';
-import { setAlert, authError } from '../../../redux/actions/userActions';
+import { authError } from '../../../redux/actions/userActions';
+import setAlert from '../../../utils/setAlert';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 
 import Page from '../../common/Page';
-import { StyledSocilaAuth } from './SignUp.styles';
+import ComponentLoader from '../../ComponentLoader';
+import { StyledSocialAuth } from './SignUp.styles';
 
 //dynamic imports
 const SignUpForm = lazy(() => import('./SignUpForm'));
@@ -17,7 +19,7 @@ const Logo = lazy(() => import('../../../assets/Logo'));
 const Div = lazy(() => import('../../common/Div'));
 const Text = lazy(() => import('../../common/Text'));
 
-const SignUpContainer = ({ setAlert, authError, isAuth }) => {
+const SignUpContainer = ({ authError, isAuth }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -72,13 +74,13 @@ const SignUpContainer = ({ setAlert, authError, isAuth }) => {
 
   return (
     <Page m='1rem 0' pb='0'>
-      <Suspense fallback='loader loader'>
+      <Suspense fallback={<ComponentLoader />}>
         <Div maxWidth='500px' m='0 auto' textAlign='center'>
           <Link to='/'>
             <Logo />
           </Link>
 
-          <StyledSocilaAuth>
+          <StyledSocialAuth>
             <AuthButtonContainer
               provider='google'
               buttonText='Sign Up with Google'
@@ -93,7 +95,7 @@ const SignUpContainer = ({ setAlert, authError, isAuth }) => {
               signUpRef={signUpRef}
               authError={authError}
             />
-          </StyledSocilaAuth>
+          </StyledSocialAuth>
 
           <Text mt='2rem'>or</Text>
           <Text mt='1rem' mb='2rem' text>
@@ -123,6 +125,4 @@ const mapStateToProps = state => ({
   isAuth: state.user.isAuth
 });
 
-export default connect(mapStateToProps, { setAlert, authError })(
-  SignUpContainer
-);
+export default connect(mapStateToProps, { authError })(SignUpContainer);
