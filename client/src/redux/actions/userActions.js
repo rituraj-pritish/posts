@@ -1,4 +1,3 @@
-
 import { AUTH_SUCCESS, AUTH_ERROR, SET_USER, LOGOUT } from '../types';
 
 export const authSuccess = data => dispatch => {

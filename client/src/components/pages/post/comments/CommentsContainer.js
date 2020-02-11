@@ -8,6 +8,7 @@ import setAlert from '../../../../utils/setAlert';
 import Input from '../../../common/Input';
 import Button from '../../../common/Button';
 import CommentContainer from './CommentContainer';
+import Div from '../../../common/Div';
 
 const CommentsContainer = ({ postId, isAuth }) => {
   const [text, setText] = useState('');
@@ -38,6 +39,7 @@ const CommentsContainer = ({ postId, isAuth }) => {
 
   const handleComment = e => {
     e.preventDefault();
+    if(!text) return;
     if (!isAuth) {
       setAlert('Login to continue', 'danger');
     } else {
@@ -60,7 +62,9 @@ const CommentsContainer = ({ postId, isAuth }) => {
           value={text}
           onChange={e => setText(e.target.value)}
         />
-        <Button>Comment</Button>
+        <Div textAlign='right' m='2rem 0'>
+          <Button variant={text ? 'primary' : 'disabled'}>Comment</Button>
+        </Div>
       </form>
       {comments.map(comment => (
         <CommentContainer comment={comment} postId={postId} />

@@ -14,6 +14,7 @@ import {
 } from '../../../graphql/queries/postQueries';
 import EditPost from './EditPost';
 import ComponentLoader from '../../ComponentLoader';
+import formValidator from '../../../utils/formValidator';
 
 const EditPostContainer = ({ match, history }) => {
   const postId = match.params.postId;
@@ -67,7 +68,7 @@ const EditPostContainer = ({ match, history }) => {
     refetchQueries: [
       {
         query: getPostsQuery,
-        variables: {page: 1}
+        variables: { page: 1 }
       }
     ]
   });
@@ -80,7 +81,7 @@ const EditPostContainer = ({ match, history }) => {
     refetchQueries: [
       {
         query: getPostsQuery,
-        variables: {page: 1}
+        variables: { page: 1 }
       }
     ]
   });
@@ -93,7 +94,7 @@ const EditPostContainer = ({ match, history }) => {
     refetchQueries: [
       {
         query: getPostsQuery,
-        variables: {page: 1}
+        variables: { page: 1 }
       }
     ]
   });
@@ -115,8 +116,16 @@ const EditPostContainer = ({ match, history }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const { title, content, image, tags } = formData;
+  const { isEmpty } = formValidator;
   const handleSubmit = e => {
     e.preventDefault();
+    //form validation
+    if (isEmpty(title, content, tags) || (!image && isEmpty(imageUrl))) {
+      setAlert('All fields are required', 'danger');
+      return;
+    }
+
     if (createPost) {
       addPost();
     } else {

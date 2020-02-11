@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import sizes from '../../../../sizes.js';
 
 export const StyledSidebar = styled.aside`
-  /* @media (max-width: 1000px) {
+  @media ${sizes.l2} {
     display: none;
-  } */
+  }
 `;
 
 export const SocialIcons = styled.div`
@@ -19,8 +20,7 @@ export const SocialIcons = styled.div`
     }
 
     &:hover > path {
-      fill: ${({theme}) => theme.colors.primary};;
+      fill: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
-

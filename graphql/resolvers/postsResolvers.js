@@ -107,19 +107,23 @@ module.exports = {
 
       isSameUser(post.userId, currentUser);
 
-      let imgUrl;
-      if (image) {
-        const { createReadStream } = await image;
-        imgUrl = await imageUpload(createReadStream);
-      }
+      const isImageSame = post.imageUrl === imageUrl;
 
-      if (imageUrl) {
-        imgUrl = await imageUrlUpload(imageUrl);
+      let imgUrl;
+      if (!isImageSame) {
+        if (image) {
+          const { createReadStream } = await image;
+          imgUrl = await imageUpload(createReadStream);
+        }
+
+        if (imageUrl) {
+          imgUrl = await imageUrlUpload(imageUrl);
+        }
+        post.imageUrl = imgUrl;
       }
 
       post.title = title;
       post.content = content;
-      post.imageUrl = imgUrl;
 
       const tagsArr = [];
       tags.split(',').forEach(tag => tagsArr.push(tag.trim().toLowerCase()));

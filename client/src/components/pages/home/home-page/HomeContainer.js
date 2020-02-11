@@ -7,27 +7,23 @@ import Pagination from '../../../layout/pagination/Pagination';
 import SidebarContainer from '../../../layout/sidebar/sidebar/SidebarContainer';
 import PostsContainer from '../../../posts/PostsContainer';
 import { connect } from 'react-redux';
+import { StyledContainer } from './Home.styles';
 
 const HomeContainer = ({ posts }) => {
   return (
     <Page>
       <BlogSliderContainer />
-      <Div
-        display='grid'
-        gridTemplateColumns='auto 300px'
-        gridGap='2rem'
-        margin='2rem 0'
-      >
+      <StyledContainer>
         <PostsContainer posts={posts} />
         <SidebarContainer />
-      </Div>
+      </StyledContainer>
       <Pagination />
     </Page>
   );
 };
 
 const mapStateToProps = state => ({
-  posts: state.posts.posts,
+  posts: state.posts.posts
 });
 
 export default connect(mapStateToProps)(HomeContainer);

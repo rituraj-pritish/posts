@@ -11,9 +11,15 @@ import Background from '../../../common/Background';
 import Div from '../../../common/Div';
 import AuthorRow from '../author-row/AuthorRow';
 import CommentsContainer from '../comments/CommentsContainer';
-import { StyledBackground, BackgroundContainer } from './Post.styles';
+import {
+  StyledBackground,
+  BackgroundContainer,
+  StyledShareButtons,
+  StyledSocialActions
+} from './Post.styles';
 import Button from '../../../common/Button';
 import { Link } from 'react-router-dom';
+import Icon from '../../../common/Icon';
 
 const Post = ({
   title,
@@ -30,7 +36,7 @@ const Post = ({
   handleClick
 }) => {
   let isAuthor = false;
-  if(isAuth) isAuthor = userId.toString() === currentUser._id;
+  if (isAuth) isAuthor = userId.toString() === currentUser._id;
 
   const postTags = tags.map((tag, i) => {
     const upperCasedTag = tag[0].toUpperCase() + tag.slice(1);
@@ -46,7 +52,9 @@ const Post = ({
           </Link>
         </Div>
       )}
-      <Text fontSize='4rem'>{title[0].toUpperCase() + title.slice(1)}</Text>
+      <Text fontSize={['2.5rem', '3rem', '4rem']}>
+        {title[0].toUpperCase() + title.slice(1)}
+      </Text>
       <Text textAlign='right' color='grey'>
         <Moment format='D MMM YYYY'>{date}</Moment>
       </Text>
@@ -64,26 +72,29 @@ const Post = ({
       <Text fontSize='2rem' style={{ whiteSpace: 'pre-line' }}>
         {content}
       </Text>
-      <Div
-        display='flex'
-        justifyContent='space-between'
-        fontSize='1.8rem'
-        m='2rem 0'
-      >
-        <Text>
-          Like post <i className='fas fa-heart' onClick={handleClick} /> likes:{' '}
-          {likes}
-        </Text>
-        <Text>Share on: </Text>
+      <StyledSocialActions>
+        <Div>
+          Like post
+          <Icon>
+            <i className='fas fa-heart' onClick={handleClick} />
+          </Icon>
+          likes: {likes}
+        </Div>
 
-        <FacebookShareButton url={window.location.href}>
-          Facebook
-        </FacebookShareButton>
-        <TwitterShareButton url={window.location.href}>
-          Twitter
-        </TwitterShareButton>
-        <RedditShareButton url={window.location.href}>Reddit</RedditShareButton>
-      </Div>
+        <StyledShareButtons>
+          <Text mb='1rem'>Share on: </Text>
+          <FacebookShareButton url={window.location.href}>
+            Facebook
+          </FacebookShareButton>
+          <TwitterShareButton url={window.location.href}>
+            Twitter
+          </TwitterShareButton>
+          <RedditShareButton url={window.location.href}>
+            Reddit
+          </RedditShareButton>
+        </StyledShareButtons>
+      </StyledSocialActions>
+
       <AuthorRow {...user} />
       <CommentsContainer postId={_id} />
     </Div>

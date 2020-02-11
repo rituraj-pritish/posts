@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import PostsItem from './PostsItem';
+import PostItem from './PostItem';
 
 const PostsContainer = ({ posts }) => {
+  useEffect(() => {}, [posts]);
   return (
     <div>
       {posts.map(post => (
         <Link to={`/post/${post._id}`} key={post._id}>
-          <PostsItem {...post} />
+          <PostItem {...post} />
         </Link>
       ))}
     </div>

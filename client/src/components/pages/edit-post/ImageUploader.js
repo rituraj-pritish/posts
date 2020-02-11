@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 
 import Background from '../../common/Background';
 import Input from '../../common/Input';
+import Text from '../../common/Text';
+import Div from '../../common/Div';
 import setAlert from '../../../utils/setAlert';
+import Button from '../../common/Button';
 
 const ImageUploader = ({ imageUrl, setImageUrl, setImage }) => {
   const [imgPrevUrl, setImgPrevUrl] = useState('');
@@ -41,7 +44,7 @@ const ImageUploader = ({ imageUrl, setImageUrl, setImage }) => {
       setImageUrl(value);
       resetImage();
       // if (value && imageExists(value)) {
-        resetImage();
+      resetImage();
       // } else {
       //   setAlert('Please provide a valid image url', 'danger');
       // }
@@ -73,19 +76,45 @@ const ImageUploader = ({ imageUrl, setImageUrl, setImage }) => {
   return (
     <div>
       <Input
-        placeholder='paste image url'
+        placeholder='Paste image url'
         type='text'
         onChange={handleChange}
         name='imageUrl'
         value={imageUrl}
         bg='grey'
+        m='0.5rem 0'
       />
-      <div onClick={handleReset}>Reset image</div>
-      <input
+
+      <Div
+        display='grid'
+        gridTemplateColumns='1fr 1fr'
+        justifyItems='start'
+        m='0.5rem 0'
+      >
+        <Div>
+          <Div
+            fontSize='1.2rem'
+            bg='#b4b4b4'
+            color='white'
+            p='0.6rem'
+            borderRadius='5px'
+            onClick={handleReset}
+            style={{ cursor: 'pointer' }}
+          >
+            Reset Image
+          </Div>
+        </Div>
+        <Text textAlign='center'>or</Text>
+      </Div>
+
+      <Input
         type='file'
         name='image'
         id='image-input'
         onChange={handleChange}
+        m='0.5rem 0'
+        p='0'
+        width='fit-content'
       />
       <Background
         url={url}

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import sizes from '../../../sizes'
+
 export const StyledFooter = styled.footer`
   width: 100%;
   height: ${({ theme }) => theme.footerHeight};
@@ -14,4 +16,12 @@ export const MaxWidthContainer = styled.div`
   height: 100%;
   width: 100%;
   margin: 0 auto;
+
+  @media ${sizes.md1} {
+    padding: 30px ${({ theme }) => theme.padding.md1};
+  }
+
+  @media ${sizes.mob} {
+    padding: 30px ${({ theme }) => theme.padding.mob};
+  }
 `;

@@ -1,9 +1,23 @@
 import styled from 'styled-components';
 
+import sizes from '../../../../sizes';
+
 export const SwiperContainer = styled.div`
   position: relative;
   padding-top: 40%;
   height: 0;
+
+  @media ${sizes.l2} {
+    padding-top: 50%;
+  }
+
+  @media ${sizes.md2} {
+    padding-top: 60%;
+  }
+
+  @media ${sizes.mob} {
+    padding-top: 100%;
+  }
 `;
 
 export const Background = styled.div`
@@ -22,6 +36,22 @@ export const BannerContainer = styled.div`
   bottom: 0;
   height: 0;
   transition: 0.3s ease-in-out;
+
+  @media ${sizes.l1} {
+    padding-top: 16%;
+  }
+
+  @media ${sizes.l2} {
+    padding-top: 18%;
+  }
+
+  @media ${sizes.md1} {
+    padding-top: 25%;
+  }
+
+  @media ${sizes.md1} {
+    padding-top: 40%;
+  }
 `;
 
 export const Banner = styled.div`
@@ -33,6 +63,8 @@ export const Banner = styled.div`
   height: 100%;
   padding: 25px;
   color: ${({ theme }) => theme.colors.white};
+  display: grid;
+  grid-template-columns: auto 100px;
 
   button {
     visibility: hidden;
@@ -48,12 +80,36 @@ export const Slide = styled.div`
   width: 80%;
 
   &:hover ${BannerContainer} {
-    padding-top: 18%;
+    padding-top: 21%;
+
+    @media ${sizes.l1} {
+      padding-top: 22%;
+    }
+
+    @media ${sizes.l2} {
+      padding-top: 27%;
+    }
+
+    @media ${sizes.md1} {
+      padding-top: 25%;
+    }
+
+    @media ${sizes.md1} {
+      padding-top: 40%;
+    }
   }
 
   &:hover ${BannerContainer} button {
     visibility: visible;
     transform: translateY(25px);
     opacity: 1;
+
+    @media ${sizes.md1} {
+      visibility: hidden;
+    }
+  }
+
+  @media ${sizes.md2} {
+    width: 100%;
   }
 `;

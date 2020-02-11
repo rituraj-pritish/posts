@@ -44,14 +44,34 @@ const BlogSlider = ({ posts }) => {
             <Background url={imageUrl} />
             <BannerContainer>
               <Banner>
-                <Text fontSize='2rem' fontWeight='bold' mb='10px'>
-                  {title[0].toUpperCase() + title.slice(1)}
-                </Text>
-                <Text color='gray'>- {name}</Text>
-                <Text color='gray' position='absolute' right='25px' top='25px'>
+                <div>
+                  <Text
+                    fontSize={['1.5rem', '1.7rem', '2rem']}
+                    fontWeight='bold'
+                    mb='10px'
+                  >
+                    {title[0].toUpperCase() + title.slice(1)}
+                  </Text>
+                  <Text color='gray' fontSize={['1.3rem', '1.6rem']}>
+                    - {name}
+                  </Text>
+                </div>
+                <Text
+                  color='gray'
+                  position='absolute'
+                  right='25px'
+                  top='25px'
+                  fontSize={['1.3rem', '1.6rem']}
+                >
                   <Moment format='D MMM YYYY'>{date}</Moment>
                 </Text>
-                <Button variant='secondary' bg='transparent'>
+                <Button
+                  variant='secondary'
+                  bg='transparent'
+                  gridColumn='1'
+                  width='150px'
+                  height='35px'
+                >
                   Read more
                 </Button>
               </Banner>

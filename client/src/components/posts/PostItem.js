@@ -2,17 +2,20 @@ import React from 'react';
 import Moment from 'react-moment';
 import { Link } from 'react-router-dom';
 
-import { StyledPostItem, Divider } from './PostItem.styles';
+import { StyledPostItem, Divider, StyledLikes } from './PostItem.styles';
 import Text from '../common/Text';
 import Div from '../common/Div';
+import Icon from '../common/Icon';
+import OutlinedHeartIcon from '../../assets/icons/OutlinedHeartIcon';
 import Background from '../common/Background';
 import TrendingBanner from '../trending-banner/TrendingBanner.js';
 
-const PostsItem = ({
+const PostItem = ({
   title,
   content,
   trending,
   userId,
+  likes,
   user: { firstName, lastName },
   imageUrl,
   tags,
@@ -43,24 +46,31 @@ const PostsItem = ({
   return (
     <>
       <StyledPostItem>
-        <Background url={imageUrl} gridRow='1/4'>
+        <Background className='post-item-bg' url={imageUrl} position='relative'>
           {trending && <TrendingBanner />}
+          {likes.length > 0 && (
+            <StyledLikes>
+              <Icon width='18px'>
+                <OutlinedHeartIcon />
+              </Icon>
+              {likes.length}
+            </StyledLikes>
+          )}
         </Background>
-        <Text fontSize='2.5rem' fontWeight='bold' gridColumn='2/5' gridRow='1'>
+        <Text className='post-item-title' fontSize='2.5rem' fontWeight='bold'>
           {title}
         </Text>
-        <Text gridColumn='2/5' gridRow='2'>
+        <Text className='post-item-content'>
           {content
             .split('')
             .filter((c, i) => i < 200)
             .join('') + '...'}
         </Text>
         <Div
+          className='post-item-details'
           display='flex'
           justifyContent='space-between'
           color='secondary'
-          gridColumn='2/5'
-          gridRow='3'
         >
           <Text>
             <Link to={`/posts/${name}/${userId}`}>{name}</Link>
@@ -76,4 +86,4 @@ const PostsItem = ({
   );
 };
 
-export default PostsItem;
+export default PostItem;

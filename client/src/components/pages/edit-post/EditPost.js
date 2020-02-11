@@ -23,11 +23,13 @@ const EditPost = ({
       <form onSubmit={handleSubmit}>
         <Input
           type='text'
+          placeholder='Title'
           onChange={handleChange}
           value={title}
           name='title'
           id='title'
           bg='grey'
+          m='0.5rem 0'
         />
         <ImageUploader
           imageUrl={imageUrl}
@@ -49,8 +51,9 @@ const EditPost = ({
           name='tags'
           id='tags'
           bg='grey'
+          m='0.5rem 0'
         />
-        <Button>Submit</Button>
+        <Button m='1rem 0'>Submit</Button>
       </form>
     </Page>
   );

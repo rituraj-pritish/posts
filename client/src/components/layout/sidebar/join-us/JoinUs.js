@@ -4,10 +4,10 @@ import Div from '../../../common/Div';
 import Text from '../../../common/Text';
 import Button from '../../../common/Button';
 import Input from '../../../common/Input';
-import FacebookIcon from '../../../../assets/FacebookIcon';
-import InstagramIcon from '../../../../assets/InstagramIcon';
-import TwitterIcon from '../../../../assets/TwitterIcon';
-import GooglePlusIcon from '../../../../assets/GooglePlusIcon';
+import FacebookIcon from '../../../../assets/icons/FacebookIcon';
+import InstagramIcon from '../../../../assets/icons/InstagramIcon';
+import TwitterIcon from '../../../../assets/icons/TwitterIcon';
+import GooglePlusIcon from '../../../../assets/icons/GooglePlusIcon';
 import { SocialIcons } from '../sidebar/Sidebar.styles';
 
 const JoinUs = () => {

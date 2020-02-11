@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { background, grid, layout, space,border } from 'styled-system';
+import { background, grid, layout, space,border, display, position } from 'styled-system';
 
 const StyledBackground = styled.div`
   background: ${({ url }) => `url(${url})`};
@@ -8,7 +8,7 @@ const StyledBackground = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   
-  ${background} ${grid} ${layout} ${space} ${border}
+  ${background} ${grid} ${layout} ${space} ${border} ${display} ${position}
 `;
 
 const Background = props => {

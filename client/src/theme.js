@@ -10,11 +10,13 @@ export default {
     black: '#484848'
   },
   padding: {
-    xxl: '50px'
+    xxl: '50px',
+    md1: '30px',
+    mob: '10px'
   },
   navHeight: '50px',
   footerHeight: '400px',
   maxWidth: '1366px',
 
-  breakpoints: ['420px'],
+  breakpoints: ['420px','600px','800px']
 };

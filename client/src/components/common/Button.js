@@ -23,6 +23,11 @@ ${variant({
       borderStyle: 'solid',
       borderColor: theme.colors.primary,
       p: '0.4rem 1rem'
+    },
+    disabled: {
+      background: '#a1a1a1',
+      cursor: 'default',
+      color: '#ffffff'
     }
   }
 })}

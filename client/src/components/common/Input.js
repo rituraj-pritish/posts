@@ -21,6 +21,20 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
+
+  &[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  &[type="file"]::before {
+    content: 'Select File';
+    display: inline-block;
+    content: 'Select File';
+    display: inline-block;
+    border: 1px solid grey;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    }
   ${space} ${typography} ${color} ${layout} ${grid} ${flexbox} ${border}
 `;
 
