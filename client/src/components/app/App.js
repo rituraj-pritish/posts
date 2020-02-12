@@ -1,29 +1,30 @@
 import React, { memo, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ReactNotification from 'react-notifications-component';
+import { ThemeProvider } from 'styled-components';
 import { useLazyQuery } from '@apollo/react-hooks';
 
-import 'react-notifications-component/dist/theme.css';
-import theme from '../../theme';
-import './App.css';
+import PrivateRoute from 'src/components/shared/PrivateRoute';
+import ComponentLoader from 'src/components/shared/ComponentLoader';
+import ScrollToTop from 'src/components/shared/ScrollToTop';
+import ToTopButton from 'src/components/shared/ToTopButton';
+import NavbarContainer from 'src/components/navbar/NavbarContainer';
+import FooterContainer from 'src/components/footer/FooterContainer';
+import HomeContainer from 'src/components/home/HomeContainer';
+import SignUpContainer from 'src/components/auth/sign-up/SignUpContainer';
+import SignInContainer from 'src/components/auth/sign-in/SignInContainer';
+import PostContainer from 'src/components/posts/post/PostContainer';
+import EditPostContainer from 'src/components/posts/edit-post/EditPostContainer';
+import UserPostsContainer from 'src/components/posts/user-posts/UserPostsContainer';
+import TagPostsContainer from 'src/components/posts/tag-posts/TagPostsContainer';
+import { getUserByTokenQuery } from 'src/graphql/queries/userQueries';
+import { authError, authSuccess } from 'src/redux/actions/userActions';
+import theme from 'src/theme';
 
-import { getUserByTokenQuery } from '../../graphql/queries/userQueries';
-import { authError, authSuccess } from '../../redux/actions/userActions';
-import PrivateRoute from '../PrivateRoute';
-import NavbarContainer from '../layout/navbar/NavbarContainer';
-import FooterContainer from '../layout/footer/FooterContainer';
-import HomeContainer from '../pages/home/home-page/HomeContainer';
-import ScrollToTop from '../ScrollToTop';
-import ToTopButton from '../layout/to-top-button/ToTopButton';
-import SignUpContainer from '../pages/sign-up/SignUpContainer';
-import SignInContainer from '../pages/sign-in/SignInContainer';
-import PostContainer from '../pages/post/post/PostContainer';
-import EditPostContainer from '../pages/edit-post/EditPostContainer';
-import ComponentLoader from '../ComponentLoader';
-import UserPostsContainer from '../pages/user-posts/UserPostsContainer';
-import TagPostsContainer from '../pages/tag-posts/TagPostsContainer';
+//css imports
+import 'react-notifications-component/dist/theme.css';
+import './App.css';
 
 const App = ({ authLoading, authError, authSuccess }) => {
   const token = window.localStorage.getItem('token');
