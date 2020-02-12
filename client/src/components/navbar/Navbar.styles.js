@@ -27,12 +27,18 @@ export const Container = styled.div`
   }
 
   @media ${sizes.mob} {
-    padding: 0 ${({ theme }) => theme.padding.mob};
+    padding: 0 ${({ theme }) => parseInt(theme.padding.mob) + 10 + 'px'};
   }
 `;
 
 export const StyledLogo = styled.div`
   width: fit-content;
+
+  svg {
+    @media ${sizes.md2} {
+      width: 64px;
+    }
+  }
 `;
 
 export const StyledNavRight = styled.div`

@@ -22,8 +22,17 @@ const UserPostsContainer = ({ match }) => {
   if (loading) return <ComponentLoader />;
 
   return (
-    <Page>
-      <Text>Popular posts from {name}</Text>
+    <Page textAlign='center'>
+      {posts !== undefined && posts.length === 0 ? (
+        <Text mt='2rem'>No results found</Text>
+      ) : (
+        <Text mb='3rem' mt='2rem' fontSize='2rem'>
+          Popular posts from{' '}
+          <Text inline fontWeight='bold'>
+            {name}
+          </Text>
+        </Text>
+      )}
       {posts && <PostsContainer posts={posts} />}
     </Page>
   );

@@ -68,7 +68,7 @@ const CommentsContainer = ({ postId, isAuth }) => {
         </Div>
       </form>
       {comments.map(comment => (
-        <CommentContainer comment={comment} postId={postId} />
+        <CommentContainer key={comment._id} comment={comment} postId={postId} />
       ))}
     </div>
   );

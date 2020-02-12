@@ -18,6 +18,7 @@ import PostContainer from 'src/components/posts/post/PostContainer';
 import EditPostContainer from 'src/components/posts/edit-post/EditPostContainer';
 import UserPostsContainer from 'src/components/posts/user-posts/UserPostsContainer';
 import TagPostsContainer from 'src/components/posts/tag-posts/TagPostsContainer';
+import PopularPosts from 'src/components/posts/popular-posts/PopularPosts';
 import { getUserByTokenQuery } from 'src/graphql/queries/userQueries';
 import { authError, authSuccess } from 'src/redux/actions/userActions';
 import theme from 'src/theme';
@@ -57,6 +58,7 @@ const App = ({ authLoading, authError, authSuccess }) => {
             <Route exact path='/signin' component={SignInContainer} />
             <Route exact path='/post/:postId' component={PostContainer} />
             <Route exact path='/posts/:tag' component={TagPostsContainer} />
+            <Route exact path='/posts' component={PopularPosts} />
             <Route
               exact
               path='/posts/:name/:userId'

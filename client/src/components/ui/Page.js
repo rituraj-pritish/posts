@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { space } from 'styled-system';
+import { space, typography } from 'styled-system';
 
 import sizes from 'src/sizes';
 
@@ -13,16 +13,16 @@ export const StyledPage = styled.div`
   color: ${({ theme }) => theme.colors.black};
 
   @media ${sizes.md1} {
-    padding: 20px ${({theme}) => theme.padding.md1};;
+    padding: 20px ${({ theme }) => theme.padding.md1};
     padding-bottom: ${({ theme }) => parseInt(theme.footerHeight) + 20 + 'px'};
   }
 
   @media ${sizes.mob} {
-    padding: 20px ${({theme}) => theme.padding.mob};;
+    padding: 20px ${({ theme }) => theme.padding.mob};
     padding-bottom: ${({ theme }) => parseInt(theme.footerHeight) + 20 + 'px'};
   }
 
-  ${space}
+  ${space} ${typography}
 `;
 
 const Page = ({ children, ...otherProps }) => {

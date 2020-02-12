@@ -31,19 +31,13 @@ const Pagination = ({ setPosts }) => {
     getPosts({
       variables: { page: e.selected + 1 }
     });
-    if (window.innerHeight > 800) {
-      window.scrollTo({ top: 600, behavior: 'smooth' });
-    }
+    // if (window.innerHeight > 800) {
+    //   window.scrollTo({ top: 600, behavior: 'smooth' });
+    // }
   };
 
   if (error) {
-    const retries = parseInt(window.localStorage.getItem('retries')) || 0;
-    window.localStorage.setItem('retries', retries + 1);
-    if (retries < 4) {
-      getPosts({
-        variables: { page: currentPage }
-      });
-    }
+    window.location.reload();
   }
   if (!loading && !error && data) {
     setPosts(data.getPosts);
@@ -56,7 +50,9 @@ const Pagination = ({ setPosts }) => {
         nextLabel={'next'}
         breakLabel={'...'}
         breakClassName={'break-me'}
-        pageCount={pagesData && pagesData.getTotalPages}
+        pageCount={
+          pagesData && pagesData.getTotalPages ? pagesData.getTotalPages : 1
+        }
         initialPage={currentPage - 1}
         marginPagesDisplayed={1}
         pageRangeDisplayed={2}

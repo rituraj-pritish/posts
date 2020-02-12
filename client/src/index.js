@@ -1,19 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { Provider } from 'react-redux';
 import reduxThunk from 'redux-thunk';
 import ApolloClient from 'apollo-client';
-import { ApolloProvider } from 'react-apollo';
 import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-import reducers from './redux/reducers';
-import App from './components/app/App';
+import reducers from 'src/redux/reducers';
+import App from 'src/components/app/App';
 
 const token = window.localStorage.getItem('token');
 
+//graphql setup
 const link = createUploadLink({
   uri:
     process.env.NODE_ENV === 'production'
@@ -29,6 +30,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+//store setup
 const middlewares = [reduxThunk];
 
 const devTools =

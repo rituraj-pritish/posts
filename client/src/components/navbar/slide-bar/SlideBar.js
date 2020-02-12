@@ -1,20 +1,29 @@
 import React, { useState, useRef } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import clickOutside from 'src/utils/clickOutside';
-import Icon from '../../ui/Icon';
-import Button from '../../ui/Button';
+import Icon from 'src/components/ui/Icon';
+import Button from 'src/components/ui/Button';
+import Text from 'src/components/ui/Text';
+import { signout } from 'src/redux/actions/userActions';
+
 import Bars from './bars/Bars';
 import { StyledSlideBar, StyledList } from './SlideBar.styles';
-import Text from '../../ui/Text';
 
-const SlideBar = ({ name }) => {
+const SlideBar = ({ name, signout }) => {
   const [show, setShow] = useState(false);
   const sliderRef = useRef();
   const barsRef = useRef();
   clickOutside(sliderRef, () => setShow(false), barsRef);
 
-  const authOptions = <></>;
+  const authOptions = (
+    <>
+      <li>
+        <Link to='/create-post'>Create Post</Link>
+      </li>
+    </>
+  );
 
   const noAuthOptions = <></>;
 
@@ -26,7 +35,7 @@ const SlideBar = ({ name }) => {
         </Icon>
       </div>
       <StyledSlideBar ref={sliderRef} show={show}>
-        <Text position='relative' top='-35px' textAlign='left'>
+        <Text position='relative' top='-30px' left='-25px' textAlign='left'>
           {name ? (
             `Hi ${name}`
           ) : (
@@ -35,10 +44,23 @@ const SlideBar = ({ name }) => {
             </Button>
           )}
         </Text>
-        <StyledList>{name ? authOptions : noAuthOptions}</StyledList>
+        <StyledList onClick={() => setShow(false)}>
+          {name ? authOptions : noAuthOptions}
+          <li>
+            <Link to='/posts'>Popular posts</Link>
+          </li>
+          <li>
+            <Link to='/posts'>Trending posts</Link>
+          </li>
+          {name && (
+            <li onClick={signout}>
+              <Link>Sign Out</Link>
+            </li>
+          )}
+        </StyledList>
       </StyledSlideBar>
     </>
   );
 };
 
-export default SlideBar;
+export default connect(null, { signout })(SlideBar);

@@ -38,6 +38,16 @@ export const StyledShareButtons = styled.div`
   @media ${sizes.md1} {
     margin-bottom: 2rem;
   }
+
+  @media ${sizes.mob} {
+    display: flex;
+    flex-direction: column;
+
+    button {
+      margin: 1rem 0 !important;
+      width: 280px !important;
+    }
+  }
 `;
 
 export const StyledSocialActions = styled.div`
@@ -47,5 +57,19 @@ export const StyledSocialActions = styled.div`
   margin: 2rem 0;
   @media ${sizes.md1} {
     flex-direction: column-reverse;
+  }
+`;
+
+export const StyledLikesContainer = styled.div`
+  position: relative;
+  margin-left: 1rem;
+
+  p {
+    position: absolute;
+    top: 26%;
+    left: 39%;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
   }
 `;

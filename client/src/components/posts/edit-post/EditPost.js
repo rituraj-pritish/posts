@@ -1,8 +1,10 @@
 import React from 'react';
 
-import Input from '../../ui/Input';
-import Page from '../../ui/Page';
-import Button from '../../ui/Button';
+import Input from 'src/components/ui/Input';
+import Page from 'src/components/ui/Page';
+import Button from 'src/components/ui/Button';
+import Div from 'src/components/ui/Div';
+
 import { StyledTextArea } from './EditPost.styles';
 import ImageUploader from './ImageUploader';
 
@@ -19,7 +21,6 @@ const EditPost = ({
 
   return (
     <Page>
-      <button onClick={deletePost}>delete Post</button>
       <form onSubmit={handleSubmit}>
         <Input
           type='text'
@@ -53,8 +54,22 @@ const EditPost = ({
           bg='grey'
           m='0.5rem 0'
         />
-        <Button m='1rem 0'>Submit</Button>
+
+        <Button m='1rem 0' p='0.5rem 3rem'>
+          Submit
+        </Button>
       </form>
+      <Div textAlign='right'>
+        <Button
+          onClick={deletePost}
+          variant='secondary'
+          borderColor='red'
+          color='red'
+          mb='1.5rem'
+        >
+          Delete Post
+        </Button>
+      </Div>
     </Page>
   );
 };

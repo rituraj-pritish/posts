@@ -20,9 +20,18 @@ const TagPostsContainer = ({ match }) => {
 
   if (loading) return <ComponentLoader />;
   return (
-    <Page>
-      <Text>Popular posts in - {tag.toUpperCase()}</Text>
-      {posts && <PostsContainer posts={posts} />}
+    <Page textAlign='center'>
+      {posts !== undefined && posts.length === 0 ? (
+        <Text mt='2rem'>No results found in {tag.toUpperCase()}</Text>
+      ) : (
+        <Text mt='2rem' mb='3rem'>
+          Popular posts in {'  '}
+          <Text inline fontWeight='bold'>
+            {tag.toUpperCase()}
+          </Text>
+        </Text>
+      )}
+      <PostsContainer posts={posts} />
     </Page>
   );
 };

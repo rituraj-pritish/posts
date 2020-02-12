@@ -16,7 +16,8 @@ const CommentContainer = props => {
   const { comment, postId, isAuth, user } = props;
   const {
     _id: commentId,
-    user: { _id: userId }
+    user: { _id: userId },
+    likes
   } = comment;
 
   const [
@@ -67,26 +68,31 @@ const CommentContainer = props => {
     ]
   });
 
-  if (likeError) setAlert(likeError.graphQLErrors[0].message, 'danger');
-  if (unlikeError) setAlert(unlikeError.graphQLErrors[0].message, 'danger');
-  if (deleteError) setAlert(deleteError.graphQLErrors[0].message, 'danger');
+  let isLiked = false;
+  if (isAuth) isLiked = likes.find(like => like.userId.toString() === user._id);
 
   const handleLike = () => {
     if (!isAuth) {
       setAlert('Login to continue', 'danger');
       return;
     } else {
+      if (isLiked) {
+        setAlert('Comment already liked', 'danger');
+        return;
+      }
       likeComment();
     }
   };
-
-  if (likeError) console.log(likeError);
 
   const handleUnlike = () => {
     if (!isAuth) {
       setAlert('Login to continue', 'danger');
       return;
     } else {
+      if (!isLiked) {
+        setAlert('Comment not liked yet', 'danger');
+        return;
+      }
       unlikeComment();
     }
   };

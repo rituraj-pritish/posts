@@ -2,6 +2,7 @@ import React, { forwardRef, useImperativeHandle } from 'react';
 import { connect } from 'react-redux';
 import { useLazyQuery } from '@apollo/react-hooks';
 
+import ComponentLoader from 'src/components/shared/ComponentLoader'
 import {
   signInQuery,
   socialSignInQuery
@@ -55,7 +56,7 @@ const SignInQuery = (props, ref) => {
   }
 
   if (loading || socialLoading)
-    return <div style={{ color: 'orange', fontSize: '3rem' }}>SPINNER</div>;
+    return <ComponentLoader/>
 
   return null;
 };

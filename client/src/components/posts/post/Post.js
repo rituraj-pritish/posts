@@ -6,6 +6,7 @@ import {
 } from 'react-share';
 import Moment from 'react-moment';
 
+import HeartIcon from 'src/assets/icons/HeartIcon';
 import Text from 'src/components/ui/Text';
 import Background from 'src/components/ui/Background';
 import Div from 'src/components/ui/Div';
@@ -19,7 +20,8 @@ import {
   StyledBackground,
   BackgroundContainer,
   StyledShareButtons,
-  StyledSocialActions
+  StyledSocialActions,
+  StyledLikesContainer
 } from './Post.styles';
 
 const Post = ({
@@ -39,6 +41,10 @@ const Post = ({
   let isAuthor = false;
   if (isAuth) isAuthor = userId.toString() === currentUser._id;
 
+  const AVG_WORDS_READ_IN_ONE_MINUTE = 200;
+  const readTime =
+    parseInt(content.split(' ').length / AVG_WORDS_READ_IN_ONE_MINUTE) + 1;
+
   const postTags = tags.map((tag, i) => {
     const upperCasedTag = tag[0].toUpperCase() + tag.slice(1);
     if (i === tags.length - 1) return <span key={i}>{upperCasedTag}</span>;
@@ -56,9 +62,14 @@ const Post = ({
       <Text fontSize={['2.5rem', '3rem', '4rem']}>
         {title[0].toUpperCase() + title.slice(1)}
       </Text>
-      <Text textAlign='right' color='grey'>
-        <Moment format='D MMM YYYY'>{date}</Moment>
-      </Text>
+
+      <Div display='flex' justifyContent='space-between' color='darkGrey'>
+        <Text>{readTime} min read</Text>
+        <Text>
+          <Moment format='D MMM YYYY'>{date}</Moment>
+        </Text>
+      </Div>
+      
       <BackgroundContainer>
         <StyledBackground>
           <Background
@@ -74,12 +85,14 @@ const Post = ({
         {content}
       </Text>
       <StyledSocialActions>
-        <Div>
+        <Div display='flex' alignItems='center'>
           Like post
-          <Icon>
-            <i className='fas fa-heart' onClick={handleClick} />
-          </Icon>
-          likes: {likes}
+          <StyledLikesContainer>
+            <Icon width='50px' color='#ffa274' onClick={handleClick}>
+              <HeartIcon />
+              <Text>{likes}</Text>
+            </Icon>
+          </StyledLikesContainer>
         </Div>
 
         <StyledShareButtons>

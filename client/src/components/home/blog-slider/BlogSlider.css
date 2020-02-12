@@ -25,3 +25,11 @@
   font-size: 35px;
   margin-left: -5px;
 }
+
+/* for touch screens */
+@media (hover: none) and (pointer: coarse) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}

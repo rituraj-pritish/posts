@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { connect } from 'react-redux';
 
+import trendingPosts from 'src/data/trendingPosts';
 import {
   getPostQuery,
   getLikesOfPostQuery
@@ -11,12 +12,15 @@ import {
   unlikePostMutation
 } from 'src/graphql/mutations/postMutations';
 import Page from 'src/components/ui/Page';
+import Div from 'src/components/ui/Div';
+import Text from 'src/components/ui/Text';
 import setAlert from 'src/utils/setAlert';
 import ComponentLoader from 'src/components/shared/ComponentLoader';
+import PostsContainer from 'src/components/shared/posts-container/PostsContainer';
 
 import Post from './Post';
 
-const PostContainer = ({ match, isAuth, user }) => {
+const PostContainer = ({ match, isAuth, user, posts }) => {
   const postId = match.params.postId;
   const { loading, error, data } = useQuery(getPostQuery, {
     variables: {
@@ -89,20 +93,27 @@ const PostContainer = ({ match, isAuth, user }) => {
 
   return (
     <Page>
-      <Post
-        {...data.getPost}
-        likes={likes && likes.length}
-        handleClick={handleClick}
-        currentUser={user}
-        isAuth={isAuth}
-      />
+      <Div maxWidth='800px' m='0 auto'>
+        <Post
+          {...data.getPost}
+          likes={likes && likes.length}
+          handleClick={handleClick}
+          currentUser={user}
+          isAuth={isAuth}
+        />
+        <Text fontSize='2rem' mt='5rem' mb='2rem' textAlign='center'>
+          Trending Posts
+        </Text>
+        <PostsContainer posts={trendingPosts} />
+      </Div>
     </Page>
   );
 };
 
 const mapStateToProps = state => ({
   isAuth: state.user.isAuth,
-  user: state.user.user
+  user: state.user.user,
+  posts: state.posts.posts
 });
 
 export default connect(mapStateToProps)(PostContainer);

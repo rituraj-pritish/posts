@@ -13,6 +13,7 @@ const StyledText = styled.p`
   font-size: 1.6rem;
   color: inherit;
   display: ${({ inline }) => inline && 'inline-block'};
+  font-size: ${({ inline }) => inline && 'inherit'};
 
   ${color} ${space} ${typography} ${position} ${grid} ${flexbox}
 `;
