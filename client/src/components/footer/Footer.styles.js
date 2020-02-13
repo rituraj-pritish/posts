@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import sizes from 'src/sizes'
+import sizes from 'src/sizes';
 
 export const StyledFooter = styled.footer`
   width: 100%;
@@ -16,6 +16,9 @@ export const MaxWidthContainer = styled.div`
   height: 100%;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media ${sizes.md1} {
     padding: 30px ${({ theme }) => theme.padding.md1};

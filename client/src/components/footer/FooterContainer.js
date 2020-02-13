@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { StyledFooter, MaxWidthContainer } from './Footer.styles';
+
+import Text from 'src/components/ui/Text';
 
 import NewsLetterForm from './newsletter-form/NewsLetterForm';
+import FooterLinks from './footer-links/FooterLinks';
+import { StyledFooter, MaxWidthContainer } from './Footer.styles';
 
 const FooterContainer = ({ location }) => {
   const [newsLetterEmail, setNewsLetterEmail] = useState('');
@@ -25,6 +28,10 @@ const FooterContainer = ({ location }) => {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
         />
+        <FooterLinks />
+        <Text textAlign='center' fontSize='1.3rem'>
+          &copy; Blogg
+        </Text>
       </MaxWidthContainer>
     </StyledFooter>
   );

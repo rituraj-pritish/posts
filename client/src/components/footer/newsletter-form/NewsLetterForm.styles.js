@@ -8,5 +8,6 @@ export const StyledNewsLetterForm = styled.form`
   text-align: center;
   align-items: center;
   margin: 0 auto;
+  width: 100%;
   max-width: 1000px;
 `
