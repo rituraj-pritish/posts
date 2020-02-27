@@ -21,7 +21,6 @@ export const setTrendingPosts = posts => {
 };
 
 export const filterPosts = (sortType, posts) => (dispatch, getState) => {
-  // console.log(getState().posts);
   dispatch({ type: ADD_FILTERED, payload: { sortType, posts } });
 };
 

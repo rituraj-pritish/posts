@@ -42,20 +42,7 @@ const ImageUploader = ({ imageUrl, setImageUrl, setImage }) => {
       const value = e.target.value;
       setImageUrl(value);
       resetImage();
-      // if (value && imageExists(value)) {
-      resetImage();
-      // } else {
-      //   setAlert('Please provide a valid image url', 'danger');
-      // }
     }
-  };
-
-  const imageExists = url => {
-    const http = new XMLHttpRequest();
-    http.open('HEAD', url, false);
-    http.send();
-    http.onerror = () => setAlert('Please provide a valid image url', 'danger');
-    return http.status === 200 ? true : false;
   };
 
   const handleReset = () => {

@@ -18,7 +18,6 @@ const UserPostsContainer = ({ match }) => {
 
   let posts;
   if (data && data.getPostsByUserId) posts = data.getPostsByUserId;
-  console.log(posts);
   if (loading) return <ComponentLoader />;
 
   return (

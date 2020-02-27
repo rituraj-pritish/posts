@@ -43,6 +43,7 @@ const EditPostContainer = ({ match, history }) => {
       });
       setImageUrl(post.imageUrl);
     }
+    // eslint-disable-next-line
   }, [postData]);
 
   let post;
@@ -120,7 +121,7 @@ const EditPostContainer = ({ match, history }) => {
   const { isEmpty } = formValidator;
   const handleSubmit = e => {
     e.preventDefault();
-    //form validation
+
     if (isEmpty(title, content, tags) || (!image && isEmpty(imageUrl))) {
       setAlert('All fields are required', 'danger');
       return;
@@ -137,7 +138,6 @@ const EditPostContainer = ({ match, history }) => {
     return <ComponentLoader />;
   if (addError || updateError || postError || deleteError) {
     setAlert('Something went wrong, please try again', 'danger');
-    console.log(addError);
   }
   return (
     <EditPost

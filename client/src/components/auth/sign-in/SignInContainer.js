@@ -20,8 +20,8 @@ const Text = lazy(() => import('../../ui/Text'));
 
 const SignInContainer = ({ isAuth }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: 'demo@demo.com',
+    password: '123123'
   });
   const { email, password } = formData;
 

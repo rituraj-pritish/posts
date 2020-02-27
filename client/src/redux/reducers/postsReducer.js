@@ -1,8 +1,4 @@
 import {
-  ADD_TAG,
-  REMOVE_TAGS,
-  ADD_FILTERED,
-  REMOVE_FILTERED,
   SET_POSTS,
   SET_TRENDING_POSTS
 } from '../types';

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const keys = require('./keys.js')
+const keys = require('./keys.js');
 
 try {
   mongoose.connect(

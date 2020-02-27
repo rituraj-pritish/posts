@@ -11,7 +11,6 @@ import {
 import Logo from 'src/assets/Logo';
 import Button from '../../ui/Button';
 import Text from '../../ui/Text';
-import Div from '../../ui/Div';
 import SlideBar from '../slide-bar/SlideBar';
 
 const Navbar = ({ isAuth, signout, name }) => {
