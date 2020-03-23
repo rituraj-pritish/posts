@@ -28,6 +28,4 @@ export default (message, type) => {
     message: message,
     type: type
   });
-
-  return { type: 'set_alert' };
 };
