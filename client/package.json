@@ -34,7 +34,7 @@
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.0.0",
     "styled-system": "^5.1.4",
-    "swiper": "^5.3.0"
+    "swiper": "^6.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
